@@ -61,4 +61,84 @@ Sample Output:
 */
 
 
+//下面这个代码，会出现段错误。后来发现是testees大小申请的太小了。因为考场数为<=100，每个考场人数<=300，所以结构体数组大小应该至少>=30000。
+#include<stdio.h>
+#include<string.h>
+
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+#define DEBUG 0
+
+struct testeeInfo{
+	char rn[14];//registration number
+	int finalrank;//final rank
+	int localnum;//local number
+	int localrank;//local rank
+	int score;//total score
+}testees[102];//注意！！我在申请数组大小的时候经常计算错该申请多少！！！这次把考场数直接当成总人数了。。
+
+bool cmp(struct testeeInfo x,struct testeeInfo y);
+
+bool cmp(struct testeeInfo x,struct testeeInfo y){//cmp函数应返回bool。
+	if(x.score!=y.score)return x.score>y.score;//注意，if里用的是不等号，不是大于号。具体为什么还不知道。
+	else if(x.score==y.score){
+		return strcmp(x.rn,y.rn)<0;
+	}
+}
+
+int main(){
+	int n;//测试地点数目《100。
+	cin>>n;
+	
+	int count=0;//统计总共的考生数。
+	int k;//每个地点内考生数《300。
+	for(int i=1;i<=n;i++){
+		cin>>k;
+		for(int j=0;j<k;j++){
+			cin>>testees[count].rn>>testees[count].score;//从0开始存储数据。
+			testees[count].localnum=i;
+			count++;
+		}
+		//输入完一个考场的信息后，还有finalrank和localrank没有确定。此处先计算localrank。
+		sort(testees+count-k,testees+count,cmp);
+		//将当前考场内按成绩降序和准考证升序排序后，写入localrank里。
+		testees[count-k].localrank=1;
+		for(int j=count-k+1;j<count;j++){
+			if(testees[j].score==testees[j-1].score)testees[j].localrank=testees[j-1].localrank;
+			else{
+				testees[j].localrank=j-(count-k)+1;
+			}
+		}
+	}
+	cout<<count<<endl;
+	
+	//对整体进行排名。
+	sort(testees,testees+count,cmp);
+  
+/*
+以下循环改写成这样也可，更不耗费时间：
+  int r=1;
+	for(int i=0;i<count;i++){
+		if(i>0&&testees[i].score!=testees[i-1].score){
+			r=i+1;
+		}
+		printf("%s %d %d %d\n",testees[i].rn,r,testees[i].localnum,testees[i].localrank);
+	}
+*/
+	for(int i=0;i<count;i++){
+		if(i==0)testees[0].finalrank=1;
+		else{
+			if(testees[i].score==testees[i-1].score)testees[i].finalrank=testees[i-1].finalrank;
+			else{
+				testees[i].finalrank=i+1;
+			}
+		}
+		printf("%s %d %d %d\n",testees[i].rn,testees[i].finalrank,testees[i].localnum,testees[i].localrank);
+	}
+	
+	return 0;
+}
+
 
