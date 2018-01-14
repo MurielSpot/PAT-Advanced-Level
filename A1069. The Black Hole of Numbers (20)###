@@ -1,0 +1,62 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1069
+
+难度：3
+*/
+
+/*
+注意事项：
+1、strlen碰到第一个字符串结束符'\0'为止，然后返回计数器值(长度不包含'\0')。
+2、char与int的转换：'0'对应十进制48，'A'对应65，'a'对应97。
+3、stl中sort默认升序。
+
+疑问：
+见代码：//把上面函数写成下面之后，测试用例就全部通过了，否则会有一个不过，不知道为什么！
+*/
+
+#include<stdio.h>
+#include<string.h>
+
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+//void int2array(int a[],int num){//输入一个四位数，将它转换到数组里。传入的数组大小应该大于等于4。
+//    for(int i=3;i>=0;i--){
+//    	a[i]=num%10;
+//    	num/=10;
+//	}
+//}
+//把上面函数写成下面之后，测试用例就全部通过了，否则会有一个不过，不知道为什么！
+void int2array(int a[],int num){//输入一个四位数，将它转换到数组里。传入的数组大小应该大于等于4。
+    for(int i=0;i<4;i++){
+    	a[i]=num%10;
+    	num/=10;
+	}
+}
+
+int main(){
+	int last;int a[5];
+	cin>>last;
+	int max,min,power;
+	while(1){
+		int2array(a,last);
+		sort(a,a+4);
+
+		max=min=0;
+		power=1;
+		for(int i=0;i<4;i++){
+			max=power*a[i]+max;
+			min=min*10+a[i];
+			power*=10;
+		}
+		last=max-min;
+		if(last<0){
+			printf("error!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+			break;
+		}
+		printf("%04d - %04d = %04d\n",max,min,last);
+		if(last==6174||last==0)break;
+	}
+	return 0;
+}
