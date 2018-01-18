@@ -1,0 +1,196 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1060
+
+难度：5，细节处理特别复杂，用stl中的string做可能更好处理一些。
+*/
+
+/*
+建议写代码时先想清楚各种可能。
+*/
+
+/*
+mine
+*/
+#include<stdio.h>
+#include<string.h>
+
+#include<iostream>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+
+const int MAX=110;//因为处理过前导零才存入的数组，所以不需要把数组开得很大。
+struct f{//num存的是0.d1d2...，其中d1>0，只有数为0时，d1等于0。e为指数。
+	int e;//可为负。
+	char num[MAX];
+	f(){
+		e=0;
+		fill(num,num+MAX,'0');
+	}
+};
+
+struct f input(){
+	struct f x;
+	
+	int t;
+	//先处理前导0。
+	int i=0;
+	while((t=getchar())!='.'&&t!=EOF&&t!=' '&&t!='\n'  && t=='0'){}
+	if(t=='.'){//说明整数部分为0，数小于1。
+		//开始去除小数部分的前导零。
+		while((t=getchar())!=EOF&&t!=' '&&t!='\n'  && t=='0'){x.e--;}
+		if(t==EOF||t==' '||t=='\n'){//小数部分也为0。
+			x.num[0]='0',x.num[1]='\0';
+			x.e=0;
+			return x;
+		}else{//小数部分不为0。
+			while(t!=EOF&&t!=' '&&t!='\n'){
+				x.num[i++]=t;
+				t=getchar();
+			}
+		}
+	}else if(t==EOF||t==' '||t=='\n'){//说明数全为0。
+		x.num[0]='0',x.num[1]='\0';
+		x.e=0;
+		return x;
+	}else{//整数部分不全为0。
+		while(t!='.'&&t!=EOF&&t!=' '&&t!='\n'){//整数部分读入。
+			x.num[i++]=t;
+			x.e++;
+			t=getchar();
+		}
+		if(t==EOF||t==' '||t=='\n'){//无小数部分。
+			x.num[i++]='\0';
+			return x;
+		}
+		while((t=getchar())!=EOF&&t!=' '&&t!='\n'){
+			x.num[i++]=t;
+		}
+	}
+	x.num[i++]='\0';
+	return x;
+}
+
+int main(){
+	int n;
+	cin>>n;
+	getchar();
+	
+	struct f a,b;
+	a=input();
+	b=input();
+	
+	int len=(int)max((double)n,(double)max((double)strlen(a.num),(double)strlen(b.num)));
+	for(int i=strlen(a.num);i<len;i++){
+		a.num[i]='0';
+	}
+	a.num[len]='\0';
+	for(int i=strlen(b.num);i<len;i++){
+		b.num[i]='0';
+	}
+	b.num[len]='\0';
+	
+	bool flag=true;
+	if(a.e==b.e){
+		for(int i=0;i<n;i++){
+			if(a.num[i]!=b.num[i]){
+				flag=false;
+			}
+		}
+	}else{
+		flag=false;
+	}
+
+	if(flag){
+		printf("YES 0.");
+		for(int i=0;i<n;i++){
+			printf("%c",a.num[i]);
+		}
+		printf("*10^%d\n",a.e);
+	}else{
+		printf("NO 0.");
+		for(int i=0;i<n;i++){
+			printf("%c",a.num[i]);
+		}
+		printf("*10^%d 0.",a.e);
+		for(int i=0;i<n;i++){
+			printf("%c",b.num[i]);
+		}
+		printf("*10^%d\n",b.e);
+	}
+	
+	return 0;
+}
+
+/*
+其他人写的
+*/
+/*
+https://www.liuchuo.net/archives/2293
+分析：
+1. cnta 和 cntb 通过扫描字符串得到小数点所在的下标（初始化cnta cntb为字符串长度，即下标为strlen(str））
+2. 考虑到可能前面有多余的零，用 p 和 q 通过扫描字符串使 p q 开始于第一个非0（且非小数点）处的下标
+3. 如果cnta >= p ，说明小数点在第一个开始的非0数的下标的右边，那么科学计数法的指数为cnta – p ; 否则应该为cnta – p + 1; 字符串b同理。
+4. 如果 p 和 q 等于字符串长度， 说明字符串是 0， 此时直接把 cnta（或者cntb）置为0，因为对于0来说乘以几次方都是相等的，如果不置为0可能会出现两个0比较导致判断为它们不相等
+5. indexa = 0开始给新的A数组赋值，共赋值n位除去小数点外的正常数字，从p的下标开始。如果p大于等于strlen，说明字符串遍历完毕后依旧没能满足需要的位数，此时需要在A数组后面补上0直到满足n位数字。indexb同理，产生新的B数组
+6. 判断A和B是否相等，且cnta和cntb是否相等。如果相等，说明他们用科学计数法表示后是相同的，输出YES，否则输出NO，同时输出正确的科学计数法
+注意：
+– 10的0次方和1次方都要写。
+– 题目中说，无需四舍五入。
+– 数组开大点，虽然只有100位，但是很有可能前面的0很多导致根本不止100位。一开始开的110，几乎没有AC的任何测试点。。后来开了10000就AC了~
+*/
+#include <cstdio>
+#include <cstring>
+using namespace std;
+int main() {
+    int n, p = 0, q = 0;
+    char a[10000], b[10000], A[10000], B[10000];
+    scanf("%d%s%s", &n, a, b);
+    int cnta = strlen(a), cntb = strlen(b);
+    for(int i = 0; i < strlen(a); i++) {
+        if(a[i] == '.') {
+            cnta = i;
+            break;
+        }
+    }
+    for(int i = 0; i < strlen(b); i++) {
+        if(b[i] == '.') {
+            cntb = i;
+            break;
+        }
+    }
+    int indexa = 0, indexb = 0;
+    while(a[p] == '0' || a[p] == '.') p++;
+    while(b[q] == '0' || b[q] == '.') q++;
+    if(cnta >= p)
+        cnta = cnta - p;
+    else
+        cnta = cnta - p + 1;
+    if(cntb >= q)
+        cntb = cntb - q;
+    else
+        cntb = cntb - q + 1;
+    if(p == strlen(a))
+        cnta = 0;
+    if(q == strlen(b))
+        cntb = 0;
+    while(indexa < n) {
+        if(a[p] != '.' && p < strlen(a))
+            A[indexa++] = a[p];
+        else if(p >= strlen(a))
+            A[indexa++] = '0';
+        p++;
+    }
+    while(indexb < n) {
+        if(b[q] != '.' && q < strlen(b))
+            B[indexb++] = b[q];
+        else if(q >= strlen(b))
+            B[indexb++] = '0';
+        q++;
+    }
+    if(strcmp(A, B) == 0 && cnta == cntb)
+        printf("YES 0.%s*10^%d", A, cnta);
+    else
+        printf("NO 0.%s*10^%d 0.%s*10^%d" , A, cnta, B, cntb);
+    return 0;
+}
