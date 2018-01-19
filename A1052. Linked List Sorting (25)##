@@ -66,6 +66,7 @@ int main(){
 	int len=visit(head);
 	
 	//排序：将不再链表中的元素排到后面，在链表中的元素按关键字从小到大排序。
+	//注意：len==0时这一步应该放到下面else里。
 	sort(sll,sll+MAX,cmp);
 	
 	//输出
