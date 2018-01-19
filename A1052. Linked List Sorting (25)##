@@ -2,6 +2,8 @@
 https://www.patest.cn/contests/pat-a-practise/1052
 类型：静态链表
 
+题目大意：按关键字排序后更新链表。
+
 难度：2
 
 注意
@@ -31,7 +33,8 @@ struct node{
 	}
 }sll[MAX];
 
-int visit(int p){//返回从p开始的链表的长度
+//访问链表，并判断结点是否属于链表。并返回从p开始的链表的长度
+int visit(int p){
     int len=0;
 	while(p!=-1){
 		sll[p].flag=1;
@@ -49,6 +52,7 @@ bool cmp(struct node a,struct node b){
 }
 
 int main(){
+	//输入
 	int n,head;
 	cin>>n>>head;
 	for(int i=0;i<n;i++){
@@ -58,10 +62,13 @@ int main(){
 		sll[index].addr=index;
 	}
 	
+	//获得链表长度，即在链表中的元素个数。
 	int len=visit(head);
 	
+	//排序：将不再链表中的元素排到后面，在链表中的元素按关键字从小到大排序。
 	sort(sll,sll+MAX,cmp);
-
+	
+	//输出
 	if(len==0){//特判
 		printf("0 -1");
 	}else{//但元素为0个时，head为-1，不能赋值为sll[0].addr，且输出格式不为%05d。
