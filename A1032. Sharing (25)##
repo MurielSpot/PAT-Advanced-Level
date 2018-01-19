@@ -1,6 +1,6 @@
 /*
 https://www.patest.cn/contests/pat-a-practise/1032
-类型：链表（找公共后缀）
+类型：静态链表（找公共后缀）
 
 难度：2，不难但是浪费了很多时间。
 */
