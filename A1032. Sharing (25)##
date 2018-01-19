@@ -1,0 +1,96 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1032
+类型：链表（找公共后缀）
+
+难度：2，不难但是浪费了很多时间。
+*/
+
+/*
+注意：
+1、数据输入的最后一行要有空白字符才能scanf结束，否则debug会一直停留在scanf，会让人误以为是数据格式出错或其他问题。
+2、%c可以读入空格，所以在读入数据1111 i时，%d %c中间要有空格。
+3、注意输出格式的要求：-1前面不可以补0，其他结果不足五位都要补0！
+*/
+
+#include<stdio.h>
+
+const int MAX=100010;
+
+struct node{
+	int data;
+	int next;
+}sll[MAX];//staticLinkedList
+
+int len(int head){
+	if(head==-1)return 0;
+	int len=0;
+	do{
+		len++;
+	}while((head=sll[head].next)!=-1);
+	return len;
+}
+
+inline int nextIndex(int index){
+	return sll[index].next;
+}
+
+int main(){
+	//读数据
+	int a,b,n;
+	scanf("%d%d%d",&a,&b,&n);
+	for(int i=0;i<n;i++){
+		int index;
+		scanf("%d",&index);//debug时，由于数据最后一行需要空白字符才能结束scanf的输出，但我忘了回车，导致一直重复测试数据，以为数据格式错误导致scanf无法读入数据，但实际是回车的问题，导致浪费了很多时间。
+		getchar();
+		scanf("%c %d",&sll[index].data,&sll[index].next);
+	}
+	
+	//计算两个链表长度
+	int alen=len(a);
+	int blen=len(b);
+	//printf("alen=%d,blen=%d\n",alen,blen);
+
+	//因为链表长度等于：不同部分长度+公共后缀长度。所以两个链表长度的差值等于前面不同部分的长度。
+	//将长的链表去掉开头等于这个差值个数的元素，两个链表变得一样长，在从这两个链表开始一次比较对应的第1、2、3...元素，直到发现相同地址或-1。
+
+	//去除长的链表长于另一条链表的开头部分。
+	int t,ap,bp;
+	if(alen>blen){//一开始把t=a写成了t=alen导致出错。
+		t=a;
+		while(alen>blen){
+			t=nextIndex(t);
+			alen--;
+		}
+		ap=t;
+		bp=b;
+	}else{
+		t=b;
+		while(blen>alen){
+			t=nextIndex(t);
+			blen--;
+		}
+		ap=a;
+		bp=t;
+	}
+	
+	//alen=len(ap);blen=len(bp);
+	//printf("alen=%d,blen=%d\n",alen,blen);
+	
+	//处理过后的两个一样长的链表，从同比较它们对应次序的元素，知道发现一样地址。
+	while(1){//一开始把这里的ap和bp写成了a和b导致出错。
+		if(ap==bp){
+			if(ap==-1)printf("-1");//-1前面不可以补0。
+			else printf("%05d",ap);//注意结果不足五位要补0。
+			break;
+		}else{
+			if(ap==-1||bp==-1){
+				printf("a!=b,but one of b and a equals -1,wrong!");
+				break;
+			}
+			ap=nextIndex(ap);
+			bp=nextIndex(bp);
+		}
+	}
+	
+	return 0;
+}
