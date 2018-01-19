@@ -1,0 +1,82 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1052
+类型：静态链表
+
+难度：2
+
+注意
+1、可能会有无效结点，所有要把它们挑出来。
+2、要特判元素为0的情况，此时头结点为-1，不能用%05d格式输出。
+*/
+
+
+#include<stdio.h>
+
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+const int MAX=100010;
+
+struct node{
+	int key;
+	int addr;
+	int next;
+	int flag;
+	node(){
+		key=-2;
+		addr=-2;
+		next=-2;
+		flag=-2;
+	}
+}sll[MAX];
+
+int visit(int p){//返回从p开始的链表的长度
+    int len=0;
+	while(p!=-1){
+		sll[p].flag=1;
+		p=sll[p].next;
+		//printf("%d ",p=sll[p].next);
+		len++;
+	}
+	//printf("\n");
+	return len;
+}
+
+bool cmp(struct node a,struct node b){
+	if(a.flag!=1||b.flag!=1)return a.flag>b.flag;
+	else return a.key<b.key;
+}
+
+int main(){
+	int n,head;
+	cin>>n>>head;
+	for(int i=0;i<n;i++){
+		int index;
+		scanf("%d",&index);
+		scanf("%d%d",&sll[index].key,&sll[index].next);
+		sll[index].addr=index;
+	}
+	
+	int len=visit(head);
+	
+	sort(sll,sll+MAX,cmp);
+
+	if(len==0){//特判
+		printf("0 -1");
+	}else{//但元素为0个时，head为-1，不能赋值为sll[0].addr，且输出格式不为%05d。
+		head=sll[0].addr;
+		printf("%d %05d\n",len,head);//这里输出len不能输出n，题目也没说有不在链表中的元素，但最好还是区分开，打印链表的元素数。
+		for(int i=0;i<len;i++){
+			if(i!=len-1){
+				printf("%05d %d %05d\n",sll[i].addr,sll[i].key,sll[i+1].addr);
+				//sll[i].next=sll[i+1].addr;
+			}else{
+				printf("%05d %d -1\n",sll[i].addr,sll[i].key);
+				//sll[i].next=-1;
+			}
+		}
+	}
+
+	return 0;
+}
