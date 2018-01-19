@@ -10,6 +10,7 @@ https://www.patest.cn/contests/pat-a-practise/1032
 1、数据输入的最后一行要有空白字符才能scanf结束，否则debug会一直停留在scanf，会让人误以为是数据格式出错或其他问题。
 2、%c可以读入空格，所以在读入数据1111 i时，%d %c中间要有空格。
 3、注意输出格式的要求：-1前面不可以补0，其他结果不足五位都要补0！
+4、使用map容易超时。
 */
 
 #include<stdio.h>
@@ -93,4 +94,40 @@ int main(){
 	}
 	
 	return 0;
+}
+
+/*
+其他人的
+*/
+/*
+https://www.liuchuo.net/archives/2113
+题目大意：求两个链表的首个共同结点的地址。如果没有，就输出-1
+分析：用结构体数组存储，node[i]表示地址为i的结点，key表示值，next为下一个结点的地址，flag表示第一条链表有没有该结点
+遍历第一条链表，将访问过的结点的flag都标记为true，当遍历第二条结点的时候，如果遇到了true的结点就输出并结束程序，没有遇到就输出-1
+*/
+#include <cstdio>
+using namespace std;
+struct NODE {
+    char key;
+    int next;
+    bool flag;
+}node[100000];
+int main() {
+    int s1, s2, n, a, b;
+    scanf("%d%d%d", &s1, &s2, &n);
+    char data;
+    for(int i = 0; i < n; i++) {
+        scanf("%d %c %d", &a, &data, &b);
+        node[a] = {data, b, false};
+    }
+    for(int i = s1; i != -1; i = node[i].next)
+        node[i].flag = true;
+    for(int i = s2; i != -1; i = node[i].next) {
+        if(node[i].flag == true) {
+            printf("%05d", i);
+            return 0;
+        }
+    }
+    printf("-1");
+    return 0;
 }
