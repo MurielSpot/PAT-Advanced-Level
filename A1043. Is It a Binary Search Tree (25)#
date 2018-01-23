@@ -1,0 +1,104 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1043
+类型：树的先序遍历、后序遍历，树的镜像。根据所给序列判断是否是先序遍历。
+
+难度：1
+
+注意事项：
+修改变量名、函数名时要把原来旧的名字全部替换掉，不要有遗漏。尤其是递归的时候，复制原递归函数，改变名称，而内部名称忘了改，导致递归式调用了旧的函数，做题时经常犯这种错误。
+*/
+
+
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+
+const int maxn=1010;
+int seq[maxn];
+
+//找第一个不小于x的值，返回这个值所在位置。若无此值，返回可以加入的位置，即最后一个元素后面。
+int firstNotLess(int left,int right,int x){
+	for(int i=left;i<=right;i++){
+		if(seq[i]>=x)return i;
+	}
+	return right+1;
+}
+//找第一个小于x的值，返回这个值所在位置。若无此值，返回可以加入的位置，即最后一个元素后面。
+int firstLess(int left,int right,int x){
+	for(int i=left;i<=right;i++){
+		if(seq[i]<x)return i;
+	}
+	return right+1;
+}
+
+//判断是否是先序遍历，[left,right]为需要判断的区间，且先序序列中seq[left]为根结点。
+bool judgePre(int left,int right){
+	//区间一直符合先序序列的条件则返回true。
+	if(left>right)return true;
+	//找当前大于等于根结点的第一个数的位置，以划分左右子树范围。
+	int pos=firstNotLess(left+1,right,seq[left]);
+	//第一个大于等于根结点的元素在[left+1,right]上，则需判断[pos,right]上的元素是否都比pos大，如果都比它大，则目前符合先序序列条件，继续递归判断。不满足则说明不满足先序序列的要求，返回false。
+	for(int i=pos;i<=right;i++){
+		if(seq[i]<seq[left])return false;
+	}
+	//递归判断右子树,左子树。
+	return judgePre(left+1,pos-1)&&judgePre(pos,right);
+	
+/*下面这一步已经包含在上面的判断里了，不需要再分开判断。	//如果右边第一个就比根结点大，认为右边就是右子树，判断右子树是否是先序序列。如果右边元素都比根结点小，则认为右边元素都属于左子树，继续判断左子树。这两种情况都是要继续判断[left+1,right]区间。
+	if(pos==left+1||pos==right+1)return judge(left+1,right,seq);
+*/
+}
+
+//判断是否是先序遍历的镜像。
+bool judgeM(int left,int right){
+	if(left>right)return true;
+	int pos=firstLess(left+1,right,seq[left]);
+	for(int i=pos;i<=right;i++){
+		if(seq[i]>=seq[left])return false;
+	}
+	return judgeM(left+1,pos-1)&&judgeM(pos,right);
+}
+
+//后序输出
+int flag=0;
+void output(int left,int right){
+	if(left>right)return;
+	int pos=firstNotLess(left+1,right,seq[left]);
+	output(left+1,pos-1);
+	output(pos,right);
+	if(flag)printf(" %d",seq[left]);
+	else{
+		flag=1;
+		printf("%d",seq[left]);
+	}
+}
+void outputM(int left,int right){
+	if(left>right)return;
+	int pos=firstLess(left+1,right,seq[left]);
+	outputM(left+1,pos-1);//中途把outputM写成了output而出错。
+	outputM(pos,right);
+	if(flag)printf(" %d",seq[left]);
+	else{
+		flag=1;
+		printf("%d",seq[left]);
+	}
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&seq[i]);
+	}
+	
+	if(judgePre(0,n-1)){
+		printf("YES\n");
+		output(0,n-1);
+	}else if(judgeM(0,n-1)){
+		printf("YES\n");
+		outputM(0,n-1);
+	}else{
+		printf("NO");
+	}
+	
+	return 0;
+}
