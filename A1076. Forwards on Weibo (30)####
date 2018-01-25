@@ -1,0 +1,107 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1076
+题型：图的遍历（bfs，结点的层次）。
+
+难度：4
+
+注意事项：
+1、图计算层次用的是bfs，不是dfs。下面代码中的dfs有大问题，以后做类似的题目一定要注意！
+*/
+
+
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<map>
+#include<string>
+#include<queue> 
+using namespace std;
+
+const int maxn = 1010;
+//const int INF = 1000000000;//无穷大。
+
+int totalUser;//<=1000。用户从1编号到totalUser。
+int level;//the levels of indirect followes that are counted.
+int k;//需要查询的用户数。
+
+int follower[maxn][maxn]={0};//第i行存的是关注i用户的人。而输入时输入的是某用户关注的人，所以在输入到g中时要注意把关注转换成被关注。
+
+bool inq[maxn];
+int layer[maxn];
+
+void bfs(int u){
+	fill(inq,inq+maxn,false);
+	fill(layer,layer+maxn,-1);
+	
+	int forwards=0; 
+	
+	int l=0;
+	queue<int> q;
+	inq[u]=true;
+	layer[u]=0;
+	q.push(u);
+	while(!q.empty()){
+		u=q.front();
+		q.pop();
+		if(layer[u]<=level&&layer[u]!=0){
+			forwards++;
+		}else if(layer[u]>level){
+			break;
+		}
+		for(int v=1;v<=totalUser;v++){
+			if(follower[u][v]>0&&inq[v]==false){
+				inq[v]=true;
+				layer[v]=layer[u]+1;
+				q.push(v);
+			}
+		}
+	}
+	
+	printf("%d\n",forwards);
+}
+/*
+这道题不要用深搜，比如下面：
+1<-2<-3<-4<-5,且1<-3。
+用深搜时，1到5依次为1、2、3、4、5层，然后都被设置为已经访问，但实际上根据广搜，3时第二层，4、5依次为第三、四层。
+计算层次数好像之前是树的时候才用深搜。注意注意！回头翻翻笔记确认一下。
+切记！切记！图计算层次用bfs。
+
+void dfs(int u,int nowLevel,int &forwards){
+	vis[u]=true;
+	if(nowLevel)forwards++;//非0层才加1。 
+	if(nowLevel>=level)return;
+	for(int v=1;v<=totalUser;v++){
+		if(follower[u][v]>0&&vis[v]==false){
+			dfs(v,nowLevel+1,forwards);
+		}
+	} 
+}
+*/
+
+void output(){
+	for(int i=1;i<=totalUser;i++){
+		for(int j=1;j<=totalUser;j++){
+			printf("%2d  ",follower[i][j]);
+		}
+		printf("\n");
+	}
+}
+int main() {
+	scanf("%d%d", &totalUser, &level);
+	for(int i=1;i<=totalUser;i++){
+		int t1,t2;
+		scanf("%d",&t1);
+		for(int j=0;j<t1;j++){
+			scanf("%d",&t2);
+			follower[t2][i]=1;//t2被i所关注。 
+		}
+	}
+	scanf("%d",&k);
+	for(int i=0;i<k;i++){
+		int id;
+		scanf("%d",&id);
+		bfs(id);
+	}
+
+	return 0;
+}
