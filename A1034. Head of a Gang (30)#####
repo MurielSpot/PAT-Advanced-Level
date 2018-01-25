@@ -1,0 +1,106 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1034
+类型：图的遍历，连通子图，字符串与数字的映射。
+
+难度：5
+*/
+
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<map>
+#include<string>
+using namespace std;
+
+const int maxn = 2010;//总人数，注意总电话数不大于1000，而打电话的有两个人，所以maxn要大于2000。
+const int INF = 1000000000;//无穷大。
+
+						   //map自动按键type1从小到大排序。
+map<int, string> int2string;//编号-》姓名。
+map<string, int> string2int;//姓名-》编号。
+map<string, int> gang;//head-》gang中的人数。
+int g[maxn][maxn] = { 0 };
+int weight[maxn] = { 0 };
+int n, k, numPerson = 0;//总电话数，门限值，总人数。
+bool vis[maxn] = { false };//是否被访问。
+
+int getIndex(string str) {//根据名称获得编号。
+	if (string2int.find(str) != string2int.end()) {//str已经出现过。
+		return string2int[str];
+	}
+	else {
+		string2int[str] = numPerson;
+		int2string[numPerson] = str;
+		return numPerson++;
+	}
+}
+
+void dfs(int u, int &totalW, int &headIndex, int &num) {//maxw表示权重最大的值，headIndex为集团的首领的编号。
+	vis[u] = true;
+	num++;
+	if (weight[u]>weight[headIndex]) {
+		headIndex = u;
+	}
+	/*注意，上面代码不需要像下面这样写，下面的代码另外多设置了maxw来记录最大的权值（其实就是首领的权值），因为每次得到首领headIndex时，headIndex对应的权值一定是最大的！！！！！！！（更改前的代码中dfs还用int &maxw每次来传递它的值，代码更改后已经删除了。）
+	if(weight[u]>maxw){
+	maxw=weight[u];
+	headIndex=u;
+	}
+	*/
+	for (int v = 0; v<numPerson; v++) {
+		if (g[u][v]<INF&&g[u][v]>0) {//有时候图会用0表示不可达，有时使用INF，所以这样写表示结点可以到达，我认为更好。
+			totalW += g[u][v];
+			g[u][v] = g[v][u] = 0;//为了防止回头重复添加边的权值。这一步非常重要，我完全没有想到。
+			if (vis[v] == false) {
+				dfs(v, totalW, headIndex, num);
+			}
+		}
+		/*下面这段代码也有问题，因为总的电话权值，加入结点b已经从a被访问，但c与b是连通的，c与b打电话的值也是要加到总权值里的，但是不需要再对b进行遍历。上面是更改后的代码。
+		if(vis[v]==false&&g[u][v]!=INF){
+		//注意还要记录总的电话权值。且应该加在这里，电话对应的其实是边！！！
+		totalW+=g[u][v];
+		dfs(v,totalW,headIndex,num);
+		}
+		}
+		*/
+	}
+}
+
+void dfsTrave() {
+	for (int u = 0; u<numPerson; u++) {
+		//每次dfs都是一个gang。
+		if (vis[u] == false) {
+			int headI = u, totalW = 0, gangNum = 0;//头领编号，头领权重，集团成员数。
+			dfs(u, totalW, headI, gangNum);
+			//注意此处要判断gangNum是否大于2，因为不大于2不是一个集团。还要判断总权重，总权重不大于k，不是集团。
+			if (gangNum>2 && totalW>k) {
+				gang[int2string[headI]] = gangNum;
+			}
+		}
+	}
+}
+
+int main() {
+	scanf("%d%d", &n, &k);
+	for (int i = 0; i<n; i++) {
+		string name1, name2;
+		int w;
+		cin >> name1 >> name2 >> w;
+		int index1 = getIndex(name1);
+		int index2 = getIndex(name2);
+		weight[index1] += w;
+		weight[index2] += w;
+		g[index1][index2] += w;
+		g[index2][index1] += w;
+	}
+
+	dfsTrave();
+
+	printf("%d\n", gang.size());
+	map<string, int>::iterator it;
+	for (it = gang.begin(); it != gang.end(); it++) {
+		cout << it->first << " " << it->second << endl;
+	}
+
+	return 0;
+}
