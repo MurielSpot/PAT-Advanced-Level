@@ -1,0 +1,74 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1009
+题型：多项式乘法
+
+难度：4
+
+注意事项：
+1、用到了double，%ld。注意浮点数在没有把握的情况下不要参加比较。
+2、注意输出的格式要求。
+3、！！！！！！可以只存储第一个数，第二个数在读入时和第一个数进行计算直接得出结果，这样可以节省空间。！！！！！！并且第一个数不用按照指数指示的位置存放，可以从0到k1-1依次存放，因为第二个数和和它相乘时从第一个数依次往后相乘，并不需要考虑找某个指数对应的系数，只有得到的结果才需要根据指数存储，因为可能还会有同样指数的值存入，如果此时要查找的话就太浪费时间。
+4、多项式乘法计算方法要会，该题中给的指数应该都是大于等于0的指数，当指数范围扩大且可能是小数时，考虑考虑怎么做！
+*/
+
+
+#include<cstdio>
+#include<cstring>
+#include<cmath> 
+using namespace std;
+
+const int MAXN=1010;
+const int eps=1e-8;
+
+double product[2010];//注意结果的指数需要大于2000.
+double a[MAXN],b[MAXN];
+
+void compute(){
+	int te,tc;
+	for(int i=0;i<MAXN;i++){
+		if(fabs(a[i])>eps){//系数不为零才有计算的必要。
+			for(int j=0;j<MAXN;j++){
+				if(fabs(b[j])>eps){
+					//计算时，指数相加，系数相乘。当系数为0时不需要存储，但注意到此处系数不会出现0。
+					product[i+j]+=a[i]*b[j];//product[i+j]=a[i]*b[j]错的，不能直接等于，因为原来product里可能已经有之前计算的值存在里面！！！！！！
+				}
+			}
+		}
+	}
+	
+	int num=0;
+	for(int i=0;i<2010;i++){
+		if(product[i]!=0.0){//注意此处对浮点数做比较了！！！可能不是很严谨。
+			num++;
+		}
+	}
+	printf("%d",num);
+	for(int i=2009;i>=0;i--){//注意输出有精度要求。且要从系数大的方向输出！！！！
+		if(product[i]!=0.0){
+			printf(" %d %.1lf",i,product[i]);
+		}
+	}
+}
+
+int main(){
+	memset(product,0,sizeof(product));
+	memset(a,0,sizeof(a));
+	memset(b,0,sizeof(b));
+	
+	int k1,k2;
+	int e;double c;//该题中，指数按都是整数算没有问题。且指数都大于等于0，所以可以当数组下标。
+	scanf("%d",&k1);
+	for(int i=0;i<k1;i++){
+		scanf("%d%lf",&e,&c);
+		a[e]=c;
+	}
+	scanf("%d",&k2);
+	for(int i=0;i<k2;i++){
+		scanf("%d%lf",&e,&c);
+		b[e]=c;
+	}
+	
+	compute();
+	
+	return 0;
+}
