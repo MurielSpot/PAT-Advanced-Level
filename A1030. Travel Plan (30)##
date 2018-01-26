@@ -1,0 +1,96 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1030
+题型：最短路径（多条最短路径，选取其中代价最小的一条，并记录这条最短路径经过的结点、总代价、总长度。）
+
+难度：2
+*/
+
+
+#include<cstring>
+#include<cstdio>
+#include<iostream>
+using namespace std;
+
+const int maxn = 510;
+const int INF = 1000000000;//无穷大。
+
+struct hw{
+	int distance;
+	int cost;
+	hw(){
+		distance=INF;
+		cost=INF;
+	}
+	hw(int d,int c){
+		distance=d;
+		cost=c;
+	}
+};
+
+hw g[maxn][maxn];
+
+int n,m,s,d;//cities(0~n-1),highways,starting,destination.
+
+int dist[maxn],pre[maxn],weight[maxn];
+bool vis[maxn]={false};
+void dijkstra(int s){
+	fill(dist,dist+maxn,INF);
+	memset(pre,-1,sizeof(pre));
+	fill(weight,weight+maxn,INF);
+	
+	dist[s]=0;
+	//vis[s]=true;//这里还不能设置vis等于true，否则下一步就选不出离源点最近的点了，因为它本身已访问，而其他点距离它的距离都是INF。 
+	weight[s]=0;
+	for(int i;i<n;i++){
+		int minIndex=-1,minDist=INF;
+		for(int v=0;v<n;v++){
+			if(dist[v]<minDist&&vis[v]==false){
+				minDist=dist[v];
+				minIndex=v;
+			}
+		}
+		if(minIndex==-1)return;
+		vis[minIndex]=true;
+		for(int v=0;v<n;v++){
+      //访问新加入的最近结点的邻接结点。
+			if(vis[v]==false && g[minIndex][v].distance<INF){//邻接结点（<INF）且未被访问。
+        
+				if(dist[v]>g[minIndex][v].distance+dist[minIndex]){//经过最近结点可以使邻接结点距离变小。
+					dist[v]=g[minIndex][v].distance+dist[minIndex];//更新距离。
+					pre[v]=minIndex;//更新前驱，minIndex已经被设置为已访问，所以minIndex之前的路径一定是最短路径，且这些之前的路径因为已访问不会被改变，不用担心前驱结点变化影响当前v的最短距离。
+					weight[v]=weight[minIndex]+g[minIndex][v].cost;//更新权值。同理，minIndex之前的权值已经是最小的，所以此处直接加上minIndex与v之间路径的代价即可。
+				}else if(dist[v]==g[minIndex][v].distance+dist[minIndex]){//遇到相同距离的最短路。
+					if(weight[v]>weight[minIndex]+g[minIndex][v].cost){//判断代价是否更小。
+						weight[v]=weight[minIndex]+g[minIndex][v].cost;//是则更新当前v的代价（weight[i]中存的是从源点到i所需的最小代价）。
+						pre[v]=minIndex;//同时v的前驱也要随之改变。
+					}
+				}
+			}
+		}
+	}
+}
+
+void getPath(int u){
+	if(u==s){
+		printf("%d ",u);
+		return;
+	}
+	getPath(pre[u]);
+	printf("%d ",u);
+}
+
+int main() {
+	scanf("%d%d%d%d", &n,&m,&s,&d);
+	for(int i=0;i<m;i++){
+		int t1,t2,t3,t4;
+		scanf("%d%d%d%d",&t1,&t2,&t3,&t4);
+		g[t1][t2]=g[t2][t1]=hw(t3,t4);
+	}
+	
+	dijkstra(s);
+	
+	getPath(d);
+	printf("%d %d",dist[d],weight[d]);
+	//输出代价最小的最短路经过的城市结点。
+	return 0;
+}
