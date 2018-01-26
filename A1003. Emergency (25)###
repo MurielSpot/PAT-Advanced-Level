@@ -5,6 +5,7 @@ https://www.patest.cn/contests/pat-a-practise/1003
 难度：3
 */
 
+//mine
 #include<cstdio>
 #include<iostream>
 #include<algorithm>
@@ -115,3 +116,47 @@ int main() {
 	return 0;
 }
 
+//其他人
+bool vis[maxn]={false};
+int dist[maxn];
+int weight[maxn];
+int num[maxn];//记录最短路径条数。
+
+void dijkstra(int u){
+	fill(dist,dist+maxn,INF);
+	memset(num,0,sizeof(num));
+	memset(weight,0,sizeof(weight));
+	
+	dist[u]=0;
+	weight[u]=team[u];
+	num[u]=1;
+	
+	for(int v=0;v<n;v++){//循环n次。
+		int minIndex=-1,minDist=INF;
+		for(int i=0;i<n;i++){
+			if(dist[i]<minDist&&vis[i]==false){
+				minDist=dist[i];
+				minIndex=i;
+			}
+		}
+		if(minIndex==-1){
+			return;
+		}
+		vis[minIndex]=true;
+		for(int i=0;i<n;i++){
+			//连接的结点未访问，且可联通。
+			if(vis[i]==false&&g[minIndex][i]>0&&g[minIndex][i]<INF){
+				//如果通过minIndex可以使连接结点的距离变小。
+				if(dist[i]>dist[minIndex]+g[minIndex][i]){
+					dist[i]=dist[minIndex]+g[minIndex][i];//覆盖dist[i]
+					weight[i]=weight[minIndex]+team[i];//覆盖weight[i]
+				}else if(dist[i]==dist[minIndex]+g[minIndex][i]){//发现不同的路径，但最短距离相同。
+					if(weight[i]<weight[minIndex]+team[i]){//以minIndex为结点，找到的hands更多。
+						weight[i]=weight[minIndex]+team[i];
+					}
+					num[i]+=num[minIndex];//i可以经过minIndex之前的num[minIndex]条路径到达，而minIndex与i之间有1条路径，所以经过minIndex到达i的路径共有1*num[minIndex]条，加上经过其它已经计算的结点到达i，所以此时经过i的路径共有num[i]+=num[minIndex]条。
+				}
+			}
+		}
+	}
+}
