@@ -1,0 +1,88 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1057
+题型：栈，查找中位数，索引查找（分块查找）。
+
+难度：3
+
+注意事项：
+1、英文翻译出错：求栈中从大到小中间大小的元素，而不是栈中正中间的元素。
+2、用string类型超时了，用strcmp就没有超时。
+3、cin，cout也尽量不要用。
+4、一开始MAXN设置为10010，设置小了，出现了段错误！！！
+*/
+
+#include<cstdio>
+#include<iostream> 
+#include<cstring>
+#include<cmath> 
+#include<stack>
+using namespace std;
+
+const int MAXN=100010;
+
+stack<int> s;
+int table[MAXN]={0};
+int block[317]={0};
+int sp=0;
+//每个block存316个元素，共317个块。因为入栈的元素最多也就100000个，所以够存。
+
+int peekMedian(int kth){
+	if(kth<0)return -1;
+	int i=0,t=0;//i表示块号，t表示已经统计了多少数字。
+	while(t+block[i]<kth){
+		t+=block[i++];
+	}
+	int j=i*316;//计算应该从table的哪个数开始继续累加t。
+	while(t+table[j]<kth){
+		t+=table[j++];
+	}
+	return j;
+}
+//对block、table也进行push。
+void push2(int x){
+	table[x]++;
+	block[x/316]++;
+}
+//对block、table也进行pop。
+int pop2(int x){
+	if(table[x]){
+		table[x]--;block[x/316]--;
+	}else return -1;
+}
+
+int main(){
+	char str[20];
+	int n,x;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%s",str);
+		if(strcmp(str,"Push")==0){
+			scanf("%d",&x);
+			push2(x);
+			s.push(x);
+		}else if(strcmp(str,"Pop")==0){
+			if(s.empty()){
+				printf("Invalid\n");
+			}else{
+				x=s.top();
+				s.pop();
+				pop2(x);
+				printf("%d\n",x);
+			}
+		}else{
+			if(s.empty()){
+				printf("Invalid\n");
+			}else{
+				x=s.size();
+				if(x%2){
+					x=(x+1)/2;
+				}else{
+					x/=2;
+				}
+				x=peekMedian(x);
+				printf("%d\n",x);
+			}
+		}
+	}
+	return 0;
+}
