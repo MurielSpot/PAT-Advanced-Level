@@ -1,0 +1,81 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1073
+类型：科学记数法。（B1024题目与这题完全一样。）
+
+难度：4
+*/
+
+#include<cstdio>
+
+int scientificNotation(){
+	char str[10000];
+	scanf("%s",str);
+	
+	if(str[0]=='-')printf("-");
+	
+	int i=1;
+	int dot,e,sign;
+	while(str[i]!='\0'){
+		if(str[i]=='.'){
+			dot=i;
+		}else if(str[i]=='E'){
+			e=i;
+		}else if(str[i]=='+'||str[i]=='-'){
+			sign=i;
+			break;
+		}
+		i++;
+	}
+	int exponent=0;
+	i=sign+1;
+	while(str[i]!='\0'){
+		exponent=exponent*10+(str[i]-'0');
+		i++;
+	}
+	int end=i;
+	
+	if(!exponent){
+		i=1;
+		while(i<e){
+			printf("%c",str[i++]);
+		}
+	}else{
+		if(str[sign]=='-'){
+			printf("0.");
+			while(--exponent){
+				printf("%c",'0');
+			}
+			i=1;
+			while(i<e){
+				if(i!=dot){
+					printf("%c",str[i]);
+				}
+				i++;
+			}
+		}else if(str[sign]=='+'){
+			i=1;
+			while(i<dot){
+				printf("%c",str[i++]);
+			}
+			i++;
+			while(exponent--){
+				if(i<e){
+					printf("%c",str[i++]);
+				}else{
+					printf("0");
+				}
+			}
+			if(i<e){
+				printf(".");
+			}
+			while(i<e){
+				printf("%c",str[i++]);
+			}
+		}
+	}
+}
+
+int main(){
+	scientificNotation();
+	return 0;
+}
