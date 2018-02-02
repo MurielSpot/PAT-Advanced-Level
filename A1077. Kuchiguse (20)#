@@ -1,0 +1,57 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1077
+类型：字符串处理。
+
+难度：1
+
+注意事项：
+1、反转字符串也可以使用algorithm下的reverse。
+2、n后面的回车要用getchar接收。
+3、此处接收字符串要用gets，不用scanf。
+*/ 
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+char str[100][260];
+
+int reverse(char arr[]){
+	int len=strlen(arr);
+	for(int i=0;i<len/2;i++){
+		int temp=arr[i];
+		arr[i]=arr[len-i-1];
+		arr[len-i-1]=temp;
+	}
+}
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	getchar();//这一句别忘了。 
+	for(int i=0;i<n;i++){
+		gets(str[i]);//此处应该用gets不用scanf
+		reverse(str[i]);
+	}
+	int i,j;
+	for(j=0;j<260;j++){
+		int up=str[0][j];//一列中最上面的那个字符。
+		for(i=0;i<n;i++){//由题字符串肯定大于等于2个。
+			if(str[i][j]!=up||str[i][j]=='\0'){//后缀查找结束，或某个字符串检索完。
+				if(j==0){
+					printf("nai");
+				}else{
+					for(int k=j-1;k>=0;k--){
+						printf("%c",str[0][k]);
+					}
+				}
+				//通过j=260来结束外层循环，通过break来解除当前循环。
+				j=260;
+				break;
+			}
+		}
+	}
+
+	return 0;
+}
