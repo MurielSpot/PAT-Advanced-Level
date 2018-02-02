@@ -1,6 +1,6 @@
 /*
 https://www.patest.cn/contests/pat-a-practise/1012
-类型：排序（stl（sort)
+类型：排序（stl（sort)，查找
 
 难度：3（英文题目差点理解错，是每一门课都在它那门课里排个名，平均分也是，然后找这些名次中最好的并输出相应科目）
 
