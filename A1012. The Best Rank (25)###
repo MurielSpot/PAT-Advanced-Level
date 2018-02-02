@@ -7,6 +7,7 @@ https://www.patest.cn/contests/pat-a-practise/1012
 注意事项：
 1、下面的代码比较啰嗦，前四个排序可以想办法合并成一个的。比如结构体里用一个数组SCORE[4]来表示三门分数即平均分，然后用一个全局变量i来依次表示0、1、2、3，则sort函数的cmp就可以根据score[i]来排名，用一个循环就可以代替四个排序代码块。
 2、学好英语。
+3、平均分的处理也可以不累加n门课成绩再除以n，再比较大小，而是直接使用总分来比较，效果相同。
 */
 #include<cstdio>
 #include<cstring>
@@ -24,7 +25,7 @@ struct info{
 	info(int id_,int c_,int m_,int e_){
 		id=id_;
 		c=c_;m=m_;e=e_;
-		average=(c_+m_+e_)/3;
+		average=(c_+m_+e_)/3;//平均分可以用总分来代替，因为只是用它来排名，不是真正用到了平均分。
 	}
 };
 
