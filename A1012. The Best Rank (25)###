@@ -1,0 +1,146 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1012
+类型：排序（stl（sort)
+
+难度：3（英文题目差点理解错，是每一门课都在它那门课里排个名，平均分也是，然后找这些名次中最好的并输出相应科目）
+
+注意事项：
+1、下面的代码比较啰嗦，前四个排序可以想办法合并成一个的。比如结构体里用一个数组SCORE[4]来表示三门分数即平均分，然后用一个全局变量i来依次表示0、1、2、3，则sort函数的cmp就可以根据score[i]来排名，用一个循环就可以代替四个排序代码块。
+2、学好英语。
+*/
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+struct info{
+	int id;
+	int c,m,e,average;
+	int cr,mr,er,ar;
+	info(){
+		int id=-1;
+	}
+	info(int id_,int c_,int m_,int e_){
+		id=id_;
+		c=c_;m=m_;e=e_;
+		average=(c_+m_+e_)/3;
+	}
+};
+
+
+bool cmpA(info a,info b){
+	return a.average>b.average;
+}
+bool cmpC(info a,info b){
+	return a.c>b.c;
+}
+bool cmpM(info a,info b){
+	return a.m>b.m;
+}
+bool cmpE(info a,info b){
+	return a.e>b.e;
+}
+bool cmpID(info a,info b){
+	return a.id>b.id;
+}
+
+int n,m;
+vector<struct info> tbr;
+int findArr[2010],findPtr=0;
+int binarySearch(int id,int left,int right){
+	//此时要求tbr中的数据已经按照id大小排过序。
+	if(left>right)return -1;
+	int mid=(left+right)/2;
+	if(tbr[mid].id==id){
+		return mid;
+	}
+	int t=binarySearch(id,left,mid-1);
+	if(t!=-1){
+		return t;
+	}else{
+		return binarySearch(id,mid+1,right);
+	}
+}
+
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=0;i<n;i++){
+		int idd,cpp,math,en;
+		scanf("%d%d%d%d",&idd,&cpp,&math,&en);
+		tbr.push_back(info(idd,cpp,math,en));
+	}
+	for(int i=0;i<m;i++){
+		scanf("%d",&findArr[findPtr++]);
+	}
+	
+	sort(tbr.begin(),tbr.end(),cmpA);
+	for(int i=0;i<n;i++){
+		if(i==0){
+			tbr[i].ar=1;
+		}else{
+			if(tbr[i].average==tbr[i-1].average){
+				tbr[i].ar=tbr[i-1].ar;
+			}else{
+				tbr[i].ar=i+1;
+			}
+		}
+	}
+	
+	sort(tbr.begin(),tbr.end(),cmpC);
+	for(int i=0;i<n;i++){
+		if(i==0){
+			tbr[i].cr=1;
+		}else{
+			if(tbr[i].c==tbr[i-1].c){
+				tbr[i].cr=tbr[i-1].cr;
+			}else{
+				tbr[i].cr=i+1;
+			}
+		}
+	}
+	sort(tbr.begin(),tbr.end(),cmpM);
+	for(int i=0;i<n;i++){
+		if(i==0){
+			tbr[i].mr=1;
+		}else{
+			if(tbr[i].m==tbr[i-1].m){
+				tbr[i].mr=tbr[i-1].mr;
+			}else{
+				tbr[i].mr=i+1;
+			}
+		}
+	}
+	
+	sort(tbr.begin(),tbr.end(),cmpE);
+	for(int i=0;i<n;i++){
+		if(i==0){
+			tbr[i].er=1;
+		}else{
+			if(tbr[i].e==tbr[i-1].e){
+				tbr[i].er=tbr[i-1].er;
+			}else{
+				tbr[i].er=i+1;
+			}
+		}
+	}
+	
+	sort(tbr.begin(),tbr.end(),cmpID);
+	for(int i=0;i<m;i++){
+		int index=binarySearch(findArr[i],0,tbr.size()-1);//返回某个成员在数组里的索引。
+		if(index==-1){
+			printf("N/A\n");
+		}else{
+			if(tbr[index].ar<=min(min(tbr[index].cr,tbr[index].mr),tbr[index].er)){
+				printf("%d A\n",tbr[index].ar);
+			}else if(tbr[index].cr<=min(tbr[index].mr,tbr[index].er)){
+				printf("%d C\n",tbr[index].cr);
+			}else if(tbr[index].mr<=tbr[index].er){
+				printf("%d M\n",tbr[index].mr);
+			}else{
+				printf("%d E\n",tbr[index].er);
+			}
+		}
+	}
+	return 0;
+}
