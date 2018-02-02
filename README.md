@@ -24,10 +24,17 @@ https://www.patest.cn/contests/pat-a-practise/1012
 类型：排序（stl（sort)，查找
 
 注意事项：
-1、下面的代码比较啰嗦，前四个排序可以想办法合并成一个的。比如结构体里用一个数组SCORE[4]来表示三门分数即平均分，然后用一个全局变量i来依次表示0、1、2、3，则sort函数的cmp就可以根据score[i]来排名，用一个循环就可以代替四个排序代码块。
-2、学好英语。
+
+1. 下面的代码比较啰嗦，前四个排序可以想办法合并成一个的。比如结构体里用一个数组SCORE[4]来表示三门分数即平均分，然后用一个全局变量i来依次表示0、1、2、3，则sort函数的cmp就可以根据score[i]来排名，用一个循环就可以代替四个排序代码块。
+2. 学好英语。
 
 ## A1020. Tree Traversals (25)##
 https://www.patest.cn/contests/pat-a-practise/1020
 
 类型：树的建立，树的遍历
+
+## A1025. PAT Ranking (25)####
+https://www.patest.cn/contests/pat-a-practise/1025
+
+注意：计算清数组元素有多少再申请！！
+
