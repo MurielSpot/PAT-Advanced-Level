@@ -1,0 +1,173 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1016
+
+类型：排序，日期时间计算。
+
+难度：5（做得超级痛苦）
+
+注意事项：
+1. 一开始读错题，以为给的记录就是按时间顺序给的，所以没有排序，结果逻辑上非常复杂，还要用到字符串hash，但实际上记录未排序，需要人为排序，并且排序后再做就简单多了。
+2. 其中处理时间差的部分比较麻烦。时间差可以用早一点的时间a反复加1分钟，当等于时间b的时候停止，这样做代码量小，但是计算次数感觉太多了。
+3. 做题时建议把代码拆成一个一个函数，并且对一个一个函数单独测试正确性，因为写完了长长的代码之后出错时，再检查真的无从查起，肉眼看太累，有些地方比如stl调试又很难看出来对错。建议一定要养成良好的代码习惯。
+4. 代码中接近末尾的地方有printf("Total amount: $%.2lf\n",sum);要注意是每个人的金额计算完才要输出，但并不是每个人都有有效通话记录，所以当名字改变开始计算另一个人的总费用时，并不是总是需要输出sum，所以之前的总费用是0的时候不要输出sum。这是个思维盲区，我自己根本没有注意到，所以要多积累做题经验，另外如果自己能想到所有可能出现的情况作为测试用例输入来测试代码正确性当然是坠吼的。
+除了题目中给的，下面这个是《算法笔记》中给出的很好的测试样例：
+10 10 10 10 10 10 20 20 20 15 15 15 15 15 15 15 20 30 20 15 15 10 10 10
+5
+aaa 01:01:01:03 on-line
+aaa 01:02:00:01 on-line
+CYLL 01:28:15:41 on-line
+aaa 01:05:02:24 on-line
+aaa 01:02:00:02 off-line
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+const int TIME=4;
+
+struct info{
+	char name[25];
+	int time[4];
+	int flag;//标识这时连线的记录还是离线的记录：1 online，2 offline，3初始化的值表示无效。
+	info(){flag=3;}
+}phoneRecord[1010];
+
+int toll[24];
+int getTollList(){//获得费用表。
+	for(int i=0;i<24;i++){
+		scanf("%d",&toll[i]);//24小时的费用。
+	}
+}
+
+//计算花费的时间、费用，打印时间和费用，并返回计算出的费用。
+double time_cost_print(struct info a,struct info b){
+	double cents=0;
+	int minutes=0;
+	if(a.time[1]==b.time[1]&&a.time[2]==b.time[2]){//在同一天且在同一个小时。
+			minutes+=(b.time[3]-a.time[3]);
+			cents+=(minutes)*toll[a.time[2]];
+	}else if(a.time[1]==b.time[1]&&a.time[2]<b.time[2]){//在同一天不在同一个小时。
+		//first hour.
+		minutes+=(60-a.time[3]);
+		cents+=(60-a.time[3])*toll[a.time[2]];
+		a.time[2]+=1;
+		//medium hour.
+		while(a.time[2]<b.time[2]){
+			minutes+=60;
+			cents+=60*toll[a.time[2]];
+			a.time[2]+=1;//算完加一个小时。
+		}
+		//last hour.
+		minutes+=b.time[3];
+		cents+=b.time[3]*toll[b.time[2]];
+	}else{//不在同一天。
+		//先把第一天剩下的时间算完，再加最后一天到结束的时间，再加中间固定价钱的若干天。
+		//第一天
+		minutes+=60-a.time[3];
+		cents=(60-a.time[3])*toll[a.time[2]];
+		a.time[2]++;
+		while(a.time[2]<24){
+			minutes+=60;
+			cents+=60*toll[a.time[2]];
+			a.time[2]++;
+		}
+		a.time[1]++;
+		//中间天
+		while(a.time[1]<b.time[1]){
+			minutes+=60*24;
+			for(int i=0;i<24;i++){
+				cents+=60*toll[i];
+			}
+			a.time[1]++;
+		}
+		//最后一天
+		minutes+=b.time[3];
+		cents+=b.time[3]*toll[b.time[2]];
+		b.time[2]--;
+		while(b.time[2]>=0){
+			minutes+=60;
+			cents+=60*toll[b.time[2]];
+			b.time[2]--;
+		}
+	}
+	printf("%d $%.2lf\n",minutes,cents/100); 
+	return cents/100;
+}
+
+bool cmp(struct info a,struct info b){
+	if(strcmp(a.name,b.name)==0){
+		if(a.time[0]==b.time[0]){
+			if(a.time[1]==b.time[1]){
+				if(a.time[2]==b.time[2]){//一开始把这一层判断少写了导致错误！！！
+					return a.time[3]<=b.time[3];
+				}else return a.time[2]<b.time[2];
+			}return a.time[1]<b.time[1];
+		}return a.time[0]<b.time[0];
+	}else return strcmp(a.name,b.name)<0;//字母序小的放在前面。
+}
+
+int n;
+int main(){
+	//输入数据。
+	getTollList();
+	scanf("%d",&n);//获得总记录数。
+	for(int i=0;i<n;i++){
+		char tmp[25];
+		scanf("%s",phoneRecord[i].name);
+		scanf("%d:%d:%d:%d",&phoneRecord[i].time[0],&phoneRecord[i].time[1],&phoneRecord[i].time[2],&phoneRecord[i].time[3]);
+		scanf("%s",tmp);
+		if(strcmp(tmp,"on-line")==0){
+			phoneRecord[i].flag=1;
+		}else if(strcmp(tmp,"off-line")==0){
+			phoneRecord[i].flag=2;
+		}
+	}
+	
+	//排序，先按人名字母序排列，再按时间排序。
+	sort(phoneRecord,phoneRecord+n,cmp);
+	
+//	for(int i=0;i<n;i++){
+//		printf("%s	%02d:%02d:%02d	%d\n",phoneRecord[i].name,phoneRecord[i].time[1],phoneRecord[i].time[2],phoneRecord[i].time[3],phoneRecord[i].flag);
+//	}
+//	return 0;
+	
+	int former=-3;
+	//先处理第一个值，因为n为正整数，所以phoneRecord[0]肯定是有值的。
+	if(phoneRecord[0].flag==1)former=0;
+	double sum=0;//统计每个人总共需要支付的金额。
+	bool printName=true;
+	for(int i=1;i<n;i++){
+		//如果相邻两个记录，姓名相同，前一个是online后一个是offline则可以构成一个完整记录，对它进行计算并输出。
+		if(strcmp(phoneRecord[i].name,phoneRecord[i-1].name)==0){
+			if(phoneRecord[i].flag==1){
+				former=i;
+			}else if(phoneRecord[i].flag==2){
+				if(former==i-1){
+					if(printName){
+						printf("%s %02d\n",phoneRecord[i].name,phoneRecord[i].time[0]);//这一句一个人只要打印一次就可以，不用每个记录都打印一次。
+						printName=false;
+					}
+					printf("%02d:%02d:%02d %02d:%02d:%02d ",phoneRecord[i-1].time[1],phoneRecord[i-1].time[2],phoneRecord[i-1].time[3],phoneRecord[i].time[1],phoneRecord[i].time[2],phoneRecord[i].time[3]);
+					sum+=time_cost_print(phoneRecord[i-1],phoneRecord[i]);
+				}
+			}
+		}else{//名字改变。
+			//虽然名字不同，但是这一步如果i对应的记录为online还是要改变former的值的！否则下一个值可与当前配对，但former值未更新，会出错。
+			if(phoneRecord[i].flag==1)former=i;//由于ifelse的第一句都是这一句，所以其实可以提到ifelse判断前面写。
+			//将上一个人总共需要支付的金额输出。只有sum不为0时才需要输出，因为为0表示到现在为止还没有有效的记录，只是名字变了。
+			if(sum){
+				printf("Total amount: $%.2lf\n",sum);
+			}
+			//sum需置0，printName需置true，供下一个人使用。
+			sum=0;printName=true;
+		}
+	}
+	//最后一个人的金额情况可能还未输出。
+	if(sum){//如果sum非零，说明最后一个人的金额还未输出。
+		printf("Total amount: $%.2lf\n",sum);
+	}
+	return 0;
+}
