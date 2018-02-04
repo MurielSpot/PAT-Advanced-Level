@@ -1,0 +1,40 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1092
+
+类型：哈希。日常生活模拟。
+
+难度：1
+*/
+
+//获得店家的项链，相应的珠子个数加1。伊娃需要某个珠子，就把某个珠子的个数减1。
+//扫描记录珠子个数的hash数组，如果小于0，说明伊娃需要珠子但是不够，missing记录增加相应的珠子数量；大于0说明店家项链中的珠子没有用完，extra增加。
+//如果发现missing不为0，说明缺珠子，No，否则Yes，打印出相应缺失或多余的珠子即可。
+#include<cstdio>
+#include<cstring>
+using namespace std;
+
+int hash[129]={0};
+
+int main(){
+	int c;
+	while((c=getchar())!='\n'&&c!=EOF){
+		hash[(int)c]++;
+	}
+	while((c=getchar())!='\n'&&c!=EOF){
+		hash[(int)c]--;
+	}
+	int extra=0,missing=0;
+	for(int i=0;i<129;i++){
+		if(hash[i]<0){
+			missing+=(0-hash[i]);
+		}else if(hash[i]>0){
+			extra+=hash[i];
+		}
+	}
+	if(missing>0){
+		printf("No %d",missing);
+	}else{
+		printf("Yes %d",extra);
+	}
+	return 0;
+}
