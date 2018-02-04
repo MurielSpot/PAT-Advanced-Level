@@ -34,3 +34,9 @@ https://www.patest.cn/contests/pat-a-practise/1084
 
 注意：
 1. 用if还是while不要混。
+
+## A1092. To Buy or Not to Buy (20)#
+
+https://www.patest.cn/contests/pat-a-practise/1092
+
+类型：哈希。
