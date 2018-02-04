@@ -1,0 +1,53 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1084
+
+类型：字符串处理（给出原字符串，找出另一条字符串与原字符串相比缺失的字符。）
+
+难度：1
+
+注意：
+1. 用if还是while不要混。
+*/
+
+#include<cstdio>
+#include<cstring>
+using namespace std;
+
+bool hash[129]={false};
+
+int main(){
+	char a[85],b[85];
+	scanf("%s %s",a,b);
+	int lena=strlen(a);
+	int lenb=strlen(b);
+	
+	//用两个指针指向两个字符串开头，依次比较字符，如果原字符串与当前字符串不同说明字符缺失，把缺失字符打出，再将原字符串下一个字符与当前字符串比较。
+	int i=0,j=0;
+	while(i<lena&&j<lenb){
+		if(a[i]==b[j]){
+			i++;
+			j++;
+		}else{//某键盘字符失灵才需要打印出该字符。
+			if(a[i]>='a'&&a[i]<='z'){//转大写。
+				a[i]-=32;
+			}
+			if(hash[(int)a[i]]==false){//未被打印。
+				hash[(int)a[i]]=true;
+				printf("%c",a[i]);
+			}
+			i++;
+		}
+	}
+	//如果原字符串还有字符，说明这些字符都是打不出来的。
+	while(i<lena){//注意这里不是if，是while。
+		if(a[i]>='a'&&a[i]<='z'){
+			a[i]-=32;
+		}
+		if(hash[(int)a[i]]==false){
+			hash[(int)a[i]]=true;
+			printf("%c",a[i]);
+		}
+		i++;
+	}
+	return 0;
+}
