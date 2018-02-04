@@ -1,0 +1,64 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1055
+
+类型：排序。
+
+难度：1
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+const int MAXN=100010;
+
+struct info{
+	char name[9];
+	int age;
+	int netWorth;
+}record[MAXN];
+
+int n,k;
+
+void print(int m,int amin,int amax){
+	//在年龄范围[amin,amax]范围内，找m个收入最大的.
+	//non-increasing:netWorth, non-decreasing:ages, non-decreasing:name.
+	int count=0;
+	for(int i=0;i<n;i++){
+		if(record[i].age<=amax&&record[i].age>=amin){
+			count++;
+			printf("%s %d %d\n",record[i].name,record[i].age,record[i].netWorth);
+			if(count>=m)break;
+		}
+	}
+	if(count==0)printf("None");
+}
+
+bool cmp(struct info a,struct info b){
+	if(a.netWorth==b.netWorth){
+		if(a.age==b.age){
+			return strcmp(a.name,b.name)<0;
+		}else return a.age<b.age;
+	}else return a.netWorth>b.netWorth;
+}
+
+int main(){
+	scanf("%d%d",&n,&k);
+	for(int i=0;i<n;i++){
+		scanf("%s %d %d",record[i].name,&record[i].age,&record[i].netWorth);
+	}
+	
+	//排序。
+	sort(record,record+n,cmp);
+	
+	for(int i=1;i<=k;i++){
+		int m,amin,amax;
+		scanf("%d %d %d",&m,&amin,&amax);
+		printf("Case #%d:\n",i); 
+		print(m,amin,amax);
+	}
+	
+	return 0;
+}
