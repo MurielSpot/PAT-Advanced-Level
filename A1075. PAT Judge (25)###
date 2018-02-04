@@ -1,0 +1,134 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1075
+
+类型：排序。
+
+难度：3（题目信息太多，做题时容易忘。题目做了挺长时间。）
+
+注意事项：
+1. 英语阅读要加强，没有注意到题目全没有通过编译或没有提交，是不能输出的，导致出错。
+2. 第一个for循环括号打得太大，把下面一个for循环也包括进去了，导致出错。另外还有把该添循环变量的地方写成了用来跳出循环进行比较的那个变量，又导致出错。所以以后写代码长点心。
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+const int MAXN=10010;
+const int MAXK=6;
+const int INF=1000000000;
+
+struct info{
+	int userId;//[00001,n]
+	int problem[MAXK];//[1,k]
+	int totalScore;//-1 means cannot compile，or an integer int the range [0,p[problemId]].
+	int perfectlySolved;
+	bool print;
+	info(){
+		fill(problem,problem+MAXK,-2);
+		totalScore=perfectlySolved=0;
+		userId=INF;
+		print=false;
+	}
+}users[MAXN];
+
+//n,k,m are all positive.
+int n;//users
+int k;//problems
+int m;//submittions
+
+int mark[MAXK];
+
+bool cmp(struct info a,struct info b){
+	if(a.totalScore==b.totalScore){
+		if(a.perfectlySolved==b.perfectlySolved){
+			return a.userId<b.userId;//所以最后没有数据的用户总分都是0，排在分数的最后；解决为题是0，排在解决问题的最后，而id无穷大，排在id的最后。所以没有数据的用户被排在了最后面。
+		}else return a.perfectlySolved>b.perfectlySolved;
+	}else return a.totalScore>b.totalScore;
+}
+
+void print(){
+	for(int i=1;i<=n;i++){
+		if(users[i].userId!=INF){
+			printf("%05d %d",users[i].userId,users[i].totalScore);
+			for(int j=1;j<=k;j++){
+				int s=users[i].problem[j];
+				if(s==-2){
+					printf(" -");
+				}else if(s>=0){
+					printf(" %d",s);
+				}else if(s==-1){
+					printf(" 0");
+				}
+			}
+			printf("\n");
+		}
+	}
+}
+
+int main(){
+	scanf("%d%d%d",&n,&k,&m);
+	for(int i=1;i<=k;i++){
+		scanf("%d",&mark[i]);
+	}
+	for(int i=0;i<m;i++){
+		int id,problem,score;
+		scanf("%d%d%d",&id,&problem,&score);
+		users[id].userId=id;
+		if(score>=0)users[id].print=true;//提交了可以通过编译的代码，说明之后可以对它进行输出。 
+		if(users[id].problem[problem]<score){
+			//如果该题目未做为-2，编译错误或得更高分都会更新该题的值。
+			users[id].problem[problem]=score;
+			if(score==mark[problem]){
+				//达到该题的最高分，则完整解决一个问题。由于一旦到达最高分，不会有分数比此时的分值更大，所以对于这一题以下变量不会累加多余的次数。
+				users[id].perfectlySolved++;
+			}
+		}
+	}	
+	//计算总分，这一步可以加到上面计算每一题的步骤里，不过有些麻烦。
+	for(int i=1;i<=n;i++){
+		if(users[i].userId!=INF){//说明有记录。
+			for(int j=1;j<=k;j++){
+				//一开始把下面的j写成了k导致错误。
+				if(users[i].problem[j]>0){//某一题有分数累加到总分里。
+					users[i].totalScore+=users[i].problem[j];
+				}
+			}
+		}
+	}
+	
+//	print();
+//	return 0;
+	
+	sort(users+1,users+n+1,cmp);
+	
+	int rank=1;
+	for(int i=1;i<=n;i++){
+		//由于排过序了，遇到没有提交过的用户，则后面的用户都没有提交，则后面都不用输出。
+		if(users[i].userId==INF)break;
+		//否则提交过数据。
+		if(users[i].totalScore!=users[i-1].totalScore){
+			//如果分数与之前的分数不同，则排名要改变。
+			rank=i;
+		}
+		if(users[i].print){//可以输出再输出。
+			//一开始没有注意到全部题目没有通过编译或者都没有提交也不能输出，从而输出了无效的数据。
+			printf("%d %05d %d",rank,users[i].userId,users[i].totalScore);
+			for(int j=1;j<=k;j++){
+				int s=users[i].problem[j];
+				if(s==-2){
+					printf(" -");
+				}else if(s>=0){
+					printf(" %d",s);
+				}else if(s==-1){
+					printf(" 0");
+				}
+			}
+			printf("\n");
+		}
+	}
+	
+	return 0;
+}
