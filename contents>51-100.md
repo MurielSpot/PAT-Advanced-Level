@@ -25,3 +25,12 @@ https://www.patest.cn/contests/pat-a-practise/1083
 
 注意事项；
 1. 注意此题中数组从1开始记录，所以sort的区间要相应从1开始。 
+
+## A1084. Broken Keyboard (20)#
+
+https://www.patest.cn/contests/pat-a-practise/1084
+
+类型：字符串处理（给出原字符串，找出另一条字符串与原字符串相比缺失的字符。
+
+注意：
+1. 用if还是while不要混。
