@@ -1,0 +1,56 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1083
+
+类型：排序。
+
+难度：0
+
+注意事项；
+1. 注意此题中数组从1开始记录，所以sort的区间要相应从1开始。 
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+const int MAXN=10010;
+const int MAXK=6;
+const int INF=1000000000;
+
+struct info{
+	char name[11];
+	char id[11];
+	int grade;
+}lg[MAXN];
+
+bool cmp(info a,info b){
+	return a.grade>b.grade;
+}
+
+int n;
+int grade1,grade2;
+int main(){
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++){
+		scanf("%s %s %d",lg[i].name,lg[i].id,&lg[i].grade);
+	}
+	scanf("%d%d",&grade1,&grade2);
+
+	sort(lg+1,lg+n+1,cmp);//排序的区间需注意是从1开始的。 
+	
+	int count=0;
+	for(int i=1;i<=n;i++){
+		int x=lg[i].grade;
+		if(x>=grade1&&x<=grade2){
+			printf("%s %s\n",lg[i].name,lg[i].id);
+			count++;
+		}
+	}
+	if(!count){
+		printf("NONE");
+	}
+	
+	return 0;
+}
