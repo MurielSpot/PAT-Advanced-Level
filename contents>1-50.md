@@ -1,3 +1,5 @@
+# 目录：甲级1~50题
+
 ## A1003. Emergency (25)###
 https://www.patest.cn/contests/pat-a-practise/1003
 
@@ -55,3 +57,8 @@ https://www.patest.cn/contests/pat-a-practise/1020
 https://www.patest.cn/contests/pat-a-practise/1025
 
 注意：计算清数组元素有多少再申请！！
+
+## A1028. List Sorting (25)
+https://www.patest.cn/contests/pat-a-practise/1028
+
+类型：排序。
