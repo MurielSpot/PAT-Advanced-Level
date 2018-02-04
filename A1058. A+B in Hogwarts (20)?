@@ -1,0 +1,31 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1058
+
+类型：货币模拟。
+
+难度：忘了（应该比较简单，好像第一次做的时候是一次ac）
+*/
+#include<cstdio>
+
+struct curr{
+	int galleon;
+	int sickle;//17s-1g
+	int knut;//29k-1s
+}a,b;
+
+void add(curr a,curr b){
+	curr c;
+	c.knut=a.knut+b.knut;
+	c.sickle=a.sickle+b.sickle+c.knut/29;
+	c.knut%=29;
+	c.galleon=a.galleon+b.galleon+c.sickle/17;
+	c.sickle%=17;
+	printf("%d.%d.%d",c.galleon,c.sickle,c.knut);
+}
+
+int main(){
+	scanf("%d.%d.%d",&a.galleon,&a.sickle,&a.knut);
+	scanf("%d.%d.%d",&b.galleon,&b.sickle,&b.knut);
+	add(a,b);
+	return 0;
+}
