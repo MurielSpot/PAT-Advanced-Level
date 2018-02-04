@@ -1,0 +1,55 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1028
+类型：排序。
+
+难度：没难度，直接用sort函数。
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+const int MAXN=100010;
+
+struct info{
+	int id;
+	char name[9];
+	int grade;
+}record[MAXN];
+
+bool cmpId(struct info a,struct info b){
+	return a.id<b.id;
+}
+bool cmpName(struct info a,struct info b){
+	int tmp=strcmp(a.name,b.name); 
+	if(tmp==0){
+		return a.id<b.id;
+	}else return tmp<0;
+}
+bool cmpGrade(struct info a,struct info b){
+	if(a.grade==b.grade){
+		return a.id<b.id;
+	}else return a.grade<b.grade;
+}
+
+int n,c;
+int main(){
+	scanf("%d%d",&n,&c);
+	for(int i=0;i<n;i++){
+		scanf("%d %s %d",&record[i].id,record[i].name,&record[i].grade);
+	}
+	if(c==1){//increasing order,id.
+		sort(record,record+n,cmpId);
+	}else if(c==2){//non-increasing order,name.if same,then look id in increasing order.
+		sort(record,record+n,cmpName);
+	}else if(c==3){//non-decreasing order,grade.if same,then look id in increasing order.
+		sort(record,record+n,cmpGrade);
+	}
+	for(int i=0;i<n;i++){
+		printf("%06d %s %d\n",record[i].id,record[i].name,record[i].grade);
+	}
+	
+	return 0;
+}
