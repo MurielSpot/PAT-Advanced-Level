@@ -17,3 +17,11 @@ https://www.patest.cn/contests/pat-a-practise/1075
 2. 英语阅读要加强，不用理解错题意。
 3. 细心：不要写错变量，括号嵌套不要出错。
 
+## A1083. List Grades (25)
+
+https://www.patest.cn/contests/pat-a-practise/1083
+
+类型：排序。
+
+注意事项；
+1. 注意此题中数组从1开始记录，所以sort的区间要相应从1开始。 
