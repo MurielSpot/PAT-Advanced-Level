@@ -1,0 +1,140 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1080
+
+类型：排序（排名）。
+
+难度：5
+
+注意事项：
+1. 注意申请者的id就是最开始输入的顺序号（从0开始到n-1），重新根据成绩排序后，申请者的排序和他们的id就被打乱不是一一对应的了，输出时需要根据id号重新排序。所以排序后不能通过id号访问相应记录，比如id为3，排序后再位置5，再通过id访问的是3号位置的记录，会出错，我最初测试时有两个测试点总是过不了，是因为把id号存入vector，然后用id访问记录出错了，改成把排序后的序号i存入vector就解决了问题，但是花费了一两个小时的时间。
+
+测试数据参考：（题目中给的测试数据比较特殊，排序后与排序前申请人的先后顺序没有太大改变，有些错误可能用这个测试数据测不出来。）
+一、
+11 6 3
+2 1 2 2 2 3
+60 60 2 3 5
+90 100 1 2 0
+70 80 1 2 3
+90 90 5 1 3
+80 90 1 0 2
+80 80 0 1 2
+80 80 0 1 2
+100 90 0 3 4
+80 70 1 3 2
+100 100 0 1 2
+100 100 0 2 4
+
+二、所有考生都无法录取的边界情况：
+5 5 3
+0 0 0 5 5
+100 100 0 1 2
+100 99 1 2 0
+99 100 2 1 0
+99 99 1 0 2
+98 98 2 0 1
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+const int MAXN=40010;
+const int MAXM=110;
+const int MAXK=10;
+const int INF=1000000000;
+
+int n;//applicants.
+int m;//graduate schools.
+int k;//choices.
+
+int quota[MAXM]={0};
+struct info{
+	int id;
+	int ge,gi;
+	double finalGrade;//rank according to the finalGrade.if tied,then according to ge.if tied,rank will be the same.
+	int perferredSchool[MAXK];
+	info(){}
+	info(int id_,int e,int i){
+		id=id_;
+		ge=e;gi=i;
+		finalGrade=(ge+gi)/2.0;//这里需要用浮点型吗？可以不除以2，用总和代替平均分来排序。
+	}
+}applicant[MAXN];
+
+vector<int> result[MAXM];
+
+bool cmpId(int a,int b);
+bool cmpScore(info a,info b);
+void print();
+
+int main(){
+	scanf("%d%d%d",&n,&m,&k);
+	for(int i=0;i<m;i++){
+		scanf("%d",&quota[i]);
+	}
+	for(int i=0;i<n;i++){
+		int ge,gi;
+		scanf("%d%d",&ge,&gi);
+		applicant[i]=info(i,ge,gi);
+		for(int j=0;j<k;j++){
+			scanf("%d",&applicant[i].perferredSchool[j]);
+		}
+	}
+	//按finalGrade排序。
+	sort(applicant,applicant+n,cmpScore);
+	//选择学校。
+	for(int i=0;i<n;i++){//遍历所有学生，此时学生已经按final分数从高到低排名。
+		int school;
+		for(int j=0;j<k;j++){
+			school=applicant[i].perferredSchool[j];//获得学生想要申请的学校序号。
+			if(result[school].size()<quota[school]){//如果一个学校录取人数还没有超过限额。
+				result[school].push_back(i);//把相应学生的id加入，不是加入i，i只是学生当前的顺位排序。前面一句话有误，还是应该加入学生顺位排序。因为下面寻找加入result数组的最后一个元素还要用到i。
+				break;
+			}else if(quota[school]>0){//注意size为0，而录取人数也为0时，if不成立。而下面代码中的quota[school]-1的值为-1，会出错。所以这里不能只用else。
+				//如果遇到超过限额的情况，判断它和未超过限额的最后一个同学的总成绩、ge是否都相同，都相同则需要加入。否则看这个学生申请的下一个学校。
+				int lastIndex=result[school][quota[school]-1];//注意这里得到的其实时学生的id值，由于重新排序，学生的id值已经不能指示学生在applicant数组中的位置。所以应该把拍完序的学生的序号放到result里。在最后输出的时候再按照id输出。
+				if(applicant[i].finalGrade==applicant[lastIndex].finalGrade&&applicant[i].ge==applicant[lastIndex].ge){
+					result[school].push_back(i);
+					break;
+				}
+			}
+		}
+	}
+	//需要先排序再输出。
+	for(int i=0;i<m;i++){
+		sort(result[i].begin(),result[i].end(),cmpId);
+		int index;
+		for(int j=0;j<result[i].size();j++){
+			index=result[i][j];
+			if(j==0){
+				printf("%d",applicant[index].id);
+			}else{
+				printf(" %d",applicant[index].id);
+			}
+		}
+		printf("\n");
+	}
+	
+	return 0;
+}
+
+bool cmpId(int a,int b){
+	return applicant[a].id<applicant[b].id;
+}
+bool cmpScore(info a,info b){
+	if(a.finalGrade==b.finalGrade){
+		return a.ge>b.ge;
+	}else return a.finalGrade>b.finalGrade;
+}
+
+void print(){
+	for(int i=0;i<n;i++){
+		printf("finalGrade:%lf, ge:%d, gi:%d, sch:",applicant[i].finalGrade,applicant[i].ge,applicant[i].gi);
+		for(int j=0;j<k;j++){
+			printf("    %d,",applicant[i].perferredSchool[j]);
+		}
+		printf("\n");
+	}
+}
