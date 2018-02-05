@@ -1,0 +1,34 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1050
+
+类型：哈希
+
+难度：0
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<iostream>
+using namespace std;
+const int MAXN=10010;
+int n;
+bool flag[10010]={false};
+char a[MAXN],b[MAXN];
+
+int main(){
+	gets(a);
+	int c;
+	while((c=getchar())!='\n'&&c!=EOF){
+		flag[(int)c]=true;
+	}
+	int lena=strlen(a);
+	for(int i=0;i<lena;i++){
+		if(flag[(int)a[i]]==false){
+			printf("%c",a[i]);
+		}
+	}
+	return 0;
+}
+
+
+
