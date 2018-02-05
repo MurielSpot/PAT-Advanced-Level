@@ -6,6 +6,14 @@ https://www.patest.cn/contests/pat-a-practise/1055
 
 类型：排序。
 
+## A1070. Mooncake (25)##（使用浮点类型时出了很多错）
+https://www.patest.cn/contests/pat-a-practise/1070
+
+注意事项：
+1. 当数据是double型时，一定要用%lf来读入，如果用了%d会出现莫名其妙的结果。
+2. double最好不要参加比较，用的使用最好用极小值来矫正。因为即使它有时不影响结果，但是如果代码本身有错，很可能让人以为可能是double比较时出错引起的，其实并不是。
+3. 题目中库存量全用int表示的时候，会有一个测试点答案错误，要改成double。以后代码中可能会用到double或者参与double运算的变量类型一定要设置为double。但是要注意整型才能做数组的下标，而浮点转换成整型可能会丢失精度，所以变量要是为double就不能做下标了。
+
 ## A1075. PAT Judge (25)###
 
 https://www.patest.cn/contests/pat-a-practise/1075
