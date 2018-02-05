@@ -62,3 +62,12 @@ https://www.patest.cn/contests/pat-a-practise/1025
 https://www.patest.cn/contests/pat-a-practise/1028
 
 类型：排序。
+
+## A1041. Be Unique (20)#
+https://www.patest.cn/contests/pat-a-practise/1041
+
+类型：计数。散列。
+
+注意事项：
+
+1.count用来统计各个数出现次数，但count里第一个unique的数字不一定就是所要找的数字，题目要求按bet顺序第一个独一无二的数字，而赌博中第一个独一无二的数字未必是count数组里从小到大第一个遇到计数为1的数字。
