@@ -71,3 +71,11 @@ https://www.patest.cn/contests/pat-a-practise/1041
 注意事项：
 
 1.count用来统计各个数出现次数，但count里第一个unique的数字不一定就是所要找的数字，题目要求按bet顺序第一个独一无二的数字，而赌博中第一个独一无二的数字未必是count数组里从小到大第一个遇到计数为1的数字。
+
+## A1048. Find Coins (25)##
+https://www.patest.cn/contests/pat-a-practise/1048
+
+类型：类似于背包问题。
+
+注意事项：
+1. c用来记录某种面值的钱币有多少个，一般情况只要c对应值不等于0即可，但是当相同面值钱币相加时，需要c对应值不小于2。
