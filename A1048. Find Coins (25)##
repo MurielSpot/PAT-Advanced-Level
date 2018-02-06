@@ -1,0 +1,64 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1048
+
+类型：类似于背包问题。
+
+难度：2。(求两钱币相加是否等于给定值，该题需要一定技巧。）
+
+注意事项：
+1. c用来记录某种面值的钱币有多少个，一般情况只要c对应值不等于0即可，但是当相同面值钱币相加时，需要c对应值不小于2。
+*/
+
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+const int MAXN=1010;
+
+int n;//coins.
+int m;//the amount of money to pay.
+
+int c[510]={0};
+
+void find(int sum,int &left,int &right){
+	int tmpSum;
+	while(left<=right){
+		while(c[left]==0&&left<=right){//该位置没有钱币。
+			left++;
+		}
+		while(c[right]==0&&left<=right){
+			right--;
+		}
+		if(left<=right){
+			tmpSum=left+right;
+			if(tmpSum==sum){
+				if(left==right){//如果是相同面值相加。
+					if(c[left]<2)left++;//使left大于right，因为此时使同样面值的钱币相加，需要该钱币数大于等于2。
+				}
+				return;
+			}else if(tmpSum<sum){
+				left++;//right对应的计数仍然非0。
+			}else{
+				right--;
+			}
+		}
+	}
+}
+
+int main(){
+	scanf("%d%d",&n,&m);
+	for(int i=0;i<n;i++){
+		int x;
+		scanf("%d",&x);
+		c[x]++;
+	}
+	int a=0,b=509;
+	find(m,a,b);
+	if(a>b){//a,b是引用，所以如果找完了数组，即a>b还没有找到要找的元素，则无解。
+		printf("No Solution");
+	}else{
+		printf("%d %d",a,b);
+	}
+	return 0;
+}
