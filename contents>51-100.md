@@ -6,6 +6,13 @@ https://www.patest.cn/contests/pat-a-practise/1055
 
 类型：排序。
 
+## AA1067. Sort with Swap(0,*) (25)###
+https://www.patest.cn/contests/pat-a-practise/1067
+
+注意事项：
+1. swap(0,*)并不是下标为0和*的元素交换，而是数值为0和*的两个元素交换。
+2. 循环中找不再本位的元素时，如果每次都从头开始枚举，有两组数据会超时，因为复杂度是二次方级的。要注意到，每个元素移动到本位之后，就不会出现0占用它的位置的情况，也就是不会再移动。所以找到当前数组不在本位的第一个元素之后，下次寻找可以从这个元素开始找。
+
 ## A1070. Mooncake (25)##（使用浮点类型时出了很多错）
 https://www.patest.cn/contests/pat-a-practise/1070
 
