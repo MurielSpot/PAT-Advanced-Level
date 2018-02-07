@@ -1,0 +1,81 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1033
+
+类型：贪心。
+
+难度：5（自己没做出来，测试样例打出来的结果是750点几，和749有一点偏差，不知道哪错了。）
+
+注意事项：
+1. 声明变量时把最后的分号写成逗号出错，查错查了很长时间。用的时dev c++，错误提示是：[Error] expected unqualified-id before 'int'。
+2. 函数声明中最后一个引用符号写了，但函数实现时忘了写，给出错误提示：undefined reference to `update(double&, double&, int&, double&)'。
+3. 第一个加油站离杭州距离需要是0，否则无法前进。
+*/
+
+//《算法笔记》答案。
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+const int maxn=510;
+const int INF=1000000000;
+
+struct station{
+	double price,dis;
+}st[maxn];
+
+bool cmp(station a,station b){
+	return a.dis<b.dis;
+}
+int main(){
+	int n;
+	double cmax,d,davg;
+	scanf("%lf%lf%lf%d",&cmax,&d,&davg,&n);
+	for(int i=0;i<n;i++){
+		scanf("%lf%lf",&st[i].price,&st[i].dis);
+	}
+	//先把终点也看作一个加油站，这样就不用另外判断是否到达终点，全都看作是否有加油站可以到达即可。
+	st[n].price=0;//数组最后放置终点，价格为0.
+	st[n].dis=d;//终点距离为d。
+	sort(st,st+n,cmp);
+	if(st[0].dis!=0){//第一个加油站距离不是0，无法前进。
+		printf("The maximum travel distance = 0.00");
+	}else{
+		int now=0;//当前加油站编号。
+		//总花费，当前油量，满油行驶距离。
+		double ans=0,nowTank=0,max=cmax*davg;
+		while(now<n){//每次循环选出下一次需要到达的加油站。
+			int k=-1;double priceMin=INF;//最低加油站编号和油价。
+			for(int i=now+1;i<=n&&st[i].dis-st[now].dis<=max;i++){
+				if(st[i].price<priceMin){
+					priceMin=st[i].price;
+					k=i;
+					if(priceMin<st[now].price){
+						//如果找到第一个低于当前油价的加油站，可直接跳出循环。
+						break;
+					}
+				}
+			}
+			if(k==-1)break;//满油状态下无法找到加油站，跳出循环直接输出结果。
+			double need=(st[k].dis-st[now].dis)/davg;
+			if(priceMin<st[now].price){//加油站k的油价低于当前油价。
+				if(nowTank<need){//当前油量不足以到达加油站k。
+					ans+=(need-nowTank)*st[now].price;
+					nowTank=0;//到达加油站k后剩余油量为0.
+				}else{
+					nowTank-=need;
+				}
+			}else{
+				ans+=(cmax-nowTank)*st[now].price;
+				nowTank=cmax-need;
+			}
+			now=k;//到达加油站k，进入下一层循环。
+		}
+		if(now==n){//能到达终点。
+			printf("%.2lf",ans);
+		}else{
+			printf("The maximum travel distance = %.2lf",st[now].dis+max);
+		}
+	}
+	return 0;
+}
