@@ -1,12 +1,10 @@
 # 目录：甲级51-100题
-
 ## A1055. The World's Richest (25)#
-
 https://www.patest.cn/contests/pat-a-practise/1055
 
 类型：排序。
 
-## AA1067. Sort with Swap(0,*) (25)###
+## A1067. Sort with Swap(0,*) (25)###
 https://www.patest.cn/contests/pat-a-practise/1067
 
 注意事项：
@@ -22,7 +20,6 @@ https://www.patest.cn/contests/pat-a-practise/1070
 3. 题目中库存量全用int表示的时候，会有一个测试点答案错误，要改成double。以后代码中可能会用到double或者参与double运算的变量类型一定要设置为double。但是要注意整型才能做数组的下标，而浮点转换成整型可能会丢失精度，所以变量要是为double就不能做下标了。
 
 ## A1075. PAT Judge (25)###
-
 https://www.patest.cn/contests/pat-a-practise/1075
 
 类型：排序。
@@ -33,7 +30,6 @@ https://www.patest.cn/contests/pat-a-practise/1075
 3. 细心：不要写错变量，括号嵌套不要出错。
 
 ## A1080. Graduate Admission (30)#####
-
 https://www.patest.cn/contests/pat-a-practise/1080
 
 类型：排序（排名）。
@@ -68,7 +64,6 @@ https://www.patest.cn/contests/pat-a-practise/1080
 98 98 2 0 1</pre>
 
 ## A1083. List Grades (25)
-
 https://www.patest.cn/contests/pat-a-practise/1083
 
 类型：排序。
@@ -77,7 +72,6 @@ https://www.patest.cn/contests/pat-a-practise/1083
 1. 注意此题中数组从1开始记录，所以sort的区间要相应从1开始。 
 
 ## A1084. Broken Keyboard (20)#
-
 https://www.patest.cn/contests/pat-a-practise/1084
 
 类型：哈希（字符->布尔），字符串处理（给出原字符串，找出另一条字符串与原字符串相比缺失的字符。
@@ -86,7 +80,6 @@ https://www.patest.cn/contests/pat-a-practise/1084
 1. 用if还是while不要混。
 
 ## A1092. To Buy or Not to Buy (20)#
-
 https://www.patest.cn/contests/pat-a-practise/1092
 
 类型：哈希。
