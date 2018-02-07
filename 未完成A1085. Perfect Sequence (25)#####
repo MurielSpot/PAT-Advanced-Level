@@ -1,0 +1,81 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1085
+
+难度：5（自己没做出来）
+
+注意事项：
+1. n平方的复杂度会超时，可用二分查找来解决问题，或者双指针法来避免复杂度过高。
+
+其他方法：
+1. 二分查找法：对每一个数a[i]，在a[i+1]~a[n-1]内查找第一个超过a[i]*p数的位置j，注意这个j是不包含在序列里的，它指示的是序列最后一个元素后面那个位置，对应的j-i就是满足M<=m*p的最大长度。在所有j-i中选取最大值就是答案。
+
+*/
+
+/*
+下面代码思路（但是下面的代码有错，测试点中一个运行超时，一个答案错误）：
+所求序列一定是该递增序列中选择连续若干个数的方案。
+所以令i从小到大指向所求序列最小值所在位置，j从大到小指示最大值位置，求a[j]<=a[i]*p成立且j-i最大的方案即可（j-i+1对应的使序列中有多少元素）。
+*/
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+const int MAXN=100010;
+const int INF=1000000010;
+
+int n;int p;
+int seq[MAXN];
+int origin[MAXN];
+
+struct getIndex{
+	int minPos;
+	int maxPos;
+	getIndex(){
+		minPos=maxPos=-1;
+	}
+};
+
+struct getIndex find(int i,int j){
+	if(i>j)return getIndex();//已经到达边界，没有找到符合要求的值。
+	if(seq[j]<=seq[i]*p){//找到了。
+		struct getIndex now;
+		now.minPos=i;
+		now.maxPos=j;
+		return now;
+	}else{//没到达边界，没找到。
+		struct getIndex a,b;
+		a=find(i+1,j);
+		b=find(i,j-1);
+		if(a.minPos!=-1){
+			if(b.minPos!=-1){
+				if((a.maxPos-a.minPos)>=(b.maxPos-b.minPos)){
+					return a;
+				}else{
+					return b;
+				}
+			}else return a;
+		}else{
+			if(b.minPos!=-1){
+				return b;
+			}
+		}
+	}
+	return getIndex();
+}
+
+int main(){
+	scanf("%d%d",&n,&p);
+	for(int i=0;i<n;i++){
+		scanf("%d",&seq[i]);
+	}
+	sort(seq,seq+n);//non-decreasing.
+	int i=0,j=n-1;
+	struct getIndex ans=find(i,j);
+	if(ans.maxPos!=-1){
+		printf("%d",ans.maxPos-ans.minPos+1);
+	}else{
+		printf("0");
+	}
+	return 0;
+}
