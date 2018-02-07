@@ -1,0 +1,66 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1067
+
+难度：3（比较绕人）
+
+注意事项：
+1. swap(0,*)并不是下标为0和*的元素交换，而是数值为0和*的两个元素交换。
+2. 循环中找不再本位的元素时，如果每次都从头开始枚举，有两组数据会超时，因为复杂度是二次方级的。要注意到，每个元素移动到本位之后，就不会出现0占用它的位置的情况，也就是不会再移动。所以找到当前数组不在本位的第一个元素之后，下次寻找可以从这个元素开始找。
+*/
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+const int maxn=100010;
+const int INF=1000000000;
+
+int num[maxn];
+int pos[maxn];//存放0~n-1当前所在位置，增加此数组可以让查找的时间复杂度下降到O(1)。
+
+void swap(int a,int b){//查找a,b所在位置，然后将a和b放到对方的位置上。
+	int aPos=pos[a];
+	int bPos=pos[b];
+	int tmp=num[aPos];
+	num[aPos]=num[bPos];
+	num[bPos]=tmp;
+	pos[a]=bPos;
+	pos[b]=aPos;
+}
+
+int n;
+int main(){
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		int x;
+		scanf("%d",&x);
+		num[i]=x;
+		pos[x]=i;
+	}
+	//给定n，然后后面的序列是0~n-1的一个全排列，并非是不连续的任意n-1个值的序列。permutation有全排列的意思。
+	//如果0不在0位，则肯定占据了其他元素i的位置，则将0和i进行交换，直到0到达0位。
+	//如果0在0位，则查找第一个不在自己本来应该在的位置上的元素j，与0交换，则0占据了k元素的位置，像上一步那样反复调整即可。
+	//如果0在0位，发现所有元素都在自己应该在的位置，则可以输出结果。
+	int ans=0;bool goOn=true;
+	int i=0;
+	while(goOn){
+		if(pos[0]!=0){
+			swap(0,pos[0]);
+			ans++;
+		}else{
+			bool end=true;
+			for(;i<n;i++){//这里表示遍历数值为i~n的数是否在本位。判断本位的条件是数值i的下标和它本身是否相等。
+				if(pos[i]!=i){
+					swap(0,i);//这次交换会让0不在本位，但是1~i-1仍然在本位且不会改变，然后经过若干次关于0的变换之后，0又回到本位0，才会进入这个else的判断里，所以此时0~i-1在本位上，从i位找即可，不用从0开始从头找。
+					//另外我认为：注意到因为swap(0,i)已经将0换到值为i的数所在位置x，则0下一次寻找将值x置位，所以数值i不一定在它应该在的位置，所以下次找还是要从i开始，不能从i+1开始。
+					ans++;
+					end=false;//找到不在自己位置上的元素。继续循环。
+					break;
+				}
+			}
+			if(end)goOn=false;//没有找到不再自己位置上的元素，跳出while输出结果。
+		}
+	}
+	printf("%d",ans);
+	return 0;
+}
