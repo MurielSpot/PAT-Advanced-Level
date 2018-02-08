@@ -71,6 +71,23 @@ https://www.patest.cn/contests/pat-a-practise/1037
 注意事项：
 1. 使用贪心求得结果，前提是要能够证明使用贪心算法必定能取得最大结果。（注意到只有正数与正数相乘，以及负数与负数相乘才能取得正值，其他情况为0或为负都不需要考虑，因为加到结果里会让结果变小。所以可划分为正数和负数两个集合分别考虑。）
 
+## A1038. Recover the Smallest Number (30)#####
+https://www.patest.cn/contests/pat-a-practise/1038
+
+类型：贪心。
+
+注意：
+1. 得到字符串序列后需要去除前导零。如果字符串序列大小为0，输出0。
+2. string的erase函数三种用法：
+>（c++ 11）
+>>string& erase (size_t pos = 0, size_t len = npos);
+>>iterator erase (const_iterator p);
+>>iterator erase (const_iterator first, const_iterator last);
+>（c++ 98）
+>>string& erase (size_t pos = 0, size_t len = npos);
+>>iterator erase (iterator p);
+>>iterator erase (iterator first, iterator last);
+
 ## A1041. Be Unique (20)#
 https://www.patest.cn/contests/pat-a-practise/1041
 
