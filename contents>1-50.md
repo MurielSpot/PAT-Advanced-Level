@@ -105,6 +105,7 @@ https://www.patest.cn/contests/pat-a-practise/1044
 1. sum[i]存储第一个值到第i个值的和，所以某个钻石串[a,b]的长度可以用sum[b]-sum[a-1]直接计算，所以sum[0]应该不存储任何元素，且置为0，会便于计算。
 另外用数组存放和的思路值得注意，不用数组存放单个钻石的值可以减少很多求和运算。并且数组的值表示某些项的和这种方法在动态规划的问题中经常能遇到。
 2. 多学习各种算法吧，一些经典算法里的技巧和思想能让做题变得很快，而且有些算法本身就很精彩。
+3. 用到upper_bound函数：ForwardIter lower_bound(ForwardIter first, ForwardIter last,const _Tp& val)算法返回一个非递减序列[first, last)中的第一个大于等于值val的位置。
 
 ## A1048. Find Coins (25)##
 https://www.patest.cn/contests/pat-a-practise/1048
