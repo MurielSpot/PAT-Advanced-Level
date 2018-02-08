@@ -94,8 +94,7 @@ https://www.patest.cn/contests/pat-a-practise/1085
 ><a href="http://www.cplusplus.com/reference/algorithm/lower_bound/">lower_bound (Return iterator to lower bound (function template) )</a><br/>
 >[upper_bound (Return iterator to upper bound (function template) )](http://www.cplusplus.com/reference/algorithm/upper_bound/)<br/>
 >[equal_range (Get subrange of equal elements (function template) )](http://www.cplusplus.com/reference/algorithm/equal_range/)<br/>
->[binary_search (Test if value exists in sorted sequence (function template) )]:http://www.cplusplus.com/reference/algorithm/binary_search/
-[binary_search (Test if value exists in sorted sequence (function template) )]
+>[binary_search (Test if value exists in sorted sequence (function template) )](http://www.cplusplus.com/reference/algorithm/binary_search/)
 
 algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
 
