@@ -1,0 +1,78 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1044
+
+难度：3
+
+注意事项：
+1. sum[i]存储第一个值到第i个值的和，所以某个钻石串[a,b]的长度可以用sum[b]-sum[a-1]直接计算，所以sum[0]应该不存储任何元素，且置为0，会便于计算。
+另外用数组存放和的思路值得注意，不用数组存放单个钻石的值可以减少很多求和运算。并且数组的值表示某些项的和这种方法在动态规划的问题中经常能遇到。
+2. 多学习各种算法吧，一些经典算法里的技巧和思想能让做题变得很快，而且有些算法本身就很精彩。
+*/
+
+
+#include<cstdio>
+#include<cstring> 
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+const int MAXN=100010;
+const int INF=1000000010;
+
+int n,m;
+int sum[MAXN];
+
+struct couple{
+	int i,j;
+	couple(){}
+	couple(int a,int b){
+		i=a;
+		j=b;
+	}
+};
+//下面两个数组里存的是串的区间[a,b],但是计算串的价格时，要用b和a-1来算。
+vector<couple> equ;
+couple unequal[MAXN];int unequalPtr=0;
+
+int main(){
+	scanf("%d%d",&n,&m);
+	sum[0]=0;
+	for(int i=1;i<=n;i++){//从1开始存。
+		int x;
+		scanf("%d",&x);
+		sum[i]=x+sum[i-1];
+	}
+	//考虑m不为0的情况。
+	for(int i=0;i<=n;i++){//注意从0开始找。因为找到j后，所需区间是[i+1,j]。
+		int j=lower_bound(sum+i+1,sum+n+1,sum[i]+m)-sum;
+		if(j<=n){//找到j。
+			if(sum[j]-sum[i]==m){
+				equ.push_back(couple(i+1,j));
+			}else{//当前串大于所需值m。
+				if(unequalPtr==0){
+					unequal[unequalPtr++]=couple(i+1,j);
+				}else{
+					int balance=sum[j]-sum[i];//当前串价值。
+					int i2=unequal[0].i-1;int j2=unequal[0].j;//用来计算unequal里存放的串的价值。
+					if(balance<sum[j2]-sum[i2]){//unequal里存放的最小串比当前长。之前清零。
+						unequalPtr=0;
+						unequal[unequalPtr++]=couple(i+1,j);
+					}else if(balance==sum[j2]-sum[i2]){//一样长，增加记录。
+						unequal[unequalPtr++]=couple(i+1,j);
+					}
+				}
+			}
+		}
+	}
+	int size=equ.size();
+	if(size){
+		for(int i=0;i<size;i++){
+			printf("%d-%d\n",equ[i].i,equ[i].j);
+		}
+	}else{
+		for(int i=0;i<unequalPtr;i++){
+			printf("%d-%d\n",unequal[i].i,unequal[i].j);
+		}
+	}
+	return 0;
+}
