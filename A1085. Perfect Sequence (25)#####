@@ -21,7 +21,7 @@ Return iterator to upper bound：Returns an iterator pointing to the first eleme
 其他方法：
 1. 二分查找法：对每一个数a[i]，在a[i+1]~a[n-1]内查找第一个超过a[i]*p数的位置j，注意这个j是不包含在序列里的，它指示的是序列最后一个元素后面那个位置，对应的j-i就是满足M<=m*p的最大长度。在所有j-i中选取最大值就是答案。
 */
-//可AC代码
+//用二分查找重做。可AC代码。
 #include<cstdio>
 #include<algorithm>
 #include<iostream>
