@@ -4,4 +4,50 @@ https://www.patest.cn/contests/pat-a-practise/1038
 类型：贪心。
 
 难度：5（没想到做题方法）
+
+注意：
+1. 得到字符串序列后需要去除前导零。如果字符串序列大小为0，输出0。
+2. string的erase函数三种用法：
+（c++ 11）
+string& erase (size_t pos = 0, size_t len = npos);
+iterator erase (const_iterator p);
+iterator erase (const_iterator first, const_iterator last);
+（c++ 98）
+string& erase (size_t pos = 0, size_t len = npos);
+iterator erase (iterator p);
+iterator erase (iterator first, iterator last);
 */
+//如果字符串s1+s2表示的数字比s2+s1小，就把s1放在前面，反之s2在前。这样可以确定某两个字符串在整个序列中的在前还是在后的相对位置，注意s1和s2还要和其它字符串进行同样的比较，所以s1和s2之间可能还会插入有其他字符串。
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+const int MAXN=10010;
+const int INF=1000000010;
+
+string str[MAXN];
+
+bool cmp(string a,string b){
+	return a+b<b+a;
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		cin>>str[i];
+	}
+	sort(str,str+n,cmp);
+	string ans;
+	for(int i=0;i<n;i++){
+		ans+=str[i];
+	}
+	//别忘了还要去除前导零。
+	while(ans.size()!=0&&ans[0]=='0'){
+		ans.erase(ans.begin());
+	}
+	if(ans.size()==0){
+		cout<<0;
+	}else cout<<ans;
+	return 0;
+}
