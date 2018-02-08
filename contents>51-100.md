@@ -88,13 +88,17 @@ https://www.patest.cn/contests/pat-a-practise/1085
 3. c语言溢出问题：long long m;int a;int b;m=a*b;虽然m为长整型，但是并不意味着a*b就按长整型计算，a和b仍然按int型计算，所以可能会溢出，只是最后把结果存到了更长的存储空间里。所以应该明确地类型转换乘数：m=(long long)a*b。
 4. stl容器algorithm里也有二分查找相关地函数，所以二分查找不需要自己实现。
 
-[binary_search (Test if value exists in sorted sequence (function template) )]:http://www.cplusplus.com/reference/algorithm/binary_search/
+
 
 >Binary search (operating on partitioned/sorted ranges):
 ><a href="http://www.cplusplus.com/reference/algorithm/lower_bound/">lower_bound (Return iterator to lower bound (function template) )</a>
+
 >[upper_bound (Return iterator to upper bound (function template) )](http://www.cplusplus.com/reference/algorithm/upper_bound/)
+
 >[equal_range (Get subrange of equal elements (function template) )](http://www.cplusplus.com/reference/algorithm/equal_range/)
->[binary_search (Test if value exists in sorted sequence (function template) )]
+
+>[binary_search (Test if value exists in sorted sequence (function template) )]:http://www.cplusplus.com/reference/algorithm/binary_search/
+[binary_search (Test if value exists in sorted sequence (function template) )]
 
 algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
 
