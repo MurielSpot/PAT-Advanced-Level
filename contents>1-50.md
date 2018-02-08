@@ -80,12 +80,13 @@ https://www.patest.cn/contests/pat-a-practise/1038
 1. 得到字符串序列后需要去除前导零。如果字符串序列大小为0，输出0。
 2. string的erase函数三种用法：
 >（c++ 11）
->>string& erase (size_t pos = 0, size_t len = npos);
->>iterator erase (const_iterator p);
+>>string& erase (size_t pos = 0, size_t len = npos);<br/>
+>>iterator erase (const_iterator p);<br/>
 >>iterator erase (const_iterator first, const_iterator last);
+
 >（c++ 98）
->>string& erase (size_t pos = 0, size_t len = npos);
->>iterator erase (iterator p);
+>>string& erase (size_t pos = 0, size_t len = npos);<br/>
+>>iterator erase (iterator p);<br/>
 >>iterator erase (iterator first, iterator last);
 
 ## A1041. Be Unique (20)#
