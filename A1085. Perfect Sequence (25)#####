@@ -1,0 +1,145 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1085
+
+难度：5（自己没做出来）
+
+注意事项：
+1. n平方的复杂度会超时，可用二分查找来解决问题，或者双指针法来避免复杂度过高。
+2. 注意数据的表示范围：一般来说int是32位，所以表示范围为-2^31~2^31-1，即-2147483648~2147483647，而题中所给数字不超过10^9,但是两个数相乘可能会溢出。
+3. c语言溢出问题：long long m;int a;int b;m=a*b;虽然m为长整型，但是并不意味着a*b就按长整型计算，a和b仍然按int型计算，所以可能会溢出，只是最后把结果存到了更长的存储空间里。所以应该明确地类型转换乘数：m=(long long)a*b。
+4. stl容器algorithm里也有二分查找相关地函数，所以二分查找不需要自己实现。该题中可用upper_bound来查找数组中大于给定值地第一个数所在地位置。
+default (1)：
+template <class ForwardIterator, class T>
+  ForwardIterator upper_bound (ForwardIterator first, ForwardIterator last,
+                               const T& val);
+custom (2)：
+template <class ForwardIterator, class T, class Compare>
+  ForwardIterator upper_bound (ForwardIterator first, ForwardIterator last,
+                               const T& val, Compare comp);
+Return iterator to upper bound：Returns an iterator pointing to the first element in the range [first,last) which compares greater than val.
+
+其他方法：
+1. 二分查找法：对每一个数a[i]，在a[i+1]~a[n-1]内查找第一个超过a[i]*p数的位置j，注意这个j是不包含在序列里的，它指示的是序列最后一个元素后面那个位置，对应的j-i就是满足M<=m*p的最大长度。在所有j-i中选取最大值就是答案。
+*/
+//可AC代码
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+const int MAXN=100010;
+const int INF=1000000010;
+
+int binarySearchLarger(int left,int right,long long data);
+
+int num[MAXN];
+int n,p;
+int main(){
+	scanf("%d%d",&n,&p);
+	for(int i=0;i<n;i++){
+		scanf("%d",&num[i]);
+	}
+	sort(num,num+n);
+	int ans=0;
+	for(int i=0;i<n;i++){
+		long long mp=(long long)num[i]*p;//注意如果写long long mp=num[i]*p;会有一个测试点不能通过，因为num[i]和p都是int，它们进行的int的乘法运算，会溢出，虽然最后把结果放到了long long里，但是存放的是已经溢出的结果了。
+		int j=binarySearchLarger(i,n-1,mp);
+		if(j==-1){//没找到指定元素说明序列中所有元素都比mp小，j应该指向最后一个元素后面。
+			j=n;
+		}
+		if(ans<j-i){
+			ans=j-i;
+		}
+	}
+	cout<<ans; 
+	return 0;
+}
+int binarySearchLarger(int left,int right,long long data){//找大于data的第一个值。
+	if(left>right)return -1;
+	int mid=(left+right)/2;
+	if(num[mid]<=data){//则要找的值肯定在右边。
+		return binarySearchLarger(mid+1,right,data);
+	}else{//否则要找的值就是当前值或者左边。
+		//如果此时[left,mid]区间只有一个值，肯定就是当前值。
+		if(left==mid)return mid;
+		//如果此时[left,mid]不只一个值，说明mid左边有值。看左边是否小于等于data，如果是mid就是要找的值，否则继续找左边。
+		else{
+			if(num[mid-1]<=data){
+				return mid;
+			}else{
+				return binarySearchLarger(left,mid-1,data);
+			}
+		}
+	}
+}
+
+
+/*
+下面代码思路（但是下面的代码有错，测试点中一个运行超时，一个答案错误）：
+所求序列一定是该递增序列中选择连续若干个数的方案。
+所以令i从小到大指向所求序列最小值所在位置，j从大到小指示最大值位置，求a[j]<=a[i]*p成立且j-i最大的方案即可（j-i+1对应的使序列中有多少元素）。
+*/
+#include<cstdio>
+#include<algorithm>
+#include<iostream>
+using namespace std;
+
+const int MAXN=100010;
+const int INF=1000000010;
+
+int n;int p;
+int seq[MAXN];
+int origin[MAXN];
+
+struct getIndex{
+	int minPos;
+	int maxPos;
+	getIndex(){
+		minPos=maxPos=-1;
+	}
+};
+
+struct getIndex find(int i,int j){
+	if(i>j)return getIndex();//已经到达边界，没有找到符合要求的值。
+	if(seq[j]<=seq[i]*p){//找到了。
+		struct getIndex now;
+		now.minPos=i;
+		now.maxPos=j;
+		return now;
+	}else{//没到达边界，没找到。
+		struct getIndex a,b;
+		a=find(i+1,j);
+		b=find(i,j-1);
+		if(a.minPos!=-1){
+			if(b.minPos!=-1){
+				if((a.maxPos-a.minPos)>=(b.maxPos-b.minPos)){
+					return a;
+				}else{
+					return b;
+				}
+			}else return a;
+		}else{
+			if(b.minPos!=-1){
+				return b;
+			}
+		}
+	}
+	return getIndex();
+}
+
+int main(){
+	scanf("%d%d",&n,&p);
+	for(int i=0;i<n;i++){
+		scanf("%d",&seq[i]);
+	}
+	sort(seq,seq+n);//non-decreasing.
+	int i=0,j=n-1;
+	struct getIndex ans=find(i,j);
+	if(ans.maxPos!=-1){
+		printf("%d",ans.maxPos-ans.minPos+1);
+	}else{
+		printf("0");
+	}
+	return 0;
+}
+
