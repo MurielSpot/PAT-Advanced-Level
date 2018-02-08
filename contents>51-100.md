@@ -79,6 +79,25 @@ https://www.patest.cn/contests/pat-a-practise/1084
 注意：
 1. 用if还是while不要混。
 
+## A1085. Perfect Sequence (25)#####（自己没做出来）
+https://www.patest.cn/contests/pat-a-practise/1085
+
+注意事项：
+1. n平方的复杂度会超时，可用二分查找来解决问题，或者双指针法来避免复杂度过高。
+2. 注意数据的表示范围：一般来说int是32位，所以表示范围为-2^31~2^31-1，即-2147483648~2147483647，而题中所给数字不超过10^9,但是两个数相乘可能会溢出。
+3. c语言溢出问题：long long m;int a;int b;m=a*b;虽然m为长整型，但是并不意味着a*b就按长整型计算，a和b仍然按int型计算，所以可能会溢出，只是最后把结果存到了更长的存储空间里。所以应该明确地类型转换乘数：m=(long long)a*b。
+4. stl容器algorithm里也有二分查找相关地函数，所以二分查找不需要自己实现。
+
+[binary_search (Test if value exists in sorted sequence (function template) )]:http://www.cplusplus.com/reference/algorithm/binary_search/
+
+>Binary search (operating on partitioned/sorted ranges):
+><a href="http://www.cplusplus.com/reference/algorithm/lower_bound/">lower_bound (Return iterator to lower bound (function template) )</a>
+>[upper_bound (Return iterator to upper bound (function template) )](http://www.cplusplus.com/reference/algorithm/upper_bound/)
+>[equal_range (Get subrange of equal elements (function template) )](http://www.cplusplus.com/reference/algorithm/equal_range/)
+>[binary_search (Test if value exists in sorted sequence (function template) )]
+
+algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
+
 ## A1092. To Buy or Not to Buy (20)#
 https://www.patest.cn/contests/pat-a-practise/1092
 
