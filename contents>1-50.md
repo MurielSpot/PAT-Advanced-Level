@@ -71,7 +71,7 @@ https://www.patest.cn/contests/pat-a-practise/1037
 注意事项：
 1. 使用贪心求得结果，前提是要能够证明使用贪心算法必定能取得最大结果。（注意到只有正数与正数相乘，以及负数与负数相乘才能取得正值，其他情况为0或为负都不需要考虑，因为加到结果里会让结果变小。所以可划分为正数和负数两个集合分别考虑。）
 
-## A1038. Recover the Smallest Number (30)#####
+## A1038. Recover the Smallest Number (30)#####（自己没有做出来）
 https://www.patest.cn/contests/pat-a-practise/1038
 
 类型：贪心。
