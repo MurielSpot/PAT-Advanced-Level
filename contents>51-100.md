@@ -88,8 +88,6 @@ https://www.patest.cn/contests/pat-a-practise/1085
 3. c语言溢出问题：long long m;int a;int b;m=a*b;虽然m为长整型，但是并不意味着a*b就按长整型计算，a和b仍然按int型计算，所以可能会溢出，只是最后把结果存到了更长的存储空间里。所以应该明确地类型转换乘数：m=(long long)a*b。
 4. stl容器algorithm里也有二分查找相关地函数，所以二分查找不需要自己实现。
 
-
-
 >Binary search (operating on partitioned/sorted ranges):<br/>
 ><a href="http://www.cplusplus.com/reference/algorithm/lower_bound/">lower_bound (Return iterator to lower bound (function template) )</a><br/>
 >[upper_bound (Return iterator to upper bound (function template) )](http://www.cplusplus.com/reference/algorithm/upper_bound/)<br/>
@@ -97,6 +95,16 @@ https://www.patest.cn/contests/pat-a-practise/1085
 >[binary_search (Test if value exists in sorted sequence (function template) )](http://www.cplusplus.com/reference/algorithm/binary_search/)
 
 algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
+
+## A1089. Insert or Merge (25)###（各类基本排序算法不熟，应该要都能快速写出来。）
+https://www.patest.cn/contests/pat-a-practise/1089
+类型：排序。
+
+注意事项：
+1. 用while时要注意是否需要改变指针。for(int i=0;i<n;i++)中i的改变已经在括号里实现了，而while中如果用i控制循环的跳出，需要手动改变i，不要忘了写，否则很容易死循环。
+2. 循环语句中如果有条件已经满足答案结果，别忘了要及时跳出循环，不要浪费资源。
+3. merge里对每个小区间span的排序，并没有用专门的归并算法的合并函数，而是用sort函数代替，因为本题数据量较小，这样做没问题。
+4. 该题中归并函数用非递归算法容易一些。可以尝试用递归算法也做一遍，我还没有试。
 
 ## A1092. To Buy or Not to Buy (20)#
 https://www.patest.cn/contests/pat-a-practise/1092
