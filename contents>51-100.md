@@ -98,7 +98,8 @@ algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
 
 ## A1089. Insert or Merge (25)###（各类基本排序算法不熟，应该要都能快速写出来。）
 https://www.patest.cn/contests/pat-a-practise/1089
-类型：排序。
+
+类型：排序（插入排序，归并排序）。
 
 注意事项：
 1. 用while时要注意是否需要改变指针。for(int i=0;i<n;i++)中i的改变已经在括号里实现了，而while中如果用i控制循环的跳出，需要手动改变i，不要忘了写，否则很容易死循环。
