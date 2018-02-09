@@ -1,6 +1,8 @@
 /*
 https://www.patest.cn/contests/pat-a-practise/1093
 
+类型：字符串子串（不连续子串；统计某个单词在字符串中出现的次数）。
+
 难度：2
 
 注意事项：
