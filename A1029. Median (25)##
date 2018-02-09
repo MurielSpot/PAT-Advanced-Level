@@ -1,0 +1,83 @@
+/*A1029. Median (25)###
+https://www.patest.cn/contests/pat-a-practise/1029
+
+类型：查找。中位数。
+
+难度：2
+
+多种方法：
+1. 轮流删除最大最小元素：由于数组a，b有序，所以最小元素一定在a和b数组的最右边的一个，最大在最左边。每次删除一对最大最小，当剩下两个元素时输出小的那个，剩下一个元素时直接输出。
+2. 直接计算出中位数大小排第几，从最小数数到中位数所在位置：记录总共有多少个元素，数组a长n，b长m，mid=(n+m)/2,设置count记录已经计数多少数，分别指针i，j指向a和b的开头，那个数组指针指向位置较小就将哪个指针加1，且count加1，当count加到mid大小，即找到第mid大的值时，它即是整个数组的中位数。
+3. 大概思路：取数组a和b的中位数ma和mb，如果ma>mb，则总的中位数mid在小于等于ma大于等于mb的部分。因为如果mid在大于ma的部分的话，则a中至少有一半数都比mid小，且ma>mb,所以b中至少也有一半比mid小，所以总共至少有一半元素比该mid小，则此时mid不可能是中位数，与题矛盾。所以该算法每次都可以删除上一次操作剩下的元素的一半，复杂度平均为logn。
+但需要注意的是，在去除一半元素的时候，如果确定去除的边界，这需要仔细讨论，要能把大于mid和小于mid的元素删除同样的数目。
+不同方法的平均效率：方法3的效率最高，然后是2，然后是1。
+*/
+
+//方法1
+#include<cstdio>
+#include<cstring> 
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+#define A 0
+#if A
+#endif
+
+const int MAXN=1000010;
+const int INF=1<<31-1;//int的最大值为2^31-1。
+
+int na,nb;
+long int a[MAXN];
+long int b[MAXN];
+
+/*
+由于数组a，b有序，所以最小元素一定在a和b数组的最右边的一个，最大在最左边。每次删除一对最大最小，当剩下两个元素时输出小的那个，剩下一个元素时直接输出。
+*/
+long int findMid(){
+	int ai=0,aj=na-1;
+	int bi=0,bj=nb-1;
+	while(ai<=aj&&bi<=bj){//a和b都有元素。所以至少有2个元素。
+		if(bi==bj&&ai==aj){//a,b都只剩一个元素，取小的输出。
+			if(b[bi]<a[ai])return b[bi];
+			else return a[ai];
+		}else{//一个数组大于1一个元素，另一个数组大于等于1个元素。删除一个小的元素，删除一个大的元素。题目中说的是递增序列（不知道是不是严格递增）。
+			if(a[ai]<b[bi])ai++;
+			else bi++;
+			if(ai>aj){//在a中删除了一个最小元素，且a删完了。
+				bj--;//在b中删除一个最大元素。
+				break;
+			}else if(bi>bj){
+				aj--;
+				break;
+			}else{//a和b都没删完。
+				if(a[aj]>b[bj])aj--;
+				else bj--;
+			}
+		}
+	}
+	while(ai<=aj){
+		return a[(ai+aj)/2];
+	}
+	while(bi<=bj){
+		return b[(bi+bj)/2];
+	}
+	printf("\n***************somewhere wrong******************\n");
+	return INF;//虽然给的数可能等于INF，但是题目中a和b都不为0，所以上面代码如果没有错一定会返回一个值。这里写return只是为了让函数即使出错的时候也有返回值，满足函数的返回类型的要求。
+}
+
+int main(){
+	scanf("%d",&na);
+	for(int i=0;i<na;i++){
+		scanf("%ld",&a[i]);
+	}
+	scanf("%d",&nb);
+	for(int i=0;i<nb;i++){
+		scanf("%ld",&b[i]);
+	}
+	printf("%ld",findMid());
+	return 0;
+}
+
+//方法2
+//方法3（以后想做再做吧）
