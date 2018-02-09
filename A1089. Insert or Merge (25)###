@@ -1,0 +1,135 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1089
+类型：排序。
+
+难度：3（各类排序算法写得不够快。）
+
+注意事项：
+1. 用while时要注意是否需要改变指针。for(int i=0;i<n;i++)中i的改变已经在括号里实现了，而while中如果用i控制循环的跳出，需要手动改变i，不要忘了写，否则很容易死循环。
+2. 循环语句中如果有条件已经满足答案结果，别忘了要及时跳出循环，不要浪费资源。
+3. merge里对每个小区间span的排序，并没有用专门的归并算法的合并函数，而是用sort函数代替，因为本题数据量较小，这样做没问题。
+4. 该题中归并函数用非递归算法容易一些。可以尝试用递归算法也做一遍，我还没有试。
+*/
+#include<cstdio>
+#include<cstring> 
+#include<algorithm>
+#include<vector> 
+using namespace std;
+
+#define A 0
+
+const int MAXN=110;
+const int INF=1000000010;
+
+//进行1次插入排序。
+void insertSort(int arr[],int first,int second,int third){
+	//first指向有序序列的第一个值的位置。second指向无序区间第一位。third指向所有元素后面的那一位，再数组从0开始存的时候，third相当于数组大小。
+	if(second>=third){
+		printf("\n*****************\nwrong! access a position over the size of the array in insertSort\n*****************\n");
+	}
+	int index=second;
+	while(index>first&&arr[index]<arr[index-1]){
+		//后面的元素小，前移。
+		int tmp=arr[index];
+		arr[index]=arr[index-1];
+		arr[index-1]=tmp;
+		index--;//别忘了写，while相比for的缺点或优点之一在于，index指针的值要自己改变。
+	}
+}
+
+//比较两个相同长度的数组里的值一一对应相等。
+bool cmp(int a[],int b[],int size){
+	for(int i=0;i<size;i++){
+		if(a[i]!=b[i])return false;
+	}
+	return true;
+}
+
+void mergeSort(int arr[],int span,int left,int right){//用sort代替了归并算法里的合并函数。
+#if A
+	printf("\n(in mergeSort)span=%d\n",span);
+#endif
+	//对[left,right]中一个span大小的子区间进行排序。
+	for(int i=left;i<=right;i+=span){
+#if A
+	printf("i=%d,i+span=%d\n",i,i+span);
+#endif
+		if(i+span>right){//i加上span大小已经越界，则对[i,right]范围排序即可。
+			sort(arr+i,arr+right+1);
+		}else{
+			sort(arr+i,arr+i+span);//之前写成了sort(arr+i,arr+span);程序直接奔溃了！！！！！！！！！！
+		}
+	}
+#if A
+	printf("(in mergeSort)end\n");
+#endif
+}
+
+void print(int arr[],int size){
+	//打印一个数组里的所有元素。
+	for(int i=0;i<size;i++){
+		if(i==0){
+			printf("%d",arr[0]);
+		}else{
+			printf(" %d",arr[i]);
+		}
+	}
+	printf("\n");
+}
+
+int main(){
+	int n;
+	int o1[MAXN],o2[MAXN];
+	int sorted[MAXN];
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&o1[i]);
+		o2[i]=o1[i];
+	}
+	for(int i=0;i<n;i++){
+		scanf("%d",&sorted[i]);
+	}
+	bool needmerge=true;
+	//先判断插入排序。
+	for(int i=1;i<n;i++){
+		//一趟插入排序。
+		insertSort(o1,0,i,n);
+		if(cmp(o1,sorted,n)==true){
+			needmerge=false;
+			printf("Insertion Sort\n");
+			if(i!=n-1){//当前不是最后一次排序，则得到下一次排序序列需要再排一次。
+				insertSort(o1,0,i+1,n);
+			}
+			print(o1,n);
+			break;
+		}
+	}
+	//再判断归并排序。
+	if(needmerge){
+		needmerge=true;//此时把它再置为true，为的是判断是否需要进行最后一次循环。
+		int span=2;
+		while(span<n){//归并的片段小于n。
+			mergeSort(o2,span,0,n-1);
+			if(cmp(o2,sorted,n)==true){
+				printf("Merge Sort\n");
+				mergeSort(o2,span*2,0,n-1);//因为该循环内span小于n，所以当前肯定不是最后一次循环，所以不用判断是否需要进行span*2的循环。
+				print(o2,n);
+				needmerge=false;
+				break;//即时跳出循环。
+			}
+			span*=2;//像上面的index一样，这里的span*=2一开始也忘了写了。
+		}
+		if(needmerge){
+			span*=2;//最后再进行一次归并片段大于n的归并。
+			mergeSort(o2,span,0,n-1);
+			if(cmp(o2,sorted,n)==true){
+				printf("Merge Sort\n");
+				print(o2,n);
+			}else{//如果执行了这个else里的语句，说明没有结果，但是题目中说了保证有唯一的结果，所以这里不应该会被执行到。
+				printf("\n*****************\nwrong! the mergeSort has finished, but find no result\n*****************\n");
+			}
+		}
+	}
+	
+	return 0;
+}
