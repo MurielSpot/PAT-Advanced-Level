@@ -122,6 +122,8 @@ https://www.patest.cn/contests/pat-a-practise/1092
 ## A1093. Count PAT's (25)##
 https://www.patest.cn/contests/pat-a-practise/1093
 
+类型：字符串子串。
+
 注意事项：
 1. 可以了解一些模运算的知识（摘自百度百科）：<br/>
 >取模运算（“Modulo Operation”）和取余运算（“Complementation ”）两个概念有重叠的部分但又不完全一致。主要的区别在于对负整数进行除法运算时操作不同。
