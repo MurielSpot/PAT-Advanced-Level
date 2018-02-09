@@ -74,7 +74,7 @@ https://www.patest.cn/contests/pat-a-practise/1083
 ## A1084. Broken Keyboard (20)#
 https://www.patest.cn/contests/pat-a-practise/1084
 
-类型：哈希（字符->布尔），字符串处理（给出原字符串，找出另一条字符串与原字符串相比缺失的字符。
+类型：哈希（字符->布尔），字符串处理（给出原字符串，找出另一条字符串与原字符串相比缺失的字符）。
 
 注意：
 1. 用if还是while不要混。
