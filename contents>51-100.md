@@ -106,6 +106,13 @@ https://www.patest.cn/contests/pat-a-practise/1089
 2. 循环语句中如果有条件已经满足答案结果，别忘了要及时跳出循环，不要浪费资源。
 3. merge里对每个小区间span的排序，并没有用专门的归并算法的合并函数，而是用sort函数代替，因为本题数据量较小，这样做没问题。
 4. 该题中归并函数用非递归算法容易一些。可以尝试用递归算法也做一遍，我还没有试。
+5. 注意此题中初始序列不参与与目标序列相同的比较，否则可能导致某个数据产生双解。
+
+测试数据：
+<pre>//input
+4
+3 4 2 1
+3 4 2 1</pre>
 
 ## A1092. To Buy or Not to Buy (20)#
 https://www.patest.cn/contests/pat-a-practise/1092
