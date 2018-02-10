@@ -1,0 +1,70 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1101
+
+类型：查找（快速排序里的pivot）。
+
+难度：3（比较讲究技巧的题，容易超时。还要注意输出格式。）
+
+注意事项：
+1. 暴力判断会超时。不会超时的算法：第一遍遍历（即输入数据的时候），得到某个元素之前的最大值，如果当前元素没有之前的最大值大，说明不是pivot；可用同样的思路倒着遍历一遍得到后面的最小值，来判断当前是否是pivot。
+注意第一遍遍历按上诉方法做，第二遍遍历根据当前元素是否可能是pivot，再暴力判断后面的元素是否有比当前元素小的，这种方法同样会超时。
+2. 主元个数为0时，第二行虽然没有输出主元，但必须输出一个换行！
+*/
+#include<cstdio>
+#include<cstring> 
+using namespace std;
+
+#define A 0
+#if A
+#endif
+
+const int MAXN=100010;//10^5放到文本文件里就变成105了，导致数组开小出现段错误。
+const int INF=1<<31-1;
+
+int num[MAXN];
+bool pivot[MAXN]={false};//注意初始化中未明确赋值的地方自动填false，不是true，用{true}得到数组第一个值是true后面全是false。
+int main(){
+	int n;
+	scanf("%d",&n);
+	
+	int count=0;//统计有多少个pivot。
+	
+	int max=-1;//存储某个元素在它之前最大的元素。
+	for(int i=0;i<n;i++){
+		scanf("%d",&num[i]);
+		if(max<=num[i]){//之前的都小于等于当前元素，则该元素可能是pivot，否则一定不是。
+			pivot[i]=true;count++;
+			max=num[i];
+		}
+	}
+	int min=INF;//存储某个元素在它之后最小的元素。
+	for(int i=n-1;i>=0;i--){
+		if(min<num[i]){
+			if(pivot[i]){
+				count--;//这个元素之前被记过数才需要减少。
+				pivot[i]=false;
+			}
+		}else{
+			min=num[i];
+		}
+	}
+	//输出。
+	printf("%d\n",count);
+	if(count){
+		bool blank=false;
+		for(int i=0;i<n;i++){
+			if(pivot[i]){
+				if(blank){
+					printf(" %d",num[i]);//这里输出num的值，不是pivot的值，不要大意。
+				}else{
+					printf("%d",num[i]);
+					blank=true;
+				}
+			}
+		}
+	}else{
+		printf("\n");
+	}
+	
+	return 0;
+}
