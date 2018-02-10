@@ -18,9 +18,10 @@ https://www.patest.cn/contests/pat-a-practise/1104
 1. 如果用脑子想不清楚题目所给数据的规律，可以举几个例子类推。
 该题中第i个数总出现次数为i*(n+1-i)。注意这里的i的范围为[1,n]，不能从0开始。
 2. 隐式类型转换的注意事项：sum+=tmp*(n+1-i)*i;这一句中sum，tmp是double型，n，i是int型，代码中tmp放在(n+1-i)*i前面能测试通过，但是把tmp放在最后乘会有两个测试点不能通过。
+
 因为n最大为10^5，所以tmp在后面的时候(n+1-i)*i还未转换成double类型，仍然按照int的存储大小进行运算，而tmp放在前面，(n+1-i)*i再参与运算就是double型的了。
-溢出测试：
-<pre>#include<cstdio>
+<pre>//溢出测试
+#include<cstdio>
 int main(){
 	int n=100000;
 	int i=50000;
