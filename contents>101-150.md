@@ -21,12 +21,12 @@ https://www.patest.cn/contests/pat-a-practise/1104
 
 因为n最大为10^5，所以tmp在后面的时候(n+1-i)*i还未转换成double类型，仍然按照int的存储大小进行运算，而tmp放在前面，(n+1-i)*i再参与运算就是double型的了。
 <pre>//溢出测试
-#include<cstdio>
+#include&<;cstdio>
 int main(){
 	int n=100000;
 	int i=50000;
-	double tmp1=1.0*i*(n+1-i);
-	double tmp2=i*(n+1-i)*1.0;
+	double tmp1=1.0*i*(n+1-i);//double类型放在前面乘。
+	double tmp2=i*(n+1-i)*1.0;//double类型放在后面乘。
 	printf("tmp1=%.2lf\ntmp2=%.2lf",tmp1,tmp2);
 	return 0;
 }
