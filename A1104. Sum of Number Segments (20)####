@@ -1,0 +1,30 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1104
+
+类型：人工推导/找规律题。
+
+难度：4
+
+注意事项：
+1. 如果用脑子想不清楚题目所给数据的规律，可以举几个例子类推。
+该题中第i个数总出现次数为i*(n+1-i)。注意这里的i的范围为[1,n]，不能从0开始。
+2. 隐式类型转换的注意事项：sum+=tmp*(n+1-i)*i;这一句中sum，tmp是double型，n，i是int型，代码中tmp放在(n+1-i)*i前面能测试通过，但是把tmp放在最后乘会有两个测试点不能通过。
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+
+const int MAXN=100010;
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	double sum=0;
+	double tmp;//是double型，不用int型。
+	for(int i=1;i<=n;i++){//i需要从1开始计数。
+		scanf("%lf",&tmp);
+		sum+=tmp*(n+1-i)*i;//这里写成(n+1-i)*i*tmp，即浮点型放在后面，就会有两个测试点过不了。
+	}
+	printf("%.2lf",sum);
+	return 0;
+}
