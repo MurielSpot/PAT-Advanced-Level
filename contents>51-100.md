@@ -120,6 +120,15 @@ https://www.patest.cn/contests/pat-a-practise/1085
 
 algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
 
+## A1088. Rational Arithmetic (20)##
+https://www.patest.cn/contests/pat-a-practise/1088
+
+类型：分数的四则运算，分数化简（会用到最大公约数）。
+
+注意事项：
+1. 虽然输入的数据能用int存，但是进行四则运算得到的结果可能大于int的范围，所以应该用long long型存储分子分母。否则会有两个测试点不通过。
+2. 输入的数据可能是没有化简的，需要先化简再计算。
+
 ## A1089. Insert or Merge (25)###（各类基本排序算法不熟，应该要都能快速写出来。）
 https://www.patest.cn/contests/pat-a-practise/1089
 
