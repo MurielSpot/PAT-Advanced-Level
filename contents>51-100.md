@@ -63,6 +63,30 @@ https://www.patest.cn/contests/pat-a-practise/1080
 99 99 1 0 2
 98 98 2 0 1</pre>
 
+## A1081. Rational Sum (20)####
+https://www.patest.cn/contests/pat-a-practise/1081
+
+类型：分数加减，分数化简。最大公约数。
+
+注意事项：
+1. 分母一定不能为0。
+2. gcd函数，分数的加减运算，这些基本的计算都不熟悉。
+
+需要了解的知识：<br/>
+分数存储的标准:
+1. 分母为非负数。
+2. 分数为0，则规定分子为0，分母为1。
+3. 分子和分母没有除了1以外的公约数。<br/>
+结构体表示：
+<pre>struct fraction{
+  int up,down;//其中up可为负数，且此时进行加法计算不会出错，等同于减法计算。
+ };</pre>
+分数化简。<br/>
+分数加法、减法。<br/>
+分数输出：有整数、假分数、真分数等情况。
+
+最大公约数的求法见下面gcd函数。
+
 ## A1083. List Grades (25)
 https://www.patest.cn/contests/pat-a-practise/1083
 
