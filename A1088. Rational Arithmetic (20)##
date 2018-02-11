@@ -1,0 +1,116 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1088
+类型：分数的四则运算，分数化简（会用到最大公约数）。
+
+难度：2
+
+注意事项：
+1. 虽然输入的数据能用int存，但是进行四则运算得到的结果可能大于int的范围，所以应该用long long型存储分子分母。否则会有两个测试点不通过。
+2. 输入的数据可能是没有化简的，需要先化简再计算。
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+using namespace std;
+
+typedef long long ll;
+struct fraction {
+	ll n, d;//d非零。
+	fraction() {
+		n = 0; d = 1;//注意分母一定不能为0！！
+	}
+};
+
+ll gcd(ll a,ll b){
+	if(a<0)a=0-a;
+	if(b<0)b=0-b;
+	return (b==0)?a:gcd(b,a%b);
+}
+fraction reduction(fraction x){
+	if(x.d<0){
+		x.n=0-x.n;
+		x.d=0-x.d;
+	}
+	if(x.n==0)x.d=1;
+	else{
+		ll cd=gcd(x.n,x.d);
+		x.n/=cd;x.d/=cd;
+	}
+	return x;
+}
+
+fraction sum(fraction a,fraction b){
+	fraction result;
+	result.n=a.n*b.d+a.d*b.n;
+	result.d=a.d*b.d;
+	return reduction(result);
+}
+fraction difference(fraction a,fraction b){
+	fraction result;
+	result.n=a.n*b.d-a.d*b.n;
+	result.d=a.d*b.d;
+	return reduction(result);
+}
+fraction product(fraction a,fraction b){
+	fraction result;
+	result.n=a.n*b.n;
+	result.d=a.d*b.d;
+	return reduction(result);
+}
+fraction quotient(fraction a,fraction b){//传入的b不能是0，所以用该函数之前函数外需要判断。
+	fraction result;
+	if(b.n==0){
+		printf("\n***********dividend can't be 0************\n");
+		return result;
+	}
+	result.n=a.n*b.d;
+	result.d=a.d*b.n;
+	return reduction(result);
+}
+void outputFraction(fraction x){
+	if(x.n<0)printf("(");
+	if(x.d==1)printf("%lld",x.n);
+	else if(x.n>x.d)printf("%lld %lld/%lld",x.n/x.d,x.n%x.d,x.d);
+	else if((0-x.n)>x.d)printf("%lld %lld/%lld",x.n/x.d,0-x.n%x.d,x.d);//分子绝对值大于分母则以带分数的方式输出。
+	else printf("%lld/%lld",x.n,x.d);
+	
+	if(x.n<0)printf(")");
+}
+int main() {
+	fraction a,b;
+	scanf("%lld/%lld %lld/%lld",&a.n,&a.d,&b.n,&b.d);
+	a=reduction(a);
+	b=reduction(b);
+	
+	outputFraction(a);
+	printf(" + ");
+	outputFraction(b);
+	printf(" = ");
+	outputFraction(sum(a,b));
+	printf("\n");
+	
+	outputFraction(a);
+	printf(" - ");
+	outputFraction(b);
+	printf(" = ");
+	outputFraction(difference(a,b));
+	printf("\n");
+	
+	outputFraction(a);
+	printf(" * ");
+	outputFraction(b);
+	printf(" = ");
+	outputFraction(product(a,b));
+	printf("\n");
+	
+	outputFraction(a);
+	printf(" / ");
+	outputFraction(b);
+	printf(" = ");
+	if(b.n==0){
+		printf("Inf");
+	}else outputFraction(quotient(a,b));
+	
+	return 0;
+}
