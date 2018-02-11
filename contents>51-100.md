@@ -85,7 +85,7 @@ https://www.patest.cn/contests/pat-a-practise/1081
 分数加法、减法。<br/>
 分数输出：有整数、假分数、真分数等情况。
 
-最大公约数的求法见下面gcd函数。
+最大公约数：gcd函数。
 
 ## A1083. List Grades (25)
 https://www.patest.cn/contests/pat-a-practise/1083
