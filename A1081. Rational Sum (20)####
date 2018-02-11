@@ -1,0 +1,105 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1081
+
+类型：分数加减，分数化简。最大公约数。
+
+难度：4
+
+注意事项：
+1. 分母一定不能为0。
+2. gcd函数，分数的加减运算，这些基本的计算都不熟悉。
+
+补充：
+分数存储的标准。
+1. 分母为非负数。
+2. 分数为0，则规定分子为0，分母为1。
+3. 分子和分母没有除了1以外的公约数。
+结构体表示：
+struct fraction{
+  int up,down;
+};
+分数化简见下面reduction函数。
+分数加法见下面add函数，其中分子是负的时候相当于减法运算，但用add函数能够正确运算。
+分数输出：有整数、假分数、真分数等情况。
+
+最大公约数的求法见下面gcd函数。
+*/
+
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+using namespace std;
+
+typedef long long ll;
+
+/**分数存储的标准。
+1. 分母为非负数。
+2. 分数为0，则规定分子为0，分母为1。
+3. 分子和分母没有除了1以外的公约数。
+*/
+struct fraction {
+	ll n, d;
+	fraction() {
+		n = 0; d = 1;//注意分母一定不能为0！！
+	}
+};
+
+//该函数a和b的大小无关紧要，无论传入的a大于b还是b大于a还是等于，都能得到正确结果。
+ll gcd(ll a,ll b){//求a和b的最大公约数
+	if(a<0||b<0)return -1;//有错误则返回0。
+	if(b==0)return a;
+	else return gcd(b,a%b);//括号前忘了写gcd导致出错。
+}
+
+ll abs4ll(ll x){
+	if(x<0)return 0-x;
+	else return x;
+}
+
+fraction reduction(fraction a){
+	if(a.d<0){//分母为负数，令分子和分母都为相反数。
+		a.n=0-a.n;
+		a.d=0-a.d;
+	}
+	if(a.n==0){
+		a.d=1;
+	}else{
+		ll cd=gcd(abs4ll(a.n),abs4ll(a.d));
+		a.n/=cd;a.d/=cd;
+	}
+	return a;
+}
+
+//计算两个数相加，可以异号。返回已经化简的结果。
+fraction add(fraction a, fraction b) {
+	fraction result;
+	result.n=a.n*b.d+a.d*b.n;
+	result.d=a.d*b.d;
+	return reduction(result);
+}
+
+const int MAXN = 110;
+int main() {
+	int n; scanf("%d", &n);
+	fraction ans;
+	for (int i = 0; i<n; i++) {
+		fraction tmp;
+		scanf("%lld/%lld", &tmp.n, &tmp.d);
+		ans = add(ans, tmp);
+	}
+	if (ans.n == 0)printf("0");
+	else{
+		if(ans.n<0){
+			printf("-");
+			ans.n=0-ans.n;
+		}
+		if (ans.n >= ans.d) {
+			printf("%lld", ans.n / ans.d);
+			if(ans.n%ans.d)printf(" ");
+		}
+		if (ans.n%ans.d) {
+			printf("%lld/%lld", ans.n%ans.d, ans.d);
+		}
+	}
+	return 0;
+}
