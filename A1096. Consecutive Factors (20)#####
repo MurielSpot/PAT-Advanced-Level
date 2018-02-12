@@ -7,4 +7,48 @@ https://www.patest.cn/contests/pat-a-practise/1096
 
 注意事项；
 1. 所有情况下1都不作为因数，比如质数只有1和它本身两个因数，应该输出这个数，而不是1。
+2. 连乘数需要用long long型。
+3. （我一开始做题时提前计算出了[1,n]中所有可能组和的连乘数的结果，用二维数组存储，其中mc[i][j]存储的时i连乘到j的值，然后让n直接除以其中的连乘数即可，这种方法并没有让算法变快，反而让代码变复杂了很多。
+而且我的问题在于以为只计算[1,12]内的连乘数的值即可，实际上时连乘的数的个数不会超过12，不是它的值全在12之内，所以对于int，提前计算连乘数值可能要算到几千才能让题目答案正确。）
 */
+#include"stdafx.h"
+
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+#define P 0//P代表需要打印的代码，P为1就表示需要执行代码打印一些东西。
+
+const int MAXN=231;
+const int INF = 1<<31-1;
+
+int main() {
+	long long n;
+	scanf("%lld",&n);
+	//sqr为根号n，ansLen为最长连续整数，ansI对应第一个整数。
+	long long sqr=(long long)sqrt(1.0*n),ansI=0,ansLen=0;
+	for(long long i=2;i<=sqr;i++){//除这个数1和数n本身外，第一个因子不会超过根号n。
+		long long tmp=1,j=i;
+		while(1){//j从i开始不断加1，看最长能到多少。
+			tmp*=j;
+			if(n%tmp!=0)break;//如果不能整除n则结束判断。
+			if(j-i+1>ansLen){//发现更长长度则加1。
+				ansI=i;
+				ansLen=j-i+1;
+			}
+			j++;
+		}
+	}
+	if(ansLen==0){
+		printf("1\n%lld",n);
+	}else{
+		printf("%lld\n%lld",ansLen,ansI);
+		for(int i=1;i<ansLen;i++){
+			printf("*%d",ansI+i);
+		}
+	}
+	return 0;
+}
