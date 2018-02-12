@@ -29,6 +29,16 @@ https://www.patest.cn/contests/pat-a-practise/1075
 2. 英语阅读要加强，不用理解错题意。
 3. 细心：不要写错变量，括号嵌套不要出错。
 
+## A1078. Hashing (25)####
+https://www.patest.cn/contests/pat-a-practise/1078
+
+类型：哈希（插入、冲突处理）。
+
+注意事项：
+1. vector的迭代器用法不熟：如it是它的一个迭代器，可以通过*it访问对应元素。
+2. 哈希函数是用求出的大于msize的最小质数小取模，不是用所给的msize。
+3. 散列表长度为某个4k+3形式的素数时，平方探测法可以探测到整个数组，所以此时可以用数组是否已经满来判断是否可以停止探测。
+
 ## A1080. Graduate Admission (30)#####
 https://www.patest.cn/contests/pat-a-practise/1080
 
