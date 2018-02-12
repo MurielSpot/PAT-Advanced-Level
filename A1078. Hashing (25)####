@@ -1,0 +1,82 @@
+#define A 0
+#define R 0
+
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+const int SIZE=10010;
+const int TABLE = 11010;
+vector<int> prime;
+int table[TABLE];
+int msize;int n;
+bool blank=false;
+
+void pretreatPrimeArray(int range){//[0,range-1]内的素数。
+	prime.push_back(2);
+	for(int i=3;i<range;i++){
+		if(i%2){//非偶数才需要判断它有没有除了本身和1之外的因数，因为偶数肯定不是素数。
+			bool is=true;
+			for(int j=3;j<=sqrt(i);j++){
+				if(i%j==0)is=false;
+			}
+			if(is)prime.push_back(i);
+		}
+	}
+#if A
+	for(int i=0;i<prime.size();i++){
+		printf("%d,",prime[i]);
+	}
+	printf("\n");
+#endif
+}
+int quadraticProbing(int key,int pos,int table[],int size){//根据当前位置找下一个可以填入数据的位置，找到了就返回，没找到返回-1。
+	int i=1;int posNew=pos;
+	while(table[posNew]!=-1&&table[posNew]!=key){
+		posNew=(pos+i*i)%size;
+		i++;
+		if(i>size)return -1;//如果探测了很多次还没有找到可以插入的位置，就认为不应该再插入了。
+	}
+	return posNew;
+}
+void insert(int key,int table[],const int size){
+	int pos=key%size;
+	if(table[pos]==-1){
+		table[pos]=key;
+		if(blank)printf(" ");
+		else blank=true;
+		printf("%d",pos);
+	}else{
+		pos=quadraticProbing(key,pos,table,size);
+		if(pos!=-1){
+			table[pos]=key;
+			if(blank)printf(" ");
+			else blank=true;
+			printf("%d",pos);
+		}else{
+			if(blank)printf(" ");
+			else blank=true;
+			printf("-");
+		}
+	}
+}
+int main() {
+	scanf("%d %d",&msize,&n);
+	
+	pretreatPrimeArray(SIZE+1000);//求出小于SIZE+1000的素数。
+	vector<int>::iterator it = lower_bound(prime.begin(), prime.end(), msize);
+	int tableSize=*it;//求出大于等于msize的最小素数作为tableSize大小。
+#if R
+	printf("tableSize=%d\n",tableSize);
+	return 0;
+#endif	
+	memset(table,-1,sizeof(table));//使用数组table时先初始化。因为所有数据都是正的，所以-1表示此位置没有值。
+	for(int i=0;i<n;i++){
+		int tmp;scanf("%d",&tmp);
+		insert(tmp,table,tableSize);//把tmp插入到table里，所用哈希函数为H(key)=key%size，根据此题的输出样例来看，这里的size指的是tableSize，不是题目给的msize；冲突处理采用二次探方法。
+	}
+	return 0;
+}
