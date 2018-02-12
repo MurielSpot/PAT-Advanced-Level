@@ -196,3 +196,12 @@ https://www.patest.cn/contests/pat-a-practise/1093
 >3. (a * b) % p = (a % p * b % p) % p
 >4. a ^ b % p = ((a % p)^b) % p
 
+## A1096. Consecutive Factors (20)#####（需要自己重做一遍，未全部通过测试点，看了别人的代码才通过）
+/*
+https://www.patest.cn/contests/pat-a-practise/1096
+
+类型：数的因数。
+
+注意事项；
+1. 所有情况下1都不作为因数，比如质数只有1和它本身两个因数，应该输出这个数，而不是1。
+2. 连乘数需要用long long型。
