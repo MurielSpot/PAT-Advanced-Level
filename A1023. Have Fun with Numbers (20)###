@@ -1,0 +1,68 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1023
+
+类型：字符串处理（数字用字符串表示）。
+
+难度：3（题目思路简单，但做得太慢，细节出错太多）
+
+注意事项：
+1. 字符串最后的'\0'要谨慎处理。
+2. string字符串是常量！
+
+相关知识点：
+string的相关用法：
+erase函数：
+1. string& erase (size_t pos = 0, size_t len = npos);
+Erases the portion of the string value that begins at the character position pos and spans len characters (or until the end of the string, if either the content is too short or if len is string::npos.
+Notice that the default argument erases all characters in the string (like member function clear).
+2. iterator erase (const_iterator p);
+Erases the character pointed by p.
+3. iterator erase (const_iterator first, const_iterator last);
+Erases the sequence of characters in the range [first,last).
+*/
+#include<iostream>
+#include<cstring>
+#include<algorithm>
+using namespace std;
+
+#define P 0//P代表需要打印的代码，P为1就表示需要执行代码打印一些东西。
+
+const int MAXN=231;
+const int INF = 1<<31-1;
+
+void todouble(char a[]){
+	int carry=0;
+	for(int i=strlen(a)-1;i>=0;i--){//数字个位在strlen(a)-1处，不是strlen(a)，要注意。且此处时i--，不是i++。
+		int tmp=carry;//因为carry和a[i]在下面两个表达式的右边都会用到，所以用这个变量时不可避免的，之前因为carry被改变后用了改变后的carry求a[i]出错。
+		carry=((a[i]-'0')*2+carry)/10;
+		a[i]=((a[i]-'0')*2+tmp)%10+'0';
+	}
+	if(carry){
+		for(int i=strlen(a);i>=0;i--){
+			a[i+1]=a[i];
+		}
+		a[0]=carry+'0';
+	}
+}
+int main() {
+	char a[25];
+	cin>>a;
+	int hash[10]={0};
+	for(int i=0;i<strlen(a);i++){
+		hash[a[i]-'0']++;
+	}
+	todouble(a);
+	for(int i=0;i<strlen(a);i++){
+		hash[a[i]-'0']--;
+	}
+	bool flag=true;
+	for(int i=0;i<10;i++){
+		if(hash[i]){
+			flag=false;break;
+		}
+	}
+	if(flag) cout<<"Yes\n";
+	else cout<<"No\n";
+	cout<<a;
+	return 0;
+}
