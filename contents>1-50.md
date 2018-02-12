@@ -53,6 +53,26 @@ https://www.patest.cn/contests/pat-a-practise/1020
 
 类型：树的建立，树的遍历
 
+## A1023. Have Fun with Numbers (20)###
+https://www.patest.cn/contests/pat-a-practise/1023
+
+类型：字符串处理（数字用字符串表示）。
+
+注意事项：
+1. 字符串最后的'\0'要谨慎处理。
+2. string字符串是常量！
+
+相关知识点：
+string的相关用法：
+erase函数：
+1. string& erase (size_t pos = 0, size_t len = npos);
+Erases the portion of the string value that begins at the character position pos and spans len characters (or until the end of the string, if either the content is too short or if len is string::npos.
+Notice that the default argument erases all characters in the string (like member function clear).
+2. iterator erase (const_iterator p);
+Erases the character pointed by p.
+3. iterator erase (const_iterator first, const_iterator last);
+Erases the sequence of characters in the range [first,last).
+
 ## A1025. PAT Ranking (25)####
 https://www.patest.cn/contests/pat-a-practise/1025
 
