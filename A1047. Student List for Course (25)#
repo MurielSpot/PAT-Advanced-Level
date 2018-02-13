@@ -1,0 +1,56 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1047
+
+类型：排序（统计每门课学习的人名再按字母序输出）。
+
+难度：1。
+*/
+//#include"stdafx.h"
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+const int MAXN=40010;
+const int MAXK=2510;
+
+struct info{
+	char name[5];
+	//info(){name[0]=0;}
+	info(char name_[]){
+		strcpy(name,name_);
+	}
+};
+
+bool cmp(info a,info b){
+	return strcmp(a.name,b.name)<0;
+}
+
+vector<info> course[MAXK];
+
+int n,k;
+int main(){
+	scanf("%d %d",&n,&k);
+	for(int i=0;i<n;i++){
+		char name[5];int c;
+		scanf("%s %d",name,&c);
+		int cn;
+		for(int j=0;j<c;j++){
+			scanf("%d",&cn);
+			course[cn].push_back(name);
+		}
+	}
+	for(int i=1;i<=k;i++){
+		int size=course[i].size();
+		printf("%d %d\n",i,size);
+		if(size){
+			sort(course[i].begin(),course[i].end(),cmp);
+			for(int j=0;j<size;j++){
+				printf("%s\n",course[i][j].name);
+			}
+		}
+	}
+	return 0;
+}
