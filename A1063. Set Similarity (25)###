@@ -1,0 +1,55 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1063
+
+类型：集合。
+
+难度：3（不会使用set，审题错误）。
+
+注意事项：
+1. 英语不好，题目没理解清楚，题目中的集合输出时是需要去重的，所以如果有两组数1，1，1，2，2和2，2，2，3输入，则两集合共有的数只有一个2，不能记为4个2（集合各有两个）或5个2（一共5个2）。
+2. 了解set使用方法。
+3. 百分号的输出方法：%%。
+
+其他：可以自己考虑用哈希数组代替集合做做看。
+*/
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<set>
+using namespace std;
+
+const int MAXN=52;
+const int MAXM=106;
+set<int> s[MAXN];
+
+void getAnswer(int a,int b){
+	int countSame=0;
+	set<int>::iterator it;
+	for(it=s[a].begin();it!=s[a].end();it++){
+		if(s[b].find(*it)!=s[b].end()){
+			countSame++;
+		}
+	}
+	printf("%.1lf%%\n", (double)countSame * 100 / (s[a].size() + s[b].size() - countSame));
+}
+
+int main(){
+	int n;
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++){
+		int m;scanf("%d",&m);
+		int element;
+		for(int j=0;j<m;j++){
+			scanf("%d",&element);
+			s[i].insert(element);
+		}
+	}
+	int k;
+	scanf("%d",&k);
+	for(int i=0;i<k;i++){
+		int q1,q2;
+		scanf("%d %d",&q1,&q2);
+		getAnswer(q1,q2);
+	}
+	return 0;
+}
