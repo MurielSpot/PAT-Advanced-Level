@@ -1,0 +1,78 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1039
+
+类型：哈希（查询），排序。
+
+难度：2。（容易超时）
+
+注意事项：
+1. 根据学生名找相应记录时，用sort函数对学生名排序，再二分查找对应记录，会有一个记录超时。改用hash函数后，虽然没超时，但占用的内存空间太大。
+*/
+
+//#include"stdafx.h"
+
+#include<cstdio>
+#include<cstring>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+const int MAXN=40010;
+const int MAXK=2510;
+
+struct info{
+	char name[5];
+	vector<int> course;
+	info(){name[0]=0;}
+	info(char n[],int data){
+		strcpy(name,n);
+		course.push_back(data);
+	}
+}stu[500000];
+int stuPtr=500000;
+
+bool cmp(info a,info b){
+	return strcmp(a.name,b.name)<0;
+}
+
+int find(char name[]){
+	return (name[0]-'A')*17576+(name[1]-'A')*676+(name[2]-'A')*26+(name[3]-'0');
+}
+
+int n,k;
+int main(){
+	scanf("%d %d",&n,&k);
+	//数据录入stu数组。
+	for(int i=0;i<k;i++){
+		int index;int stuNum;
+		scanf("%d %d",&index,&stuNum);
+		char tmpName[5];int Pos;
+		for(int j=0;j<stuNum;j++){
+			scanf("%s",tmpName);
+			int pos=find(tmpName);
+			if(stu[pos].name[0]){//如果名字第一位不为0，说明之前录入过数据。
+				stu[pos].course.push_back(index);
+			}else{
+				stu[pos]=info(tmpName,index);
+			}
+		}
+	}
+	//在stu数组里找需要查询的学生的信息，并输出。
+	for(int i=0;i<n;i++){
+		char tmpName[5];
+		scanf("%s",tmpName);
+		int pos=find(tmpName);
+		if(stu[pos].name[0]){
+			int size=stu[pos].course.size();
+			sort(stu[pos].course.begin(),stu[pos].course.end());
+			printf("%s %d",tmpName,size);
+			for(int j=0;j<size;j++){
+				printf(" %d",stu[pos].course[j]);
+			}
+			printf("\n");
+		}else{
+			printf("%s 0\n",tmpName);
+		}
+	}
+	return 0;
+}
