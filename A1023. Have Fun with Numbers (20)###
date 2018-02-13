@@ -8,6 +8,7 @@ https://www.patest.cn/contests/pat-a-practise/1023
 注意事项：
 1. 字符串最后的'\0'要谨慎处理。
 2. string字符串是常量！
+3. 如果发现乘2之后数字位数增多了，则肯定不会输出Yes。
 
 相关知识点：
 string的相关用法：
