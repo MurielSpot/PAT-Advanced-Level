@@ -71,7 +71,15 @@ Notice that the default argument erases all characters in the string (like membe
 2. iterator erase (const_iterator p);
 Erases the character pointed by p.
 3. iterator erase (const_iterator first, const_iterator last);
-Erases the sequence of characters in the range [first,last).
+Erases the sequence of characters in the range \[first,last).
+
+## A1024. Palindromic Number (25)###
+https://www.patest.cn/contests/pat-a-practise/1024
+
+类型：回文数，反转字符串，字符串所表示的数字的加减。
+
+注意事项：
+1. 手动处理数组时别忘了结尾的"\0"。
 
 ## A1025. PAT Ranking (25)####
 https://www.patest.cn/contests/pat-a-practise/1025
