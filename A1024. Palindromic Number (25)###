@@ -1,0 +1,60 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1024
+
+类型：回文数，反转字符串，字符串所表示的数字的加减。
+
+难度：3（做得太慢）。
+
+注意事项：
+1. 手动处理数组时别忘了结尾的"\0"。
+*/
+#include<cstdio>
+#include<cstring>
+using namespace std;
+
+bool isPalindrome(char arr[],int left,int right){
+	while(left<=right){
+		if(arr[left]!=arr[right]){
+			return false;
+		}
+		left++;right--;
+	}
+	return true;
+}
+void reverseArray(char d[],char s[],int left,int right){
+	d[right + 1] = '\0';//先把\0加上，因为后面right后面会改变。
+	while(left<=right){
+		d[left]=s[right];
+		d[right]=s[left];
+		left++;right--;
+	}
+}
+void add(char d[],char s[],int len){
+	int carry=0;
+	for(int i=len-1;i>=0;i--){
+		int tmp=d[i]-'0';
+		d[i]=(s[i]-'0'+d[i]-'0'+carry)%10+'0';
+		carry=(s[i]-'0'+tmp+carry)/10;
+	}
+	if(carry){
+		for(int i=len;i>=0;i--){
+			d[i+1]=d[i];
+		}
+		d[0]=carry+'0';
+	}
+}
+int main(){
+	char result[1200],rev[1200];
+	scanf("%s",result);
+	int k;
+	scanf("%d",&k);
+	int i=0;
+	while(i<k&&isPalindrome(result,0,strlen(result)-1)==false){
+		int len=strlen(result);//因为数组长度可能会随时改变，所以每次改变result后都要重复计算长度。
+		reverseArray(rev,result,0,len-1);
+		add(result,rev,len);
+		i++;
+	}
+	printf("%s\n%d",result,i);
+	return 0;
+}
