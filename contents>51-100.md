@@ -4,6 +4,18 @@ https://www.patest.cn/contests/pat-a-practise/1055
 
 类型：排序。
 
+## A1063. Set Similarity (25)###
+https://www.patest.cn/contests/pat-a-practise/1063
+
+类型：集合。
+
+注意事项：
+1. 英语不好，题目没理解清楚，题目中的集合输出时是需要去重的，所以如果有两组数1，1，1，2，2和2，2，2，3输入，则两集合共有的数只有一个2，不能记为4个2（集合各有两个）或5个2（一共5个2）。
+2. 了解set使用方法。
+3. 百分号的输出方法：%%。
+
+其他：可以自己考虑用哈希数组代替集合做做看。
+
 ## A1067. Sort with Swap(0,*) (25)###
 https://www.patest.cn/contests/pat-a-practise/1067
 
