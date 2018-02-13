@@ -130,6 +130,16 @@ https://www.patest.cn/contests/pat-a-practise/1038
 >iterator erase (iterator p);<br/>
 >iterator erase (iterator first, iterator last);
 
+## A1039. Course List for Student (25)##
+https://www.patest.cn/contests/pat-a-practise/1039
+
+类型：哈希（查询），排序。
+
+注意事项：
+1. 根据学生名找相应记录时，用sort函数对学生名排序，再二分查找对应记录，会有一个记录超时。改用hash函数后，虽然没超时，但占用的内存空间太大。
+同样也不可用map和string，会超时，cin和cout也不要用，注意到该题时间限制200ms，有些PAT20分的计算过程特别简单的题还给了400ms呢，所以这题时间要求算比较严的了，所以做题之前要先考虑时间，不要一拿来就做，然后发现通过不了。
+
+
 ## A1041. Be Unique (20)#
 https://www.patest.cn/contests/pat-a-practise/1041
 
