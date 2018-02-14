@@ -239,8 +239,8 @@ This parameter can also be a null pointer, in which case it is not used.<br/>
 * 第三个参数：需要转换成的数字的基数，默认10进制。
 <pre>//第二个函数使用示例
 //#include"stdafx.h"
-#include<iostream>
-#include<string>
+#include&lt;iostream>
+#include&lt;string>
 using namespace std;
 int main() {
 	string a = "abcdef123";
@@ -248,7 +248,7 @@ int main() {
 	int pos;
 	std::string::size_type sz;
 	int num = stoi(b, &sz);
-	cout << "num=" << num << ",sz=" << sz << endl;
+	cout &lt;&lt; "num=" &lt;&lt; num &lt;&lt; ",sz=" &lt;&lt; sz &lt;&lt; endl;
 	//num = stoi(a, &sz);//这一句会让程序崩溃。
 	return 0;
 }
@@ -263,9 +263,9 @@ gets已经被新标准删了，用fgets获者gets_s代替。但是fgets好像会
 3. string::npos的含义：Maximum value for size_t. npos is a static member constant value with the greatest possible value for an element of type size_t.
 4. string的用法不熟。
 <pre>//string用法简单的例子
-#include<cstdio>
-#include<iostream>
-#include<string>
+#include&lt;cstdio>
+#include&lt;iostream>
+#include&lt;string>
 using namespace std;
 int main(){
 	string a="abcdef abd";
