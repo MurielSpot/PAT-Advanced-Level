@@ -218,8 +218,10 @@ https://www.patest.cn/contests/pat-a-practise/1096
 1. 所有情况下1都不作为因数，比如质数只有1和它本身两个因数，应该输出这个数，而不是1。
 2. 连乘数需要用long long型。
 
-## 
+## A1100. Mars Numbers (20)###
+https://www.patest.cn/contests/pat-a-practise/1100
 
+类型：字符串处理（数字和字符串的转换）
 
 注意事项：
 1. 大于12的数并不是都是由两个字符串组成，如13、26、39等13的倍数，直接用tam、hel、maa表示即可，不是tam tret。同样，只有一个字符串的数并不一定是小于12的数。
@@ -269,10 +271,10 @@ int main(){
 	string b="cccc";
 	int pos;
 	printf("posBlank=%d\n",pos=a.find(' '));
-	cout<<a.substr(0,pos)<<"\n"<<a.substr(pos+1)<<"\n";
+	cout\<\<a.substr(0,pos)t\<\<"\n"t\<\<a.substr(pos+1)t\<\<"\n";
 	printf("posBlank=%d\n",pos=b.find(' ')); 
 	if(pos!=string::npos)
-		cout<<b.substr(0,pos)<<"\n"<<b.substr(pos);
+		coutt\<\<b.substr(0,pos)t\<\<"\n"<<b.substr(pos);
 	return 0;
 }
 //output
