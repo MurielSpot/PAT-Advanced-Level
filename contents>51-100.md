@@ -256,6 +256,7 @@ int main() {
 num=123,sz=3
 </pre>
 网上说：stoi函数默认要求输入的参数字符串是符合int范围的[-2147483648, 2147483647]，否则会runtime error。atoi函数则不做范围检查，若超过int范围，则显示-2147483648（溢出下界）或者2147483647（溢出上界）。
+
 2. 读取带空格的一行：
 gets已经被新标准删了，用fgets获者gets_s代替。但是fgets好像会把\n也读入数组。fgets(num,10,stdin)。
 或者用getline，遇到\n结束读取，getline(std::cin,num)。
@@ -271,10 +272,10 @@ int main(){
 	string b="cccc";
 	int pos;
 	printf("posBlank=%d\n",pos=a.find(' '));
-	cout\<\<a.substr(0,pos)t\<\<"\n"t\<\<a.substr(pos+1)t\<\<"\n";
+	cout&lt;&lt;a.substr(0,pos)t&lt;&lt;"\n"t&lt;&lt;a.substr(pos+1)t&lt;&lt;"\n";
 	printf("posBlank=%d\n",pos=b.find(' ')); 
 	if(pos!=string::npos)
-		coutt\<\<b.substr(0,pos)t\<\<"\n"<<b.substr(pos);
+		coutt&lt;&lt;b.substr(0,pos)t&lt;&lt;"\n"<<b.substr(pos);
 	return 0;
 }
 //output
