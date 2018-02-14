@@ -217,3 +217,68 @@ https://www.patest.cn/contests/pat-a-practise/1096
 注意事项；
 1. 所有情况下1都不作为因数，比如质数只有1和它本身两个因数，应该输出这个数，而不是1。
 2. 连乘数需要用long long型。
+
+## 
+
+
+注意事项：
+1. 大于12的数并不是都是由两个字符串组成，如13、26、39等13的倍数，直接用tam、hel、maa表示即可，不是tam tret。
+2. (ch=getchar())!=" "出错，因为双引号对应字符串，单引号对应字符。要谨慎。
+
+其他：
+1. 字符串转整数：对于string，可以用stoi函数，注意c++11才能用该函数：
+int stoi (const string&  str, size_t* idx = 0, int base = 10);
+int stoi (const wstring& str, size_t* idx = 0, int base = 10);
+第一个参数：需要转换的字符串。
+第二个参数：
+Pointer to an object of type size_t, whose value is set by the function to position of the next character in str after the numerical value.
+This parameter can also be a null pointer, in which case it is not used.
+大概意思就是说，如果idx不为空指针，则将字符串中数字后面的第一个字符的位置赋给这个指针。
+第三个参数：
+需要转换成的数字的基数，默认10进制。
+<pre>//第二个函数使用示例
+//#include"stdafx.h"
+#include<iostream>
+#include<string>
+using namespace std;
+int main() {
+	string a = "abcdef123";
+	string b = "123cba";
+	int pos;
+	std::string::size_type sz;
+	int num = stoi(b, &sz);
+	cout << "num=" << num << ",sz=" << sz << endl;
+	//num = stoi(a, &sz);//这一句会让程序崩溃。
+	return 0;
+}
+//output
+num=123,sz=3
+</pre>
+网上说：stoi函数默认要求输入的参数字符串是符合int范围的[-2147483648, 2147483647]，否则会runtime error。atoi函数则不做范围检查，若超过int范围，则显示-2147483648（溢出下界）或者2147483647（溢出上界）。
+2. 读取带空格的一行：
+gets已经被新标准删了，用fgets获者gets_s代替。但是fgets好像会把\n也读入数组。fgets(num,10,stdin)。
+或者用getline，遇到\n结束读取，getline(std::cin,num)。
+3. string::npos的含义：Maximum value for size_t. npos is a static member constant value with the greatest possible value for an element of type size_t.
+4. string的用法不熟。
+<pre>//string用法简单的例子
+#include<cstdio>
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+	string a="abcdef abd";
+	string b="cccc";
+	int pos;
+	printf("posBlank=%d\n",pos=a.find(' '));
+	cout<<a.substr(0,pos)<<"\n"<<a.substr(pos+1)<<"\n";
+	printf("posBlank=%d\n",pos=b.find(' ')); 
+	if(pos!=string::npos)
+		cout<<b.substr(0,pos)<<"\n"<<b.substr(pos);
+	return 0;
+}
+//output
+posBlank=6
+abcdef
+abd
+posBlank=-1
+</pre>
