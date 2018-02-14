@@ -1,4 +1,9 @@
 # 目录：甲级51-100题
+## A1054. The Dominant Color (20)##
+https://www.patest.cn/contests/pat-a-practise/1054
+
+类型：计数（映射或哈希）。
+
 ## A1055. The World's Richest (25)#
 https://www.patest.cn/contests/pat-a-practise/1055
 
