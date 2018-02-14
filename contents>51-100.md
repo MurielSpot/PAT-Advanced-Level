@@ -222,20 +222,19 @@ https://www.patest.cn/contests/pat-a-practise/1096
 
 
 注意事项：
-1. 大于12的数并不是都是由两个字符串组成，如13、26、39等13的倍数，直接用tam、hel、maa表示即可，不是tam tret。
+1. 大于12的数并不是都是由两个字符串组成，如13、26、39等13的倍数，直接用tam、hel、maa表示即可，不是tam tret。同样，只有一个字符串的数并不一定是小于12的数。
 2. (ch=getchar())!=" "出错，因为双引号对应字符串，单引号对应字符。要谨慎。
 
 其他：
 1. 字符串转整数：对于string，可以用stoi函数，注意c++11才能用该函数：
-int stoi (const string&  str, size_t* idx = 0, int base = 10);
-int stoi (const wstring& str, size_t* idx = 0, int base = 10);
-第一个参数：需要转换的字符串。
-第二个参数：
-Pointer to an object of type size_t, whose value is set by the function to position of the next character in str after the numerical value.
-This parameter can also be a null pointer, in which case it is not used.
-大概意思就是说，如果idx不为空指针，则将字符串中数字后面的第一个字符的位置赋给这个指针。
-第三个参数：
-需要转换成的数字的基数，默认10进制。
+<pre>int stoi (const string&  str, size_t* idx = 0, int base = 10);
+int stoi (const wstring& str, size_t* idx = 0, int base = 10);</pre>
+* 第一个参数：需要转换的字符串。
+* 第二个参数：<br/>
+Pointer to an object of type size_t, whose value is set by the function to position of the next character in str after the numerical value.<br/>
+This parameter can also be a null pointer, in which case it is not used.<br/>
+大概意思就是说，如果idx不为空指针，则将字符串中数字后面的第一个字符的位置赋给这个指针。<br/>
+* 第三个参数：需要转换成的数字的基数，默认10进制。
 <pre>//第二个函数使用示例
 //#include"stdafx.h"
 #include<iostream>
