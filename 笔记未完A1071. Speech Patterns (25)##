@@ -1,0 +1,48 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1071
+
+类型：字符串处理，映射（map字典）。
+
+难度：2。(做法不简洁，应该在读入数据时直接处理）
+
+1. extern int isalnum(int c);判断字符变量c是否为字母或数字，若是则返回非零，否则返回零。
+2. 问答：map<string, int>中的 int 的初始值为什么是 0？
+用在标准库里的类和算法里的内置类型我见过的都是value initial的，这也算是不成文的规定吧？我记得c++primer
+第五版里好像把这写成了一段话当做小经验
+*/
+#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<string>
+#include<map>
+using namespace std;
+
+//因为不知道一个单词长度多长，所以不要用char数组。
+int main() {
+	map<string,int> mp;
+	string s;
+	getline(cin,s);
+	int len=s.size();
+	string tmp;//不能放到循环里面，否则每次循环都变成空。
+	for(int i=0;i<len;i++){
+		if(isalnum(s[i])){
+			s[i] = tolower(s[i]);
+			tmp.append(1,s[i]);
+		}
+		if(!isalnum(s[i])||i==len-1){//注意最后一个字符可能是有效的，所以在最后一个字符串需要另行判断是否到了结尾。最后一个字符串需要增加mp中的相应值，同时也需要转小写，所以这个if不能变成else接在上个if后面。
+			if(tmp.size()){
+				mp[tmp]++;
+				tmp="";//注意清空字符串的多种写法。
+			}
+		}
+	}
+	int count=-1;string ans;
+	for(map<string,int>::iterator it=mp.begin();it!=mp.end();it++){
+		if(it->second>count){
+			count=it->second;
+			ans=it->first;
+		}
+	}
+	cout<<ans<<" "<<count;
+	return 0;
+}
