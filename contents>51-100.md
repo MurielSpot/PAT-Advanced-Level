@@ -275,7 +275,7 @@ int main(){
 	cout&lt;&lt;a.substr(0,pos)t&lt;&lt;"\n"t&lt;&lt;a.substr(pos+1)t&lt;&lt;"\n";
 	printf("posBlank=%d\n",pos=b.find(' ')); 
 	if(pos!=string::npos)
-		coutt&lt;&lt;b.substr(0,pos)t&lt;&lt;"\n"<<b.substr(pos);
+		coutt&lt;&lt;b.substr(0,pos)t&lt;&lt;"\n"&lt;&lt;b.substr(pos);
 	return 0;
 }
 //output
