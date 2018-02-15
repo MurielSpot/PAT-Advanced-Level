@@ -36,6 +36,32 @@ https://www.patest.cn/contests/pat-a-practise/1070
 2. double最好不要参加比较，用的使用最好用极小值来矫正。因为即使它有时不影响结果，但是如果代码本身有错，很可能让人以为可能是double比较时出错引起的，其实并不是。
 3. 题目中库存量全用int表示的时候，会有一个测试点答案错误，要改成double。以后代码中可能会用到double或者参与double运算的变量类型一定要设置为double。但是要注意整型才能做数组的下标，而浮点转换成整型可能会丢失精度，所以变量要是为double就不能做下标了。
 
+## 
+https://www.patest.cn/contests/pat-a-practise/1071
+
+类型：字符串处理，映射（map字典）。
+
+1. 判断是否字母或数字：extern int isalnum(int c);判断字符变量c是否为字母或数字，若是则返回非零，否则返回零。
+判断是否是十进制数字：int isdigit(char c);<ctype.h>(C)<cctype>(C++)。
+判断是否是字母：int isalpha ( int c );A value different from zero (i.e., true) if indeed c is an alphabetic letter. Zero (i.e., false) otherwise.
+2. 问答：map<string, int>中的 int 的初始值为什么是 0？
+用在标准库里的类和算法里的内置类型我见过的都是value initial的，这也算是不成文的规定吧？我记得c++primer
+第五版里好像把这写成了一段话当做小经验。
+3. scanf通配符的使用:可以用来向数组里只读入指定内容。
+<pre>#include&lt;cstdio>
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+	char s[100];
+	char discard[100];
+	scanf("%[^0-9,a-z,A-Z]s",discard);//读取除去0-9，a-z，A-Z以后的字符。
+	scanf("%[0-9,a-z,A-Z]s",s);//读取0-9，a-z，A-Z，遇到其他字符停止。
+	printf("%s\n",s);
+	return 0;
+}</pre>
+
+
 ## A1075. PAT Judge (25)###
 https://www.patest.cn/contests/pat-a-practise/1075
 
