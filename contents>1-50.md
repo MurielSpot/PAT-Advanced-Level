@@ -63,7 +63,24 @@ https://www.patest.cn/contests/pat-a-practise/1022
 2. id是7位数，所以需要%07d格式输出，否则会有错误，而且未必会提醒你是格式错误。
 3. 函数传参时需用引用，否则会超时。
 4. 下面的下面结构体以及结构体数组完全不需要，因为可以用临时变量读取一个书籍记录，存到相应map里，临时变量读取到的值不会再用，直接从map里找结果即可。
-
+5. 一行字符串，获得由一个空格分隔的一个个单词时，由多种处理方法，下面仅是几个例子：
+<pre>//第一种用getchar
+char ch='0';string tmp;
+while(ch!='\n'){
+	tmp = "";
+	while((ch=getchar())!=' '&&ch!='\n'){
+		tmp+=ch;
+	}
+	mp[tmp].push_back(id);//把获得的一个单词tmp存入到map<string,vector<int> >的映射中。
+}		
+</pre>
+<pre>//第二种主要用cin
+while(cin&lt;&lt;tkey) {//好像只要还能获得输入数据就一直输入。
+  map[key].push_back(id);//把获得的一个单词key存入到map<string,vector<int> >的映射中。
+  char ch = getchar();//接收单词后面的空白字符，如果为\n需跳出循环。
+  if(ch == '\n') break;
+}
+</pre>
 ## A1023. Have Fun with Numbers (20)###
 https://www.patest.cn/contests/pat-a-practise/1023
 
