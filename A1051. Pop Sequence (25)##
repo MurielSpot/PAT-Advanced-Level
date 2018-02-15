@@ -1,0 +1,68 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1051
+
+类型：栈（栈的弹出序列是否合理）。队列。
+
+难度：2（做得太慢）
+
+注意事项：
+1. q.pop()弹出队首元素。q.front()取队首元素。s.pop()弹出栈顶元素，s.top()取栈顶元素。
+2. 判断一个序列是否满足栈弹出序列的要求时，一次判断的序列要读完，以免影响下一个序列的读取。
+3. stl容器作为参数传递：
+（网上说的http://blog.csdn.net/yishaxiaoyao/article/details/44344097）
+STL容器类自带的拷贝构造函数和符号“=”对容器进行深拷贝：将STL容器当作参数传递给函数时，如果是值传递，则会自动调用STL容器的拷贝构造函数，如下面的程序片段。
+vector的拷贝构造函数会根据传进来的vector开辟相同的空间，然后将传进来的vector的元素一个一个拷贝到新的vector中。在逐个拷贝元素的过程中，如果该元素不是int型，而是一个自定义的类，那么必须使用该自定义的类的拷贝构造函数。那么，此时是否为深拷贝，取决于该自定义的类是否重写了拷贝构造函数。（关于STL容器内元素的拷贝问题，见引用1）
+除了STL容器外，string类自带的拷贝构造函数也是深拷贝。
+*/
+//#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<stack>
+#include<queue>
+#include<algorithm>
+using namespace std;
+
+const int MAXN=1010;
+
+queue<int> getSequence(int size){
+	queue<int> q;
+	for(int i=0;i<size;i++){
+		int data;scanf("%d",&data);
+		q.push(data);
+	}
+	return q;
+}
+
+int main() {
+	int n,m,k;
+	scanf("%d %d %d",&m,&n,&k);
+	
+	for(int i=0;i<k;i++){
+		//在不大于栈的大小的时候，将要pop的元素要么是当前栈顶元素要么是将要入栈然后成为栈顶元素的元素。
+		bool ans=true;
+		int in=1;
+		int out;
+		stack<int> s;while (!s.empty())s.pop();//每次使用堆栈判断要给序列是否合理前都要先把它清空。
+		
+		queue<int> q=getSequence(n);//一次性读完需要判断的序列。
+		while(!q.empty()){//判断一个长度为n的序列。
+			//scanf("%d",&out);//因为下面的判断中发现结果已经为no则会跳出循环就不继续读入该序列的数据了，所以输入缓冲残余数据会影响下一个序列的输入。
+			while(s.empty()||s.top()!=q.front()){//当前栈为空且栈顶元素不是需要弹出的元素，则不断push入下一个元素，即in。
+				if(s.size()>=m||in>n){//栈已经满了，或入栈的元素已经输完了，栈顶却不是要输出的元素，则不能够所要判断的序列无法形成。
+					ans=false;break;
+				}else{//当入栈元素还有且栈内有空间就继续入栈。
+					s.push(in++);
+				}
+			}
+			if(ans==false)break;//可以结束这个序列的判断。
+			//ans为true说明找到了相对应元素，可以pop。
+			s.pop();q.pop();
+		}
+		if(ans){
+			printf("YES\n");
+		}else{
+			printf("NO\n");
+		}
+	}
+	return 0;
+}
