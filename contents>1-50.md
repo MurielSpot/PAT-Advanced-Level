@@ -53,6 +53,17 @@ https://www.patest.cn/contests/pat-a-practise/1020
 
 类型：树的建立，树的遍历
 
+## A1022. Digital Library (30)##
+https://www.patest.cn/contests/pat-a-practise/1022
+
+类型：映射（map容器）
+
+注意事项：
+1. getline结尾的\n不需要用getchar接收。用scanf时，希望后面的\n不影响下一次输入，可以用scanf("%d\n",&x);这种方式把后面的\n吃掉，其他多余字符同理。
+2. id是7位数，所以需要%07d格式输出，否则会有错误，而且未必会提醒你是格式错误。
+3. 函数传参时需用引用，否则会超时。
+4. 下面的下面结构体以及结构体数组完全不需要，因为可以用临时变量读取一个书籍记录，存到相应map里，临时变量读取到的值不会再用，直接从map里找结果即可。
+
 ## A1023. Have Fun with Numbers (20)###
 https://www.patest.cn/contests/pat-a-practise/1023
 
