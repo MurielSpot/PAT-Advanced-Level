@@ -1,4 +1,19 @@
 # 目录：甲级51-100题
+
+## A1051. Pop Sequence (25)##
+https://www.patest.cn/contests/pat-a-practise/1051
+
+类型：栈（栈的弹出序列是否合理）。队列。
+
+注意事项：
+1. q.pop()弹出队首元素。q.front()取队首元素。s.pop()弹出栈顶元素，s.top()取栈顶元素。
+2. 判断一个序列是否满足栈弹出序列的要求时，一次判断的序列要读完，以免影响下一个序列的读取。
+3. stl容器作为参数传递：
+（网上说的http://blog.csdn.net/yishaxiaoyao/article/details/44344097）
+STL容器类自带的拷贝构造函数和符号“=”对容器进行深拷贝：将STL容器当作参数传递给函数时，如果是值传递，则会自动调用STL容器的拷贝构造函数，如下面的程序片段。<br/>
+vector的拷贝构造函数会根据传进来的vector开辟相同的空间，然后将传进来的vector的元素一个一个拷贝到新的vector中。在逐个拷贝元素的过程中，如果该元素不是int型，而是一个自定义的类，那么必须使用该自定义的类的拷贝构造函数。那么，此时是否为深拷贝，取决于该自定义的类是否重写了拷贝构造函数。<br/>
+除了STL容器外，string类自带的拷贝构造函数也是深拷贝。
+
 ## A1054. The Dominant Color (20)##
 https://www.patest.cn/contests/pat-a-practise/1054
 
