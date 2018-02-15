@@ -1,0 +1,120 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1022
+
+类型：映射（map容器）
+
+难度：2
+
+注意事项：
+1. getline结尾的\n不需要用getchar接收。用scanf时，希望后面的\n不影响下一次输入，可以用scanf("%d\n",&x);这种方式把后面的\n吃掉，其他多余字符同理。
+2. id是7位数，所以需要%07d格式输出，否则会有错误，而且未必会提醒你是格式错误。
+3. 函数传参时需用引用，否则会超时。
+4. 下面的下面结构体以及结构体数组完全不需要，因为可以用临时变量读取一个书籍记录，存到相应map里，临时变量读取到的值不会再用，直接从map里找结果即可。
+*/
+//#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<string>
+#include<map>
+#include<vector>
+#include<algorithm>
+using namespace std;
+
+const int MAXN=10010;
+
+struct info{
+	int id;
+	string title;
+	string author;
+	vector<string> keyWords;
+	string publisher;
+	int year;
+}book[MAXN];//注意不需要这个数组，因为数据输入直接处理后不需要再从book里的数据了。
+
+map<string,vector<int> > title2id;
+map<string,vector<int> > author2id;
+map<string,vector<int> > keyWords2id;
+map<string,vector<int> > publisher2id;
+map<int,vector<int> > year2id;
+
+void printVector(vector<int> &it){
+	sort(it.begin(),it.end());
+	for(vector<int>::iterator tmp=it.begin();tmp!=it.end();tmp++){
+		printf("%07d\n", *tmp);//id不足7个字符要补0。
+	}
+}
+
+int main() {
+	int n,m;
+	cin>>n;
+	for(int i=0;i<n;i++){
+		int id;
+		scanf("%d\n",&id);
+		book[i].id=id;
+		getline(cin,book[i].title);
+		getline(cin, book[i].author); //结尾不需要getchar来接受换行符。
+		char ch='0';string tmp;
+		while(ch!='\n'){
+			tmp = "";
+			while((ch=getchar())!=' '&&ch!='\n'){
+				tmp+=ch;
+			}
+			book[i].keyWords.push_back(tmp);
+			keyWords2id[tmp].push_back(id);
+		}
+		getline(cin,book[i].publisher);
+		scanf("%d\n",&book[i].year);
+		
+		title2id[book[i].title].push_back(id);
+		author2id[book[i].author].push_back(id);
+		publisher2id[book[i].publisher].push_back(id);
+		year2id[book[i].year].push_back(id);
+	}
+	cin>>m;
+	for(int i=0;i<m;i++){
+		int query;
+		scanf("%d: ",&query);
+		string qString;
+		getline(cin,qString);
+		cout<<query<<": "<<qString<<endl;
+		vector<int> it;
+		if(query==1){
+			if(title2id.find(qString)!=title2id.end()){
+				it=title2id[qString];
+				printVector(it);
+			}else{
+				printf("Not Found\n");
+			}
+		}else if(query==2){
+			if(author2id.find(qString)!=author2id.end()){
+				it=author2id[qString];
+				printVector(it);
+			}else{
+				printf("Not Found\n");
+			}
+		}else if(query==3){
+			if(keyWords2id.find(qString)!=keyWords2id.end()){
+				it=keyWords2id[qString];
+				printVector(it);
+			}else{
+				printf("Not Found\n");
+			}
+		}else if(query==4){
+			if(publisher2id.find(qString)!=publisher2id.end()){
+				it=publisher2id[qString];
+				printVector(it);
+			}else{
+				printf("Not Found\n");
+			}
+		}else if(query==5){
+			int num = stoi(qString);
+			if(year2id.find(num)!=year2id.end()){
+				it=year2id[num];
+				printVector(it);
+			}else{
+				printf("Not Found\n");
+			}
+		}
+	}
+	return 0;
+}
