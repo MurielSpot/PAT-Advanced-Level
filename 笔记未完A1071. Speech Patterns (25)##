@@ -5,10 +5,25 @@ https://www.patest.cn/contests/pat-a-practise/1071
 
 难度：2。(做法不简洁，应该在读入数据时直接处理）
 
-1. extern int isalnum(int c);判断字符变量c是否为字母或数字，若是则返回非零，否则返回零。
+1. 判断是否字母或数字：extern int isalnum(int c);判断字符变量c是否为字母或数字，若是则返回非零，否则返回零。
+判断是否是十进制数字：int isdigit(char c);<ctype.h>(C)<cctype>(C++)。
+判断是否是字母：int isalpha ( int c );A value different from zero (i.e., true) if indeed c is an alphabetic letter. Zero (i.e., false) otherwise.
 2. 问答：map<string, int>中的 int 的初始值为什么是 0？
 用在标准库里的类和算法里的内置类型我见过的都是value initial的，这也算是不成文的规定吧？我记得c++primer
-第五版里好像把这写成了一段话当做小经验
+第五版里好像把这写成了一段话当做小经验。
+3. scanf通配符的使用:可以用来向数组里只读入指定内容。
+#include<cstdio>
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+	char s[100];
+	char discard[100];
+	scanf("%[^0-9,a-z,A-Z]s",discard);//读取除去0-9，a-z，A-Z以后的字符。
+	scanf("%[0-9,a-z,A-Z]s",s);//读取0-9，a-z，A-Z，遇到其他字符停止。
+	printf("%s\n",s);
+	return 0;
+}
 */
 #include"stdafx.h"
 #include<cstdio>
