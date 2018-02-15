@@ -36,7 +36,7 @@ https://www.patest.cn/contests/pat-a-practise/1070
 2. double最好不要参加比较，用的使用最好用极小值来矫正。因为即使它有时不影响结果，但是如果代码本身有错，很可能让人以为可能是double比较时出错引起的，其实并不是。
 3. 题目中库存量全用int表示的时候，会有一个测试点答案错误，要改成double。以后代码中可能会用到double或者参与double运算的变量类型一定要设置为double。但是要注意整型才能做数组的下标，而浮点转换成整型可能会丢失精度，所以变量要是为double就不能做下标了。
 
-## 
+## A1071. Speech Patterns (25)##
 https://www.patest.cn/contests/pat-a-practise/1071
 
 类型：字符串处理，映射（map字典）。
@@ -49,8 +49,8 @@ https://www.patest.cn/contests/pat-a-practise/1071
 第五版里好像把这写成了一段话当做小经验。
 3. scanf通配符的使用:可以用来向数组里只读入指定内容。
 <pre>#include&lt;cstdio>
-#include<iostream>
-#include<string>
+#include&lt;iostream>
+#include&lt;string>
 using namespace std;
 int main(){
 	char s[100];
@@ -60,7 +60,6 @@ int main(){
 	printf("%s\n",s);
 	return 0;
 }</pre>
-
 
 ## A1075. PAT Judge (25)###
 https://www.patest.cn/contests/pat-a-practise/1075
