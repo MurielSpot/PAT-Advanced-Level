@@ -281,6 +281,17 @@ https://www.patest.cn/contests/pat-a-practise/1096
 1. 所有情况下1都不作为因数，比如质数只有1和它本身两个因数，应该输出这个数，而不是1。
 2. 连乘数需要用long long型。
 
+## A1097. Deduplication on a Linked List (25)###
+https://www.patest.cn/contests/pat-a-practise/1097
+
+类型：静态链表。
+
+注意事项：
+1. 取绝对值：#include<math.h>
+<pre>int abs(int x);
+long labs(int x);
+double fabs(double x);</pre>
+
 ## A1100. Mars Numbers (20)###
 https://www.patest.cn/contests/pat-a-practise/1100
 
