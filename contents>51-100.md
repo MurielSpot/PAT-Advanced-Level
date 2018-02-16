@@ -291,6 +291,7 @@ https://www.patest.cn/contests/pat-a-practise/1097
 <pre>int abs(int x);
 long labs(int x);
 double fabs(double x);</pre>
+2. 做题过程中，有一段代码出现段错误，自己看代码，切记不要再犯这种错误！！！
 
 ## A1100. Mars Numbers (20)###
 https://www.patest.cn/contests/pat-a-practise/1100
