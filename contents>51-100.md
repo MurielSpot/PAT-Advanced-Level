@@ -85,6 +85,11 @@ int main(){
 	return 0;
 }</pre>
 
+## A1074. Reversing Linked List (25)##
+https://www.patest.cn/contests/pat-a-practise/1074
+
+类型：静态链表
+
 ## A1075. PAT Judge (25)###
 https://www.patest.cn/contests/pat-a-practise/1075
 
