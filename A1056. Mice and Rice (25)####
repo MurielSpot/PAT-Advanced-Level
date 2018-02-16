@@ -1,0 +1,117 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1056
+
+类型：队列或数组（分组排名）。
+
+难度：4（做得不简洁）
+
+注意事项：
+1. 要理解题意：第二行输入中老鼠的重量是从0到np-1编号的选手对应的老鼠的重量，而第三行是选手的编号。针对第三行，把每ng个选手编为一组，然后选取优胜者进行下一轮比赛。
+*/
+//#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<stack>
+#include<queue>
+#include<algorithm>
+using namespace std;
+
+const int MAXN=1010;
+int np;//programmers.
+int ng;//programmers in a group.
+
+struct info{
+	int mouseW;
+	int id;
+	int rank;
+	int ansRank;
+}programmer[MAXN],ans[MAXN];
+
+vector<int> winner;
+vector<int> competitor;
+
+/*
+处理一个小组的值，将失败者目前的排名置为round，将胜利者放入winner数组中。
+传入参数：要处理的数组的左右区间，左闭右开。
+*/
+void handleGroup(int first,int right,int round){
+	int maxW=-1,maxId;
+	int id;
+	for(;first<right;first++){
+		id = competitor[first];
+		programmer[id].rank=round;
+		if(programmer[id].mouseW>maxW){
+			maxW=programmer[id].mouseW;
+			maxId=id;
+		}
+	}
+	winner.push_back(maxId);
+}
+bool cmp(info a,info b){
+	return a.rank>b.rank;
+}
+bool cmpBack(info a, info b) {
+	return a.id < b.id;
+}
+int initialRound(int pTotal,const int pGroup) {
+	if (pGroup <= 1)return -1;
+	if (pTotal < 1)return 0;
+	else if (pTotal == 1)return 1;
+	int round = 1;
+	double pNextTotal = (double)pTotal / pGroup;
+	while (pTotal > 1) {
+		if (pNextTotal > pTotal / pGroup) {//说明不能正好每组pGroup个人。
+			pTotal = pTotal / pGroup + 1;
+		}else {
+			pTotal = pTotal / pGroup;
+		}
+		pNextTotal = (double)pTotal / pGroup;
+	}
+	return pTotal;
+}
+int main() {
+	scanf("%d %d",&np,&ng);
+	for(int i=0;i<np;i++){
+		scanf("%d",&programmer[i].mouseW);
+		programmer[i].id=i;
+	}
+	for(int i=0;i<np;i++){
+		int id;scanf("%d",&id);
+		competitor.push_back(id);
+	}
+	int round=1;
+	while(competitor.size()){//每一轮处理若干个组，并给失败者赋予该轮次的值，表示该轮他们被淘汰。
+		winner.clear();
+		int i=0;
+		for(;i+ng<=competitor.size();i+=ng){
+			handleGroup(i,i+ng,round);
+		}
+		if(i<competitor.size()){
+			handleGroup(i,competitor.size(),round);
+		}
+		if(winner.size()==1){
+			programmer[winner[0]].rank=round+1;
+			break;//处理完了。
+		}
+		competitor=winner;//进行下一轮处理。
+		round++;
+	}
+	sort(programmer,programmer+np,cmp);
+	int ansRank = 1;
+	programmer[0].ansRank = 1;
+	for(int i=1;i<np;i++){
+		if (programmer[i].rank == programmer[i - 1].rank) {
+			programmer[i].ansRank = programmer[i - 1].ansRank;
+		}
+		else {
+			programmer[i].ansRank = i + 1;
+		}
+	}
+	sort(programmer, programmer + np, cmpBack);
+	for (int i = 0; i < np; i++) {
+		if(i)printf(" ");
+		printf("%d", programmer[i].ansRank);
+	}
+	printf("\n");
+	return 0;
+}
