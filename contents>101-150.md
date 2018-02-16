@@ -9,6 +9,11 @@ https://www.patest.cn/contests/pat-a-practise/1101
 注意第一遍遍历按上诉方法做，第二遍遍历根据当前元素是否可能是pivot，再暴力判断后面的元素是否有比当前元素小的，这种方法同样会超时。
 2. 主元个数为0时，第二行虽然没有输出主元，但必须输出一个换行！
 
+## A1103. Integer Factorization (30)###
+https://www.patest.cn/contests/pat-a-practise/1103
+
+类型：背包问题，数的分解（把一个数分解成若干次方项的和）。
+
 ## A1104. Sum of Number Segments (20)####
 https://www.patest.cn/contests/pat-a-practise/1104
 
