@@ -281,7 +281,7 @@ https://www.patest.cn/contests/pat-a-practise/1096
 1. 所有情况下1都不作为因数，比如质数只有1和它本身两个因数，应该输出这个数，而不是1。
 2. 连乘数需要用long long型。
 
-## A1097. Deduplication on a Linked List (25)###（出现了令人费解的段错误）
+## A1097. Deduplication on a Linked List (25)###
 https://www.patest.cn/contests/pat-a-practise/1097
 
 类型：静态链表。
