@@ -90,6 +90,10 @@ https://www.patest.cn/contests/pat-a-practise/1074
 
 类型：静态链表
 
+注意事项：
+1. 逆序也可考虑用堆栈。
+2. vector的reverse自行了解。
+
 ## A1075. PAT Judge (25)###
 https://www.patest.cn/contests/pat-a-practise/1075
 
