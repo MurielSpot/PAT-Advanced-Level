@@ -1,0 +1,70 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1074
+
+类型：静态链表
+
+难度：2
+*/
+//#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<stack>
+#include<queue>
+#include<algorithm>
+using namespace std;
+
+void reverseList(vector<int> &v,const int k);
+void reverseInterval(vector<int> &v,int left,int right);
+
+const int MAXN=100010;
+struct info{
+	int addr;
+	int data;
+	int nextAddr;
+	info(){addr=-1;}
+	info(int addr_,int data_,int nextAddr_){
+		addr=addr_;data=data_;nextAddr=nextAddr_;
+	}
+}num[MAXN];
+int n;//nodes.
+int k;//length of sublist.
+int first;
+
+vector<int> list;
+int main() {
+	scanf("%d %d %d",&first,&n,&k);
+	for(int i=0;i<n;i++){
+		int addr,data,next;
+		scanf("%d%d%d",&addr,&data,&next);
+		num[addr]=info(addr,data,next);
+	}
+	int ptr=first;
+	while(ptr!=-1){
+		list.push_back(ptr);
+		ptr=num[ptr].nextAddr;
+	}
+	reverseList(list,k);
+	int i=0;int index;
+	for(;i<list.size()-1;i++){
+		index=list[i];
+		printf("%05d %d %05d\n",num[index].addr, num[index].data, num[list[i+1]].addr);
+	}
+	index=list[i];
+	printf("%05d %d -1", num[index].addr, num[index].data);
+	return 0;
+}
+
+void reverseList(vector<int> &v,const int k){
+	for(int i=0;i+k<=v.size();i+=k){//最后一个区间如果不满k就不需要反转。
+		reverseInterval(v,i,i+k);
+	}
+}
+void reverseInterval(vector<int> &v,int left,int right){//左闭右开。
+	right--;
+	while(left<right){
+		int tmp=v[left];
+		v[left]=v[right];
+		v[right]=tmp;
+		left++;right--;
+	}
+}
