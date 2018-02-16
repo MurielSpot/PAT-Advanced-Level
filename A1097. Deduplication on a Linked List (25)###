@@ -3,7 +3,7 @@ https://www.patest.cn/contests/pat-a-practise/1097
 
 类型：静态链表。
 
-难度：3（有一个测试点过不了，看了答案）
+难度：3（有一处出现了段错误，自己去看看，切记切记这类错误！！！！）
 
 注意事项：
 1. 取绝对值：#include<math.h>
@@ -53,7 +53,8 @@ int main() {
 		ptr=num[ptr].nextAddr;
 	}
   
-/*这一段会有段错误。注释下面的代码就不会有。。。不知道为什么
+/*这一段会有段错误。注释下面的代码就不会有。因为need和discard数组未必会有数据。
+比如for中need.size()-1可能等于-1，0<-1不成立，跳出循环，循环后面的need[i]为need[0]，need数组是没有这个位置的值的，而出现段错误。
 	int i;int addr;
 	for(i=0;i<need.size()-1;i++){
 		addr=need[i];
