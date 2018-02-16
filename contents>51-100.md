@@ -24,6 +24,15 @@ https://www.patest.cn/contests/pat-a-practise/1055
 
 类型：排序。
 
+## A1056. Mice and Rice (25)####
+https://www.patest.cn/contests/pat-a-practise/1056
+
+类型：队列或数组（分组排名）。
+
+注意事项：
+1. 要理解题意：第二行输入中老鼠的重量是从0到np-1编号的选手对应的老鼠的重量，而第三行是选手的编号。针对第三行，把每ng个选手编为一组，然后选取优胜者进行下一轮比赛。
+
+
 ## A1063. Set Similarity (25)###
 https://www.patest.cn/contests/pat-a-practise/1063
 
