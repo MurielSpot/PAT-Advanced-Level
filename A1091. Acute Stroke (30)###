@@ -1,0 +1,104 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1091
+
+类型：广度优先搜索（获得某连续区域），三维数组。
+
+难度：3（英文题目不容易懂）
+*/
+#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<cmath>
+#include<queue>
+#include<vector>
+using namespace std;
+
+const int MAXM=1290;
+const int MAXN=130;
+const int MAXL=65;
+int m,n;//sizes of each slice.m*n.(maximum resolution: 1286*128).
+int l;//<=60.the number of slices.
+int t;//integer threshold.(if the volumn is less than t,it shouldn't be counted.)
+
+int slice[MAXL][MAXM][MAXN]={0};//存放切片。
+bool inq[MAXL][MAXM][MAXN]={false};//标记某个像素是否已经入队，如果能入队说明是脑卒中需要统计的像素，一旦入队也代表该像素被访问到了。
+int ans=0;
+struct pos{
+	int l,m,n;//记录像素点的位置。
+	pos(){}
+	pos(int k,int i,int j){
+		l=k;m=i;n=j;
+	}
+};
+
+inline void offset(pos now,int direction,pos &to){//访问与当前像素点now相邻的六个方向。
+	to=now;
+	if(direction==1){to.l--;return;}//up.
+	if(direction==2){to.l++;return;}//down.
+	if(direction==3){to.m--;return;}//left.
+	if(direction==4){to.m++;return;}//right.
+	if (direction == 5) { to.n--; return; };//back.
+	if(direction==6){to.n++;return;}//front.
+}
+
+inline bool valid(pos &pixel){
+  //如果位置越界，无效。
+	if(pixel.l>l|| pixel.l<0)return false;
+	if(pixel.m>m|| pixel.m<0)return false;
+	if(pixel.n>n|| pixel.n<0)return false;
+	if(inq[pixel.l][pixel.m][pixel.n])return false;//该位置已经访问过，也无效。
+	if(slice[pixel.l][pixel.m][pixel.n]==0)return false;//位置没有越界但是不为1，也无效。
+	return true;
+} 
+
+void bfs(pos a,int &volume){//一次广搜，访问相连的一片像素点，并统计有效像素点数量存到volume里。已被访问的像素点被标记为true，即inq数组的作用。
+	queue<pos> q;
+	q.push(a);
+	inq[a.l][a.m][a.n]=true;
+	volume++;
+	while(!q.empty()){
+		pos now=q.front();
+		q.pop();
+		pos adj;
+		for(int i=1;i<=6;i++){
+			offset(now,i,adj);
+			if(valid(adj)){
+				q.push(adj);
+				inq[adj.l][adj.m][adj.n]=true;
+				volume++;
+			}
+		}
+	}
+}
+
+void traversal(){//多次广搜，遍历许多片各自相连的像素点。如果一个相连区域中像素点数满足要求大于等于t，则累加到答案中。
+	int volume;
+	for(int k=0;k<l;k++){
+		for(int i=0;i<m;i++){
+			for(int j=0;j<n;j++){
+				if(inq[k][i][j]==false&&slice[k][i][j]!=0){
+					volume=0;
+					bfs(pos(k,i,j),volume);
+					if(volume>=t) ans+=volume;
+				}
+			}
+		}
+	}
+}
+
+void input(){
+	for(int k=0;k<l;k++){
+		for(int i=0;i<m;i++){
+			for(int j=0;j<n;j++){
+				scanf("%d",&slice[k][i][j]);
+			}
+		}
+	}
+}
+int main() {
+	cin>>m>>n>>l>>t;
+	input();
+	traversal();
+	printf("%d",ans);
+	return 0;
+}
