@@ -9,6 +9,17 @@ https://www.patest.cn/contests/pat-a-practise/1101
 注意第一遍遍历按上诉方法做，第二遍遍历根据当前元素是否可能是pivot，再暴力判断后面的元素是否有比当前元素小的，这种方法同样会超时。
 2. 主元个数为0时，第二行虽然没有输出主元，但必须输出一个换行！
 
+## A1102. Invert a Binary Tree (25)##
+
+https://www.patest.cn/contests/pat-a-practise/1102
+
+类型：二叉树（层序、中序遍历），bfs
+
+注意事项：
+1. 尝试用scanf("%c\n",&ch);吃掉下次读取时多余的回车出现了问题，以后还是用getchar吧。
+2. 输出的层序遍历和中序遍历都是反转过的树，所以在一开始输入左右子树时，直接把原左子树的位置赋给父结点的右子树的指针，原右子树同理。
+再按层序和中序遍历的写法直接输出得到正好时一棵反转的二叉树。
+
 ## A1103. Integer Factorization (30)###
 https://www.patest.cn/contests/pat-a-practise/1103
 
