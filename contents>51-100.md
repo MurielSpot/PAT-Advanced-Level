@@ -205,6 +205,27 @@ https://www.patest.cn/contests/pat-a-practise/1085
 
 algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
 
+## A1086. Tree Traversals Again (25)#####
+https://www.patest.cn/contests/pat-a-practise/1086
+
+类型：二叉树建树、遍历（根据中序序列获得后序序列；遍历非递归写法，根据栈的变化情况（先序中序的关系）判断树的结构）
+
+难度：5（自己没做对）
+
+思路：push则new一个结点并赋值，将其指针返回给父结点相应儿子，pop则返回NULL给父结点对应儿子。<br/>
+讨论：<br/>
+因为叶子结点n0的个数等于有两个孩子的结点的个数n2加1，即n0=n2+1。<br/>
+而n0对应2个空结点，n1对应1个，n2为0个。<br/>
+所以空结点数为2n0+n1=n0+n1+n2+1,即等于树中结点总数加1。<br/>
+由此可知对某个树push和pop时，pop可以看作是对其左或右子树一个个空结点进行操作，每次pop让空结点返回NULL，push则让非空结点返回自己的位置。<br/>
+
+其他思路：<br/>
+已知中序序列堆栈压入弹出状况（入栈顺序其实就是先序遍历的顺序），可知根结点的位置，从而划分出左右子树，对于左右子树同理。根据中序序列LNR和先序序列NLR的关系来获得整个树，然后进行后序遍历。
+
+注意事项：
+1. 把应该为char的数组写成int arr[6],然后用%s输入数据，没有报错，但出现了莫名其妙的错误。
+
+
 ## A1088. Rational Arithmetic (20)##
 https://www.patest.cn/contests/pat-a-practise/1088
 
