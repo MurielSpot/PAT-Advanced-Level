@@ -1,0 +1,88 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1102
+
+类型：二叉树（层序、中序遍历），bfs
+
+难度：2
+
+注意事项：
+1. 尝试用scanf("%c\n",&ch);吃掉下次读取时多余的回车出现了问题，以后还是用getchar吧。
+2. 输出的层序遍历和中序遍历都是反转过的树，所以在一开始输入左右子树时，直接把原左子树的位置赋给父结点的右子树的指针，原右子树同理。
+再按层序和中序遍历的写法直接输出得到正好时一棵反转的二叉树。
+*/
+#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<queue>
+using namespace std;
+
+const int MAXN=12;
+int n;//nodes.[0,n-1]
+struct node{
+	int data;
+	int left;
+	int right;
+	int father;
+	node(){left=right=father=-1;}
+};
+
+node origin[MAXN];
+
+int input(){
+	for(int i=0;i<n;i++){
+		char left,right;
+		scanf("%c %c",&right,&left);//输入时就把树inverted反转。
+		getchar();
+		if(isdigit(left)){
+			left=left-'0';
+			origin[i].left=left;
+			origin[left].father=i;
+		}
+		if(isdigit(right)){
+			right=right-'0';
+			origin[i].right=right;
+			origin[right].father=i;
+		}
+	}
+	for(int i=0;i<n;i++){//找到根结点，根结点是没有父亲的结点。
+		if(origin[i].father==-1)return i;
+	}
+}
+bool ioBlank=false;
+void inorderInverted(int root){
+	if(root!=-1){
+		inorderInverted(origin[root].left);
+		if(ioBlank)printf(" ");else ioBlank=true;
+		printf("%d",root);
+		inorderInverted(origin[root].right);
+	}
+}
+bool bfsBlank=false;
+void bfs(int root){
+	//bool inq[MAXN]={false};//不用设置这个数组，因为一只是树，肯定无环路。
+	queue<int> q;
+	q.push(root);
+	while(!q.empty()){
+		int now=q.front();
+		if(bfsBlank)printf(" ");else bfsBlank=true;
+		printf("%d",now);
+		q.pop();
+		int left=origin[now].left;
+		if(left!=-1){
+			q.push(left);
+		}
+		int right=origin[now].right;
+		if(right!=-1){
+			q.push(right);
+		}
+	}
+	printf("\n");
+}
+int main() {
+	scanf("%d", &n);
+	getchar();
+	int root=input();
+	bfs(root);
+	inorderInverted(root);
+	return 0;
+}
