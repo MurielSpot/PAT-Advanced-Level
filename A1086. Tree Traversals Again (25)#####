@@ -14,4 +14,56 @@ https://www.patest.cn/contests/pat-a-practise/1086
 
 其他思路：
 已知中序序列堆栈压入弹出状况（入栈顺序其实就是先序遍历的顺序），可知根结点的位置，从而划分出左右子树，对于左右子树同理。根据中序序列LNR和先序序列NLR的关系来获得整个树，然后进行后序遍历。
+
+注意事项：
+1. 把应该为char的数组写成int arr[6],然后用%s输入数据，没有报错，但出现了莫名其妙的错误。
 */
+#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+using namespace std;
+
+//const int MAXN=32;
+int n;
+struct node{
+	int data;
+	node* left;
+	node* right;
+	node(){left=right=NULL;}
+};
+char arr[6];//把数组写成int arr[6],然后用%s输入数据，没有报错，但会出现莫名其妙的错误。
+int line=0;
+node* buildTree(){
+	node* now=NULL;
+	if(line<2*n){
+		scanf("%s",arr);
+		line++;
+		if(arr[1]=='u'){
+			now=new node;
+			scanf("%d",&(now->data));
+		}else if(arr[1]=='o'){
+			return NULL;
+		}
+		now->left=buildTree();
+		now->right=buildTree();
+	}
+	return now;
+}
+
+int blank=false;
+void postorderTravesal(node* now){
+	if(now!=NULL){
+		postorderTravesal(now->left);
+		postorderTravesal(now->right);
+		if(blank)printf(" ");
+		else blank=true;
+		printf("%d",now->data);
+	}
+}
+
+int main() {
+	scanf("%d",&n);
+	node* root=buildTree();
+	postorderTravesal(root);
+	return 0;
+}
