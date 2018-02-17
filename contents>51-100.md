@@ -237,6 +237,21 @@ https://www.patest.cn/contests/pat-a-practise/1091
 
 类型：广度优先搜索（获得某连续区域），三维数组。
 
+
+注意事项：
+1. 访问某个像素相邻的点时，也可以用增量矩阵：
+<pre>int x[6]={0,0,0,0,1,-1};
+int y[6]={0,0,1,-1,0,0};
+int z[6]={1,-1,0,0,0,0};
+for(int i=0;i&lt;6;i++){
+	newX=nowX+x[i];
+	newY=nowY+y[i];
+	newZ=nowZ+z[i];
+}</pre>
+2. 三维01矩阵不可以设为bool型。
+3. dfs容易出现段错误，因为可能遍历深度较深，出现爆栈错误。
+4. 该题中的三维矩阵：第一层为一片slice，然后第二、三维时一片中的行和列。
+
 ## A1092. To Buy or Not to Buy (20)#
 https://www.patest.cn/contests/pat-a-practise/1092
 
