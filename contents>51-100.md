@@ -232,6 +232,11 @@ https://www.patest.cn/contests/pat-a-practise/1089
 3 4 2 1
 3 4 2 1</pre>
 
+## A1091. Acute Stroke (30)###
+https://www.patest.cn/contests/pat-a-practise/1091
+
+类型：广度优先搜索（获得某连续区域），三维数组。
+
 ## A1092. To Buy or Not to Buy (20)#
 https://www.patest.cn/contests/pat-a-practise/1092
 
