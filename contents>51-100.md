@@ -205,12 +205,10 @@ https://www.patest.cn/contests/pat-a-practise/1085
 
 algorithm头文件参考资料：http://www.cplusplus.com/reference/algorithm/
 
-## A1086. Tree Traversals Again (25)#####
+## A1086. Tree Traversals Again (25)#####（自己没做对）
 https://www.patest.cn/contests/pat-a-practise/1086
 
 类型：二叉树建树、遍历（根据中序序列获得后序序列；遍历非递归写法，根据栈的变化情况（先序中序的关系）判断树的结构）
-
-难度：5（自己没做对）
 
 思路：push则new一个结点并赋值，将其指针返回给父结点相应儿子，pop则返回NULL给父结点对应儿子。<br/>
 讨论：<br/>
