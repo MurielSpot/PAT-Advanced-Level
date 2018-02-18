@@ -1,0 +1,64 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1079
+
+类型：图的遍历。
+
+难度：2（要注意题目是否可以用图的遍历来做，经常会忘了可以用图的遍历来很方便地解决问题。）
+*/
+#include<cstdio>
+#include<iostream>
+#include<queue>
+using namespace std;
+
+const int MAXN=100010;
+int n;//members.[0,n-1].
+double p;//unit price.
+double r;//percentage rate of price increment.
+
+struct info{
+	vector<int> id;
+	double amount;
+	double price;
+	info() { amount = price = 0; }
+}supplier[MAXN];
+
+double ans=0;
+queue<int> q;
+void bfs(int root){
+	q.push(root);
+	supplier[root].price=p;
+	while(!q.empty()){
+		int now=q.front();q.pop();
+		int nextNum=supplier[now].id.size();
+		int next;
+		if(nextNum){//有下一级成员，则更新下一级成员的销售价格。
+			for(int i=0;i<nextNum;i++){
+				next=supplier[now].id[i];
+				supplier[next].price=supplier[now].price*(1+r/100);
+				q.push(next);
+			}
+		}else{//无下一级成员，说明是零售商，可以计算销售额。
+			ans+=supplier[now].price*supplier[now].amount;
+		}
+	}
+}
+int main() {
+	cin>>n>>p>>r;
+	for(int i=0;i<n;i++){
+		int k,id;
+		scanf("%d",&k);
+		if(k){
+			for(int j=0;j<k;j++){
+				scanf("%d",&id);
+				supplier[i].id.push_back(id);
+			}
+		}else{
+			double amount;
+			scanf("%lf",&amount);
+			supplier[i].amount=amount;
+		}
+	}
+	bfs(0);
+	printf("%.1lf",ans);
+	return 0;
+}
