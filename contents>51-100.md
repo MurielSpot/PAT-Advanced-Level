@@ -259,6 +259,11 @@ https://www.patest.cn/contests/pat-a-practise/1089
 3 4 2 1
 3 4 2 1</pre>
 
+## A1090. Highest Price in Supply Chain (25)##
+https://www.patest.cn/contests/pat-a-practise/1090
+
+类型：图的遍历。
+
 ## A1091. Acute Stroke (30)###
 https://www.patest.cn/contests/pat-a-practise/1091
 
