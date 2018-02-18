@@ -117,7 +117,7 @@ https://www.patest.cn/contests/pat-a-practise/1078
 ## A1079. Total Sales of Supply Chain (25)##
 https://www.patest.cn/contests/pat-a-practise/1079
 
-类型：图的遍历。
+类型：图的遍历（bfs、dfs都可以做这道题）。
 
 注意事项：
 1. 要注意题目是否可以用图的遍历来做，经常会忘了可以用图的遍历来很方便地解决问题。
