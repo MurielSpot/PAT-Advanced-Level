@@ -114,6 +114,14 @@ https://www.patest.cn/contests/pat-a-practise/1078
 2. 哈希函数是用求出的大于msize的最小质数小取模，不是用所给的msize。
 3. 散列表长度为某个4k+3形式的素数时，平方探测法可以探测到整个数组，所以此时可以用数组是否已经满来判断是否可以停止探测。
 
+## A1079. Total Sales of Supply Chain (25)##
+https://www.patest.cn/contests/pat-a-practise/1079
+
+类型：图的遍历。
+
+注意事项：
+1. 要注意题目是否可以用图的遍历来做，经常会忘了可以用图的遍历来很方便地解决问题。
+
 ## A1080. Graduate Admission (30)#####
 https://www.patest.cn/contests/pat-a-practise/1080
 
