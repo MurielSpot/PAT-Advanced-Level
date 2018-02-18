@@ -1,0 +1,61 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1094
+
+类型：图的遍历。
+
+难度：2
+*/
+#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<queue>
+using namespace std;
+
+#define P 0
+
+const int MAXN=110;
+
+int n;//members.[1,n].
+int m;//have children.
+struct info{
+	vector<int> child;
+	//int level;
+	//info(){level=-1};
+}member[MAXN];
+
+int countLevel[MAXN]={0};
+
+int maxG=-1;
+int maxM=-1;
+void setLevel(int root,int level){//dfs.
+#if P
+	printf("\n****\nindex=%d,level=%d\n****\n",root,index);
+#endif
+	//member[root].level=level;
+	countLevel[level]++;
+	if(countLevel[level]>maxM){
+		maxM=countLevel[level];
+		maxG=level;
+	}
+	for(int i=0;i<member[root].child.size();i++){
+		setLevel(member[root].child[i],level+1);
+	}
+	
+}
+
+int main() {
+	cin>>n>>m;
+	for(int i=0;i<m;i++){
+		int k;scanf("%d",&k);
+		int childNum; scanf("%d", &childNum);
+		int child;
+		for(int j=0;j<childNum;j++){
+			scanf("%d",&child);
+			member[k].child.push_back(child);
+		}
+	}
+	//member[1].level=1;
+	setLevel(1,1);
+	printf("%d %d",maxM,maxG);
+	return 0;
+}
