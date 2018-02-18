@@ -323,6 +323,11 @@ https://www.patest.cn/contests/pat-a-practise/1093
 >3. (a * b) % p = (a % p * b % p) % p
 >4. a ^ b % p = ((a % p)^b) % p
 
+## A1094. The Largest Generation (25)##
+https://www.patest.cn/contests/pat-a-practise/1094
+
+类型：图的遍历。
+
 ## A1096. Consecutive Factors (20)#####（需要自己重做一遍，未全部通过测试点，看了别人的代码才通过）
 /*
 https://www.patest.cn/contests/pat-a-practise/1096
