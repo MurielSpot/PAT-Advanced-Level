@@ -1,0 +1,64 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1106
+
+类型：图的遍历。
+
+难度：3（其实不难，但出现了一些意外错误）
+
+注意事项：
+1. 题目保证价格最大不超过10^10，所以用int的最大值来表示INF范围还是小的，而且价格为浮点型，不应该用int型的最大值给它赋值。
+2. r是百分号前面的值，实际上增加的比率为r/100，所以可以提前处理r=r/100，然后计算价格是用price*(1+r)即可，可以减少若干次除法运算。
+3. 对每一级商家添加下一级商家时，下标要用前者的下标，不要用错了，比如不要把用来控制循环次数的变量当成商家的下标来用，所以变量名起好很重要，不然不经意间可能就出错了。
+*/
+//#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include<queue>
+#include<cmath> 
+using namespace std;
+
+#define P 0
+
+const int MAXN=100010;
+const double INF=1e12;//10^12。这里无穷应该为double型，因为要赋值给double型的最小价格。
+
+int n;//[0,n-1].
+double p;
+double r;
+
+struct info{
+	vector<int> next;
+}supplier[MAXN];
+
+int minC=0;
+double minP=INF;
+void dfs(int root,double price){
+	int nSize=supplier[root].next.size();
+	if(nSize==0){
+		if(price<minP){
+			minP=price;
+			minC=1;
+		}else if(price==minP){
+			minC++;
+		}
+		return;
+	}
+	for(int i=0;i<nSize;i++){
+		dfs(supplier[root].next[i],price*(1+r));
+	}
+}
+
+int main() {
+	scanf("%d %lf %lf",&n,&p,&r);
+	r/=100;//可以提前处理r变成百分数的值。
+	for(int i=0;i<n;i++){
+		int num;scanf("%d",&num);
+		for(int j=0;j<num;j++){
+			int next;scanf("%d",&next);
+			supplier[i].next.push_back(next);//应该对supplier[i]添加下一级商家，不是supplier[j]，把i写成j检查的时候虽然看到了j，但根本没有意识到它错了，可能调试的时候会反应过来，但是我也没有调试，自己改代码改了半个小时都没改对！
+		}
+	}
+	dfs(0,p);
+	printf("%.4lf %d",minP,minC);
+	return 0;
+}
