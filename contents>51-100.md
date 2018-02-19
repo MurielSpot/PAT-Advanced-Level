@@ -54,6 +54,17 @@ https://www.patest.cn/contests/pat-a-practise/1063
 
 其他：可以自己考虑用哈希数组代替集合做做看。
 
+## A1064. Complete Binary Search Tree (30)#####（没想到好的做法）
+https://www.patest.cn/contests/pat-a-practise/1064
+
+类型：二叉搜索树 + 完全二叉树。
+
+思路：
+1. 因为二叉搜索树的中序遍历正好是递增序列，所以可以对所有数据从小到大排序，在中序顺序建树时插入，再层序遍历。
+
+注意事项：
+1. memset在cstring头文件里。
+
 ## A1067. Sort with Swap(0,*) (25)###
 https://www.patest.cn/contests/pat-a-practise/1067
 
