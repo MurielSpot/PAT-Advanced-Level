@@ -1,0 +1,184 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1053
+
+类型：图的遍历（带权图）
+
+难度：3
+
+注意事项：
+1. “.”和“->”优先级和数组下标[]以及圆括号()的优先级一样高，而取址运算符&的优先级比它们低一级。
+2. 第一次做的时候，在输入完孩子结点时没有立即按照它们的权值从大到小排序，而是获得结果后再比较各个结果序列的权值大小对结果进行排序，出现了段错误，目前还不不清楚为什么会出现段错误（最后一个测试点因为段错误未通过）。
+第一次做的错误的代码贴在正确代码下面了。
+*/
+//可ac。
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<algorithm> 
+using namespace std;
+
+const int MAXN=110;
+
+int n;//nodes.
+int m;//non-left nodes.
+int s;//given weight number.
+
+struct node{
+	vector<int> child;
+	int weight;
+}tree[MAXN];
+
+bool cmpNonInc(int indexA,int indexB){
+	return tree[indexA].weight>tree[indexB].weight;
+}
+
+void input(){
+	for(int i=0;i<n;i++){
+		scanf("%d",&tree[i].weight);
+	}
+	for(int i=0;i<m;i++){
+		int id,k;scanf("%d%d",&id,&k);
+		int child;
+		for(int j=0;j<k;j++){
+			scanf("%d",&child);
+			tree[id].child.push_back(child);
+		}
+		sort(tree[id].child.begin(),tree[id].child.end(),cmpNonInc);//将孩子的权值从大到小排列，则结果直接可获得依次从大到小的序列。
+	}
+}
+
+vector<vector<int> > ans;
+vector<int> tmp;
+void dfs(int index,int sumW){
+	int cNum=tree[index].child.size();
+	tmp.push_back(tree[index].weight);
+	sumW+=tree[index].weight;
+	if(cNum==0){
+		if(sumW==s) ans.push_back(tmp);
+		tmp.pop_back();
+		return;
+	}
+	for(int i=0;i<cNum;i++){
+		dfs(tree[index].child[i],sumW);
+	}
+	tmp.pop_back();
+}
+
+void output(){
+	for(int i=0;i<ans.size();i++){
+		vector<int> tmp=ans[i];
+		for(int j=0;j<tmp.size();j++){
+			if(j)printf(" ");
+			printf("%d",tmp[j]);
+		}
+		printf("\n");
+	}
+}
+
+int main() {
+	scanf("%d%d%d",&n,&m,&s);
+	input();
+	dfs(0,0);
+	output();
+	return 0;
+}
+
+//出错代码。
+#include<cstdio>
+#include<queue>
+#include<algorithm>
+using namespace std;
+
+const int maxn=110;
+int weight[maxn];
+
+struct node{
+	//int id;//数组下标即为相应元素的id，注意要%02d格式。
+	vector<int> child;
+}nodeArray[maxn];
+
+int n,m,s;//二叉树中总结点数，非叶结点数，路径长需要等于的权值。
+
+vector<int> tempPath;
+vector<vector<int> > allPath;
+
+//遍历图，同时记录路径长度到tempPath里，如果符合要求就把它存储到allPath里。
+//index表示当前遍历到的结点的id。
+void dfs(int index,int tempWeight){
+	//增加该结点的权值
+	tempWeight+=weight[index];
+
+	//找到等于s长度的路径，加入allPath。
+	//!!!!!!!注意要求的路径是从根结点到叶结点的，而不是根结点到任意结点。
+	if(tempWeight==s&&nodeArray[index].child.size()==0){
+		//此处别忘了也要push和pop到temppath。
+		tempPath.push_back(index);
+		allPath.push_back(tempPath);
+		tempPath.pop_back();
+		return;
+	}
+	//路径长度不等于s或不为叶结点时：路径长度大于或等于所求的s，或当前结点是叶结点，都应及时返回。
+	if(tempWeight>=s||nodeArray[index].child.size()==0){
+		return;
+	}
+	
+	//遍历该结点的孩子结点，对其进行深搜。
+	for(int i=0;i<nodeArray[index].child.size();i++){
+		//把该结点加入路径
+		tempPath.push_back(index);
+		dfs(nodeArray[index].child[i],tempWeight);
+		//把该结点从路径删除，以免影响其他路径的记录。
+		tempPath.pop_back();
+	}
+	
+}
+
+//根据权重递减排序
+//！！！cmp函数任何情况都要有返回值。因为程序需要能够处理两条路径上权值完全相同的情况。否则最后一个测试点会出现段错误。
+bool cmp(vector<int> a,vector<int> b){
+	int mi=min(a.size(),b.size());
+	for(int i=0;i<mi;i++){
+		if(weight[a[i]]!=weight[b[i]]){
+			return weight[a[i]]>weight[b[i]];//由于a和b不可能是对方的前缀，所以一定会在min范围内比较出谁大谁小，这只是针对结点来说的，但是权值可能会出现相同的情况！！！！所以仅仅这有返回值是不够的。
+		}
+	}
+	return a.size()>=b.size();//权值完全相同时，哪个在前面都是一样的。
+}
+
+int main(){
+	scanf("%d%d%d",&n,&m,&s);
+	
+	for(int i=0;i<n;i++){
+		scanf("%d",&weight[i]);
+	}
+	
+	//录入数据到nodeArray里，相当于一个邻接表，存储的是树，即不用记录是否已经访问过。
+	for(int i=0;i<m;i++){
+		int id,k;//当前非叶结点。
+		scanf("%d%d",&id,&k);
+		for(int j=0;j<k;j++){
+			int chId;//孩子结点id。
+			scanf("%d",&chId);
+			nodeArray[id].child.push_back(chId);//加入其父亲的孩子数组。
+		}
+	}
+	
+	dfs(0,0);
+	
+	//对allPath里的所有路径按照vector里的结点下标递减顺序排序。
+	
+	sort(allPath.begin(),allPath.end(),cmp);
+	
+	//输出
+	for(int i=0;i<allPath.size();i++){
+		for(int j=0;j<allPath[i].size();j++){
+			if(j){
+				printf(" ");
+			}
+			printf("%d",weight[allPath[i][j]]);
+		}
+		printf("\n");
+	}
+	
+	return 0;
+}
