@@ -1,0 +1,122 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1066
+
+类型：平衡二叉树
+
+难度：5
+
+注意事项：
+1. 平衡因子（balance factor）：一般用左子树高度减右子树高度。
+设当前结点的平衡因子为n，n的左孩子的平衡因子为l，n的右孩子的平衡因子为r。
+n=2,l=1;说明插入在左边孩子的左边。
+n=2,l=-1;左边孩子的右边。
+n=-2,l=1;右边孩子的左边。
+n=-2,l=-1;右边孩子的右边。
+*/
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<queue>
+using namespace std;
+
+#define P 0 
+
+const int MAXN=110;
+
+struct node{
+	int data;
+	int height;
+	//int bf;
+	node *left,*right;
+	node(){
+		left=right=NULL;
+		height = 1;
+	}
+};
+int getHeight(node* root) {
+	if (root) {
+		return root->height;
+	}
+	else return 0;
+}
+void updateHeight(node* root) {
+	if (root) {
+		root->height = max(getHeight(root->left), getHeight(root->right)) + 1;
+	}
+}
+void r(node* &root){
+	node* rootL=root->left;
+	root->left=rootL->right;
+	rootL->right=root;
+	updateHeight(root);
+	updateHeight(rootL);
+	root=rootL;
+}
+void l(node* &root){
+	node* rootR=root->right;
+	root->right=rootR->left;
+	rootR->left=root;
+	updateHeight(root);
+	updateHeight(rootR);
+	root=rootR;
+}
+int getBalanceFactor(node* root){
+	if(root){
+		return getHeight(root->left)-getHeight(root->right);
+	}
+	return 0;
+}
+void insert(node* &root,int data){
+	if(root!=NULL){
+		if(data<root->data){
+			insert(root->left,data);
+			updateHeight(root);
+			if(getBalanceFactor(root)==2){//平衡因子为2，则肯定有左孩子。
+				if(getBalanceFactor(root->left)==1){//LL型。
+					r(root);
+				}else if(getBalanceFactor(root->left)==-1){//LR型。
+					l(root->left);
+					r(root);
+				}
+			}
+		}else{
+			insert(root->right,data);
+			updateHeight(root);
+			if(getBalanceFactor(root)==-2){
+				if(getBalanceFactor(root->right)==-1){//RR型。
+					l(root);
+				}else if(getBalanceFactor(root->right)==1){//RL型。//把root-.right写成left出错，又调试了很长时间。
+					r(root->right);
+					l(root);
+				}
+			}
+		}
+	}else{
+		root=new node;
+		root->data=data;
+	}
+}
+
+void output(node* root) {
+	if (root) {
+		output(root->left);
+		printf("%d(h:%d,bf=%d),  ", root->data,root->height,getBalanceFactor(root));
+		output(root->right);
+	}
+}
+
+int main() {
+	int n;
+	scanf("%d",&n);
+	node *root=NULL;
+	for(int i=0;i<n;i++){
+		int data;scanf("%d",&data);
+		insert(root,data);
+#if P
+		output(root);
+		printf("\n");
+#endif
+	}
+	printf("%d",root->data);
+	return 0;
+}
