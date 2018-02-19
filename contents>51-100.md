@@ -65,6 +65,19 @@ https://www.patest.cn/contests/pat-a-practise/1064
 注意事项：
 1. memset在cstring头文件里。
 
+## A1066. Root of AVL Tree (25)#####（！！AVL TREE！！）
+https://www.patest.cn/contests/pat-a-practise/1066
+
+类型：平衡二叉树
+
+注意事项：
+1. 平衡因子（balance factor）：一般用左子树高度减右子树高度。
+设当前结点的平衡因子为n，n的左孩子的平衡因子为l，n的右孩子的平衡因子为r。
+n=2,l=1;说明插入在左边孩子的左边。
+n=2,l=-1;左边孩子的右边。
+n=-2,l=1;右边孩子的左边。
+n=-2,l=-1;右边孩子的右边。
+
 ## A1067. Sort with Swap(0,*) (25)###
 https://www.patest.cn/contests/pat-a-practise/1067
 
