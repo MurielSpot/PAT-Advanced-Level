@@ -1,0 +1,51 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1064
+
+类型：二叉搜索树 + 完全二叉树。
+
+难度：5（没想到好的做法）
+
+思路：
+1. 因为二叉搜索树的中序遍历正好是递增序列，所以可以对所有数据从小到大排序，在中序顺序建树时插入，再层序遍历。
+
+注意事项：
+1. memset在cstring头文件里。
+*/
+#include<cstdio>
+#include<cstring> 
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+const int MAXN=1010;
+int cbst[MAXN];
+int dataArr[MAXN];
+int n;
+
+int dataPtr=0;
+void inorderBuildTree(int index){
+	if(index<=n){//原先写的是dataPtr<n&&index<=n，但实际上前面一个判断是多余的，因为后面一个判断可以保证只把n个数据输出，和前面的判断起同样的效果。
+		inorderBuildTree(index*2);
+		cbst[index]=dataArr[dataPtr++];//不能放在if里的第一句，而应该在两个inorder之间，否则不是中序插入数据。
+		inorderBuildTree(index*2+1);
+	}
+}
+
+void output(){
+	printf("%d",cbst[1]);
+	for(int i=2;i<=n;i++){
+		printf(" %d",cbst[i]);
+	}
+}
+
+int main() {
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&dataArr[i]);
+	}
+	sort(dataArr,dataArr+n);
+	memset(cbst,-1,sizeof(cbst));
+	inorderBuildTree(1);
+	output();
+	return 0;
+}
