@@ -27,6 +27,11 @@ https://www.patest.cn/contests/pat-a-practise/1012
 1. 下面的代码比较啰嗦，前四个排序可以想办法合并成一个的。比如结构体里用一个数组SCORE[4]来表示三门分数即平均分，然后用一个全局变量i来依次表示0、1、2、3，则sort函数的cmp就可以根据score[i]来排名，用一个循环就可以代替四个排序代码块。
 2. 学好英语。
 
+## A1013. Battle Over Cities (25)##
+https://www.patest.cn/contests/pat-a-practise/1013
+
+類型：連同圖（找不連通子圖的個數）。
+
 ## A1016. Phone Bills (25)#####（做得超级痛苦）
 https://www.patest.cn/contests/pat-a-practise/1016
 
