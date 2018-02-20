@@ -30,7 +30,7 @@ https://www.patest.cn/contests/pat-a-practise/1012
 ## A1013. Battle Over Cities (25)##
 https://www.patest.cn/contests/pat-a-practise/1013
 
-類型：連同圖（找不連通子圖的個數）。
+類型：連通圖（找不連通子圖的個數）。
 
 ## A1016. Phone Bills (25)#####（做得超级痛苦）
 https://www.patest.cn/contests/pat-a-practise/1016
