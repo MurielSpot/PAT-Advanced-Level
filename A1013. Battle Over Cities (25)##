@@ -1,0 +1,62 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1013
+
+類型：連通圖（找不連通子圖的個數）。
+
+難度：2（題目感覺不太好理解）
+*/
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+
+const int MAXN=1010;
+int n;//total cities.[1,n].
+int m;//remaining highways.
+int k;//cities to be checked.
+
+int road[MAXN][MAXN]={0};
+int vis[MAXN];
+
+void dfs(int v,const int occCity){
+	vis[v]=true;
+	for(int i=1;i<=n;i++){
+		if(road[v][i]&&vis[i]==false&&i!=occCity){//i城市沒有被訪問過，i不是被占領城市，i和v之間有路，則可以對其進行訪問。
+			dfs(i,occCity);
+		}
+	}
+}
+
+int getAns(const int occCity){
+	memset(vis,0,sizeof(vis));
+	//找不連通的子圖數，返回即可。
+	int count=0;
+	for(int i=1;i<=n;i++){
+		if(vis[i]==false&&i!=occCity){//此處i也要不能是被占領城市才能進行dfs。 
+			count++;//進行了遍歷才需要count++，所以不能寫在if判斷外面。 
+			dfs(i,occCity);
+		}
+	}
+	if(count)return count-1;//n個不連通的圖，用n-1條路就能鏈接。
+	else return 0;
+}
+
+void input(){
+	scanf("%d%d%d",&n,&m,&k);
+	for(int i=0;i<m;i++){
+		int c1,c2;
+		scanf("%d%d",&c1,&c2);
+		road[c1][c2]=road[c2][c1]=1;
+	}
+	for(int i=0;i<k;i++){
+		int c;
+		scanf("%d",&c);
+		printf("%d\n",getAns(c));
+	}
+}
+
+int main() {
+	input();
+	return 0;
+}
