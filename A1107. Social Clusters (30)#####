@@ -1,0 +1,94 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1107
+
+類型：並查集。（最初用圖的遍歷做，發現做不了，不過沒有細想是不是真的做不了）
+
+難度：5
+
+注意事項：
+1. 該題中將並查集的根結點的值設置為它本身的下標，比設置為0更方便、更容易處理。
+*/
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+
+#define P 0
+
+const int MAXN=1010;
+const int MAXH=1010;
+
+int hobby[MAXH]={0};
+int belongTo[MAXN]={0};//某個人屬於那個集合。
+
+int findRoot(int index){//儅元素父節點就是自身時説明它就是這個集合的根結點。
+/*一開始寫錯了！！！！不是循環也沒用遞歸，而且else沒有返回值，編譯器沒有報錯直接就把這個函數執行一遍結束了。。。
+	if(hobby[index]==index){
+		return index;
+	}else index=hobby[index];
+*/
+	while(hobby[index]!=index){
+		index=hobby[index];
+	}
+	return index;
+}
+void combine(int a,int b){
+	int aR=findRoot(a);
+	int bR=findRoot(b);
+	if(aR!=bR){
+		hobby[bR]=aR;
+	}
+}
+
+vector<int> ans;
+int main() {
+	int n;
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++){
+		int k;scanf("%d: ",&k);
+		int h;int root=0;
+		for(int j=0;j<k;j++){
+			scanf("%d",&h);
+			if(hobby[h]==0)hobby[h]=h;//如果某個愛好有人有，則要先把它當做一個集合，因爲原來存的0是沒有意義的。
+			if(j==0){
+				//該人的第一個愛好：可能已經屬於某個集合，不需要再改變hobby[root]值；不屬於某個集合，其值為它本身，也不需要改變。
+				root=h;
+			}else{
+				combine(root,h);//該人的其他愛好和root都應是一個集合裏的。
+#if P
+				printf("\n***\nfindRoot(root)=%d,root=%d\nfindRoot(h)=%d,h=%d\n***\n",findRoot(root),root,findRoot(h),h);
+#endif
+			}
+		}
+		belongTo[i]=root;//該人屬於含root愛好的集合裏，因爲後面還有合并集合所以此時的root不一定是最終的根結點。
+#if P
+				printf("\n***\nbelongTo[%d]=%d\n***\n",i,belongTo[i]);
+#endif
+	}
+	for(int i=1;i<=n;i++){
+		//將belongTo存的值都更新為相應集合的根結點。
+		if(belongTo[i]){
+			belongTo[i]=findRoot(belongTo[i]);
+		}
+	}
+	for(int i=1;i<MAXH;i++){
+		if(hobby[i]==i){//如果是某個集合的根結點。
+			int num=0;//記錄有多少人屬於這個集合。
+			for(int j=1;j<=n;j++){
+				if(belongTo[j]==i){
+					num++;
+				}
+			}
+			if(num)ans.push_back(num);
+		}
+	}
+	sort(ans.begin(),ans.end());
+	printf("%d\n",ans.size());
+	int len=ans.size()-1;
+	for(int i=len;i>=0;i--){
+		if(i==len)printf("%d",ans[i]);
+		else printf(" %d",ans[i]);
+	}
+	return 0;
+}
