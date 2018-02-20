@@ -1,0 +1,113 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1098
+
+類型：插入排序，堆排序。
+
+難度：4（堆排序太費事了，很不熟練）（有一個測試點暫時沒有通過，目前不想檢查了）
+*/
+
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+const int MAXN=110;
+
+bool compare(int a[],int b[],int size){
+	for(int i=0;i<size;i++){
+		if(a[i]!=b[i])return false;
+	}
+	return true;
+}
+
+void insertion(int a[],int size,int unsorted){//一次插入排序。
+	if(unsorted<size){//如果未排序的第一個元素沒有超過數組存儲範圍，可以進行排序。
+		int data=a[unsorted];
+		int i;
+		for(i=unsorted;i>=1;i--){
+			if(data<a[i-1]){
+				a[i]=a[i-1];
+			}else{
+				a[i]=data;break;
+			}
+		}
+		if(i==0)a[0]=data;
+	}
+}
+
+void downAdjust(int arr[],int left,int right){
+	int data=arr[left];
+	int now=left,next=(now+1)*2-1;//next先指向右孩子。
+	while(next<=right){
+		if(next+1<=right&&arr[next+1]>arr[next]){//左孩子存在且左孩子更大。
+			next++;
+		}
+		if(data<arr[next]){//data小，還要繼續向下調整。
+			arr[now]=arr[next];
+			now=next;
+			next=(now+1)*2-1;
+		}else{
+			break;
+		}
+	}
+	arr[now]=data;	
+}
+void swap(int &a,int &b){
+	int tmp=b;
+	b=a;
+	a=tmp;
+}
+void heapSort(int a[],int size,int sorted){
+	if(sorted==size&&size>1){//第一次排序，需要先建堆。如果有一個元素就已經是有序的了，不需要調整。
+		for(int i=size/2;i>=0;i--){
+			downAdjust(a,i,size-1);
+		}
+	}
+	if(sorted>1){//sorted代表已排序區間的第一個元素。儅僅剩一個元素沒有排序，而這個元素根據之前的篩選最大值的過程，則肯定就應該在第一個位置，所以不需要排序了。儅所有元素都排序完時，也不需要再排序。
+		swap(a[0],a[sorted-1]);
+		downAdjust(a,0,sorted-2);
+	}
+}
+
+void output(int arr[],int size){
+	for(int i=0;i<size;i++){
+		if(i)printf(" %d",arr[i]);
+		else printf("%d",arr[i]);
+	}
+	printf("\n");
+}
+
+int main() {
+	int beginI[MAXN],beginH[MAXN],partial[MAXN];
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&beginI[i]);
+		beginH[i]=beginI[i];
+	}
+	for(int i=0;i<n;i++){
+		scanf("%d",&partial[i]);
+	}
+	bool heap=true;
+	for(int i=0;i<n;i++){
+		insertion(beginI,n,i);
+		if(compare(beginI,partial,n)){
+			printf("Insertion Sort\n");
+			insertion(beginI,n,i+1);
+			output(beginI,n);
+			heap=false;
+			break;
+		}
+	}
+	if(heap){		
+		for(int i=n;i>0;i--){
+			heapSort(beginH,n,i);
+			if(compare(beginH,partial,n)){
+				printf("Heap Sort\n");
+				heapSort(beginH,n,i-1);
+				output(beginH,n);
+			}
+		}
+	}
+	return 0;
+}
