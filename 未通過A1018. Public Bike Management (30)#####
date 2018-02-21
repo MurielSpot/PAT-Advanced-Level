@@ -1,0 +1,18 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1018
+
+類型：最短路徑，圖的遍歷。
+
+難度：5（兩個點沒過。難度大，這類題要多做）
+
+注意事項：
+1. vector<int>的數組，被我用memset把所有位都置為1之後，運行出錯，但是置為0時，正常運行了，所以容器不要隨便用memset。
+錯誤代碼示例：
+int main() {
+	vector<int> a[3];
+	memset(a, -1, sizeof(a));
+	a[0].push_back(1);
+	return 0;
+}
+運行出錯。
+*/
