@@ -116,6 +116,7 @@ int main() {
 }
 
 //下面測試點0和7未過。把下面的MAXRADIX改成determined+1，就衹有0未過了。網上好像有人説，如果有段錯誤測試點7會錯。
+//但是把lowestRadix函數裏的(char2ll(num[i])>low改成>=第6個測試點又會錯！！
 #include<cstdio>
 #include<iostream>
 #include<cstring>
