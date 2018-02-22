@@ -118,6 +118,15 @@ int main(){
 	return 0;
 }</pre>
 
+## A1072. Gas Station (30)#####（還需再看）
+https://www.patest.cn/contests/pat-a-practise/1072
+
+類型：最短路徑。
+
+注意事項：出現了很多變量用錯位，小於等於寫成小於，小於寫成大於，這類問題，思路一定要清晰！！！
+
+其他：vs2017，運行測試樣例時和所給結果一致，而dev最後的3.3被它計算成3.2。
+
 ## A1074. Reversing Linked List (25)##
 https://www.patest.cn/contests/pat-a-practise/1074
 
