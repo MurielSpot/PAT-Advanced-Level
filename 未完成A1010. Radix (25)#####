@@ -115,7 +115,7 @@ int main() {
 	return 0;
 }
 
-//下面測試點0和7未過。
+//下面測試點0和7未過。把下面的MAXRADIX改成determined+1，就衹有0未過了。網上好像有人説，如果有段錯誤測試點7會錯。
 #include<cstdio>
 #include<iostream>
 #include<cstring>
