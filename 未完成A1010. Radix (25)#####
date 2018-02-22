@@ -14,3 +14,195 @@ https://www.patest.cn/contests/pat-a-practise/1010
 思考：
 假设数字大小超过long long，尝试用字符数组进行字符串的进制转换，或者定义结构体，用结构体的数组对数据进行进制转换。
 */
+
+
+//下面代碼有測試點0和6未過.
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<string>
+using namespace std;
+
+#define P 0
+
+const long long MAXRADIX=1<<31-1;
+
+string n1,n2;
+long long radix;
+int tag;
+
+long long determined,toDetermined;
+
+inline long long char2ll(char c){
+	if(isdigit(c)){
+		return c-'0';
+	}else return c-'a'+10;
+}
+
+long long r2ten(string num,long long r){//r進制轉10進制。
+	long long ans=0,power=1;
+	for(int i=num.size()-1;i>=0;i--){
+		ans+=char2ll(num[i])*power;
+		power*=r;
+	}
+	return ans;
+}
+
+long long lowestRadix(string num){
+	long long low=2;
+	for(int i=num.size()-1;i>=0;i--){
+		if(char2ll(num[i])>=low)low=char2ll(num[i])+1;//大於等於，不是大於。
+	}
+#if P
+	printf("\n-----------\nlowestRadix=%lld\n-----------\n",low);
+#endif
+	return low;
+}
+
+void binarySort(string s,long long leftR,long long rightR){//左右不要寫反了。
+	long long ans,power,midR;
+	int size=s.size()-1;
+	while(leftR<=rightR){
+		ans=0;
+		power=1;
+		midR = (leftR + rightR) / 2;
+#if P
+	printf("\n-----------\nleftR=%lld, rightR=%lld, midR=%lld\n-----------\n",rightR,leftR,midR);
+#endif
+		for(int i=size;i>=0;i--){
+			ans+=char2ll(s[i])*power;
+#if P
+	printf("ans=%lld, power=%lld\n",ans,power);
+#endif
+			power*=midR;
+			if(i==0&&power<0){//當前不是最後一次計算，下一步的power小於0，説明下一步也要溢出。
+				ans=determined+1;//將ans置為比已確定的那個數大的數。此時可能determined+1可能又溢出了，但是下面那個if裏對這種情況進行了判斷。
+			}
+			if(ans>determined||ans<0){//還沒算完發現結果已經比另一個數大，説明這個基數不是所需的。ans小于0表示溢出了。
+				break;
+			}
+		}
+		if(ans>determined||ans<0)rightR=midR-1;
+		else if(ans<determined)leftR=midR+1;
+		else{
+			printf("%lld",midR);
+			break;
+		}
+	}
+	if(leftR>rightR){
+		printf("Impossible");//沒找到。
+	}
+}
+
+int main() {
+	cin>>n1>>n2>>tag>>radix;
+	if(n1==n2){
+		if(n1.size()==1){//衹有一位數時，已經確定進制的那個數的進制數并不會影響另一個數，也就是説，比如兩個數都是a，其中一個已經確定進制為35，另一個并不一定為35，取11也是正確的。
+			printf("%lld",lowestRadix(n1));
+		}else{
+			printf("%lld",radix);
+		}
+	}else{
+		if(tag==1){
+			determined=r2ten(n1,radix);
+			binarySort(n2,lowestRadix(n2),determined+1);//把最後一個參數中的MAXRADIX，改寫成determined+1。
+		}else if(tag==2){
+			determined=r2ten(n2,radix);
+			binarySort(n1,lowestRadix(n2),determined+1);
+		}
+	}
+	return 0;
+}
+
+//下面測試點0和7未過。
+#include<cstdio>
+#include<iostream>
+#include<cstring>
+#include<vector>
+#include<string>
+using namespace std;
+
+#define P 0
+
+const long long MAXRADIX=1<<31-1;
+
+string n1,n2;
+long long radix;
+int tag;
+
+long long determined,toDetermined;
+
+inline long long char2ll(char c){
+	if(isdigit(c)){
+		return c-'0';
+	}else return c-'a'+10;
+}
+
+long long r2ten(string num,long long r){//r進制轉10進制。
+	long long ans=0,power=1;
+	for(int i=num.size()-1;i>=0;i--){
+		ans+=char2ll(num[i])*power;
+		power*=r;
+	}
+	return ans;
+}
+
+long long lowestRadix(string num){
+	long long low=2;
+	for(int i=num.size()-1;i>=0;i--){
+		if(char2ll(num[i])>low)low=char2ll(num[i])+1;
+	}
+#if P
+	printf("\n-----------\nlowestRadix=%lld\n-----------\n",low);
+#endif
+	return low;
+}
+
+void binarySort(string s,long long leftR,long long rightR){//左右不要寫反了。
+	long long ans,power,midR;
+	int size=s.size()-1;
+	while(leftR<=rightR){
+		ans=0;
+		power=1;
+		midR = (leftR + rightR) / 2;
+#if P
+	printf("\n-----------\nleftR=%lld, rightR=%lld, midR=%lld\n-----------\n",rightR,leftR,midR);
+#endif
+		for(int i=size;i>=0;i--){
+			ans+=char2ll(s[i])*power;
+#if P
+	printf("ans=%lld, power=%lld\n",ans,power);
+#endif
+			if(ans>determined){//還沒算完發現結果已經比另一個數大，説明這個基數不是所需的。
+				break;
+			}
+			power*=midR;
+		}
+		if(ans>determined)rightR=midR-1;
+		else if(ans<determined)leftR=midR+1;
+		else{
+			printf("%lld",midR);
+			break;
+		}
+	}
+	if(leftR>rightR){
+		printf("Impossible");//沒找到。
+	}
+}
+
+int main() {
+	cin>>n1>>n2>>tag>>radix;
+	if(n1==n2){
+		printf("%lld",radix);
+	}else{
+		if(tag==1){
+			determined=r2ten(n1,radix);
+			binarySort(n2,lowestRadix(n2),MAXRADIX);
+		}else if(tag==2){
+			determined=r2ten(n2,radix);
+			binarySort(n1,lowestRadix(n2),MAXRADIX);
+		}
+	}
+	return 0;
+}
