@@ -1,0 +1,121 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1087
+
+類型：最短路徑，dfs。
+
+難度：3
+
+注意事項：
+1. 算平均快樂值得時候，是用整個路徑上的快樂值之和除以有快樂值得城市數，不包括起點城市，因爲起點沒有給快樂值，所以不算在内。
+*/
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN=210;
+const int INF=1000000000;
+
+int n;//[2,200],cities.
+int k;//routes.
+string startCity;
+
+int g[MAXN][MAXN]={0};
+bool vis[MAXN];
+int dist[MAXN];
+
+int  happiness[MAXN]={0};
+map<string,int> name2id;
+map<int,string> id2name;
+
+vector<int> pre[MAXN];
+void dijkstra(int u){
+	memset(vis,0,sizeof(vis));
+	fill(dist,dist+MAXN,INF);
+	
+	dist[u]=0;
+	for(int i=0;i<n;i++){
+		int minIndex=-1,minDist=INF;
+		for(int v=0;v<n;v++){
+			if(vis[v]==false&&dist[v]<minDist){
+				minDist=dist[v];
+				minIndex=v;
+			}
+		}
+		if(minIndex==-1)return;
+		vis[minIndex]=true;
+		for(int v=0;v<n;v++){
+			if(vis[v]==false&&g[minIndex][v]!=0){
+				if(dist[v]>dist[minIndex]+g[minIndex][v]){
+					dist[v]=dist[minIndex]+g[minIndex][v];
+					pre[v].clear();
+					pre[v].push_back(minIndex);
+				}else if(dist[v]==dist[minIndex]+g[minIndex][v]){
+					pre[v].push_back(minIndex);
+				}
+			}
+		}
+	}
+}
+
+int countRoute=0;
+int ansH=-1;
+int averH=-1;//因為只取整數部分，所以用int可以。
+vector<int> path,tmp;
+void dfs(int u,int sumH){
+	tmp.push_back(u);
+	if(u==0){
+		countRoute++;
+		if(ansH<sumH){
+			ansH=sumH;
+			path=tmp;
+			averH=sumH/(tmp.size()-1);//此處平均快樂值也要更新。
+		}else if(ansH==sumH&&sumH/(tmp.size()-1)>averH){
+			averH=sumH/(tmp.size()-1);
+			path=tmp;
+		}
+		tmp.pop_back();
+		return;
+	}
+	sumH+=happiness[u];
+	for(int i=pre[u].size()-1;i>=0;i--){
+		int v=pre[u][i];
+		dfs(v,sumH);
+	}
+	tmp.pop_back();
+}
+
+int main() {
+	scanf("%d%d",&n,&k);
+	cin>>startCity;
+	name2id[startCity]=0;
+	id2name[0]=startCity;
+	for(int index=1;index<=n-1;index++){//用i給城市編號。0為起始位置。
+		string cityName;int point;
+		cin>>cityName>>point;
+		happiness[index]=point;
+		name2id[cityName]=index;
+		id2name[index]=cityName;
+	}
+	for(int i=0;i<k;i++){
+		string c1,c2;int cost;
+		cin>>c1>>c2>>cost;
+		int id1=name2id[c1];
+		int id2=name2id[c2];
+		g[id1][id2]=g[id2][id1]=cost;
+	}
+	dijkstra(0);
+	dfs(name2id["ROM"],0);
+	printf("%d %d %d %d\n",countRoute,dist[name2id["ROM"]],ansH,averH);
+	for(int i=path.size()-1;i>=0;i--){
+		if(i)cout<<id2name[path[i]]<<"->";
+		else cout<<id2name[path[0]];
+	}
+	return 0;
+}
