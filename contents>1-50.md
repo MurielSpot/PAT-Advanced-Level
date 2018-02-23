@@ -5,6 +5,15 @@ https://www.patest.cn/contests/pat-a-practise/1003
 
 类型：深搜，最短路径。
 
+## A1007. Maximum Subsequence Sum (25)###
+https://www.patest.cn/contests/pat-a-practise/1007
+
+類型：動態規劃。
+
+注意事項：
+1. 是子序列兩頭的元素值，不是下標。樣例中元素的值和下表值正好是一樣的，所以沒有注意到錯誤。
+儅序列全爲負數時，最大和認爲是0，然後輸出第一個和最後一個元素。
+
 ## A1009. Product of Polynomials (25)####
 https://www.patest.cn/contests/pat-a-practise/1009
 
