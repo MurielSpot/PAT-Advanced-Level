@@ -1,0 +1,60 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1007
+
+類型：動態規劃。
+
+難度：5.
+
+注意事項：
+1. 是子序列兩頭的元素值，不是下標。樣例中元素的值和下表值正好是一樣的，所以沒有注意到錯誤。
+儅序列全爲負數時，最大和認爲是0，然後輸出第一個和最後一個元素。
+*/
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN=10010;
+const int INF=1000000000;
+
+struct info{
+	int sum;
+	//int left,right;//是子序列兩頭的元素值，不是下標！！！！！！樣例中元素的值和下表值正好是一樣的，所以沒有注意到錯誤。
+	int leftD,rightD;
+	info(){sum=0-INF;}
+}ans,dpNow,dpLast;
+int main() {
+	int k;
+	scanf("%d",&k);
+	int first,last;
+	for(int i=0;i<k;i++){
+		int data;
+		scanf("%d",&data);
+		if(data+dpLast.sum>=data){
+			dpNow.leftD=dpLast.leftD;
+			dpNow.rightD=data;
+			dpNow.sum=data+dpLast.sum;
+		}else{
+			dpNow.leftD=dpNow.rightD=data;
+			dpNow.sum=data;
+		}
+		if(dpNow.sum>ans.sum){
+			ans=dpNow;
+		}
+		dpLast=dpNow;//之前的結果不再需要，用當前的結果存到dpLast裏，進行下一步運算。
+		if(i==0)first=data;
+		if(i==k-1)last=data;
+	}
+	if(ans.sum<0){
+		printf("0 %d %d",first,last);
+	}else{
+		printf("%d %d %d",ans.sum,ans.leftD,ans.rightD);
+	}
+	return 0;
+}
