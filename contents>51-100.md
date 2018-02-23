@@ -273,6 +273,13 @@ https://www.patest.cn/contests/pat-a-practise/1086
 注意事项：
 1. 把应该为char的数组写成int arr[6],然后用%s输入数据，没有报错，但出现了莫名其妙的错误。
 
+## A1087. All Roads Lead to Rome (30)###
+https://www.patest.cn/contests/pat-a-practise/1087
+
+類型：最短路徑，dfs。
+
+注意事項：
+1. 算平均快樂值得時候，是用整個路徑上的快樂值之和除以有快樂值得城市數，不包括起點城市，因爲起點沒有給快樂值，所以不算在内。
 
 ## A1088. Rational Arithmetic (20)##
 https://www.patest.cn/contests/pat-a-practise/1088
