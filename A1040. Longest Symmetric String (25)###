@@ -1,0 +1,56 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1040
+
+類型：dp（回文串）
+
+難度：3
+
+注意事項：
+1. 衹要有字符串，則回文串長度至少為1.
+*/
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 1010;
+const int INF = 1000000000;
+
+bool dp[MAXN][MAXN]={false};
+char str[MAXN];
+
+int ans=1;//應初始化為1，因爲衹要有字符就有長度為1的回文串。
+inline void updateAns(int i,int j){
+	if(j-i+1>ans)ans=j-i+1;
+}
+int main() {
+	int ch;
+	int index=1;
+	while((ch=getchar())!='\n'&&ch!=EOF){//用&&不是||
+		dp[index][index]=true;
+		str[index++]=ch;
+	}
+	for(int width=1;width<index;width++){
+		for(int i=1,j;(j=i+width)<index;i++){
+			if(i+1==j){
+				if(str[i]==str[j]){
+					dp[i][j]=true;
+					updateAns(i,j);
+				}
+			}else{
+				if(dp[i+1][j-1]&&str[i]==str[j]){
+					dp[i][j]=true;
+					updateAns(i,j);
+				}
+			}
+		}
+	}
+	printf("%d",ans);
+	return 0;
+}
