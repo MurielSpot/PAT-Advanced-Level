@@ -259,6 +259,47 @@ https://www.patest.cn/contests/pat-a-practise/1044
 2. 多学习各种算法吧，一些经典算法里的技巧和思想能让做题变得很快，而且有些算法本身就很精彩。
 3. 用到upper_bound函数：ForwardIter lower_bound(ForwardIter first, ForwardIter last,const _Tp& val)算法返回一个非递减序列\[first, last)中的第一个大于等于值val的位置。
 
+## A1045. Favorite Color Stripe (30)#####
+https://www.patest.cn/contests/pat-a-practise/1045
+
+類型：動態規劃，最長不下降子序列（LIS），最長公共子序列（LCS）
+
+難度：5
+
+注意事項：
+1. 提議不清或容易忽視的地方：eva喜歡的序列裏的顔色都是不一樣的（如果序列裏有重複顔色就不好做了）；不一定所有喜歡的顔色都要出現。
+
+測試數據：
+<pre>
+//如果用下面兩個測試數據無法做出正確結果，則pat中測試點4很可能也會出錯。
+//input
+6
+5 2 3 1 5 6
+14 3 3 3 2 2 2 2 1 5 2 2 2 2 6
+//output
+9
+//input
+6
+5 2 3 1 5 6
+6 2 3 6 2 2 1
+//output
+4
+
+//下面兩個測試數據過不了，可能測試點2也過不了。
+//input
+6
+5 2 3 1 5 6
+6 2 3 5 1 1 1
+//output
+5
+//input，主要需注意到5後面的兩個1出現時最大長度發生了變化，而兩個1後面的233出現之後最大程度又發生了變化。
+6
+5 2 3 1 5 6
+6 2 3 5 1 1 2 3 3 1 1 1
+//output
+7
+</pre>
+
 ## A1047. Student List for Course (25)#
 https://www.patest.cn/contests/pat-a-practise/1047
 
