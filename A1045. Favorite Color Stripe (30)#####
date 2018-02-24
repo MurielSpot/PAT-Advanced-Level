@@ -1,0 +1,146 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1045
+
+類型：動態規劃，最長不下降子序列（LIS），最長公共子序列（LCS）
+
+難度：5
+
+注意事項：
+1. 提議不清或容易忽視的地方：eva喜歡的序列裏的顔色都是不一樣的（如果序列裏有重複顔色就不好做了）；不一定所有喜歡的顔色都要出現。
+
+2.
+if(tmp.num<=subMax[color])//這裏需要用<=而不是<。
+如：
+6
+5 2 3 1 5 6
+6 2 3 6 2 2 1
+如果用小於，答案是3，用小於等於答案是4.
+因爲小於等於時，找到最後一個2時，236和222長度都是3，但是對於前者，最後一個1不能繼續連在它後面，所以此時以1結尾的序列也無法通過tmp來進行更新，衹能subMax中加1，所以長度衹能是1，這楊的結果是錯的。
+
+3.
+下面這一部分是有問題的。
+					//當前顔色比當前結果最後一個元素位置更靠前，則比較以當前color為結尾的最大長度，和tmp存的最大值哪個大。
+					subMax[color]++;//這裏是有問題的。
+					if(tmp.num<=subMax[color]){//這裏需要用<=而不是<。
+						tmp.lastC=color;
+						tmp.num=subMax[color];
+					}
+如：
+6
+5 2 3 1 5 6
+6 2 3 5 1 1 1
+輸出的是3，而結果是應該是5，繫2 3 1 1 1.
+因爲到5時最長序列為235，再到1時，23可以和它連起來，但是tmp裏的數據并不能體現這一點，所以衹能單獨重算1的subMax值，而非直接加1。
+同理：
+6
+5 2 3 1 5 6
+6 2 3 5 1 1 2 3 3 1 1 1
+第三個1不能再第二個1算出的subMax基礎上纍加，因爲期間出現的2 3 3會影響以1結尾的最大長度的值。所以每次遇到比tmp最後一個顔色出現順序更小的顔色時，都要重算。
+
+*/
+#include"stdafx.h"
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN=210;
+const int MAXM=210;
+const int MAXL=10010;
+const int INF=1000000000;
+
+int n;//colors.[1,n]
+int m;
+int l;
+
+map<int,int> subMax;//統計以某種顔色結尾的序列最長可以有多長。
+
+int pos[MAXN]={0};//存放某顔色在最喜愛序列中出現的先後位置。
+
+vector<int> fSeq;
+
+struct info{//到某處時，之前的序列中滿足條件的最長子序列的長度，last為滿足條件的子序列的最後一個元素。
+	int lastC;
+	int num;
+	info(){num=0;lastC=-1;}
+}tmp;
+
+void resetTmp(int color, info &tmp){
+	int num=0;
+	for(int i=0;i<fSeq.size();i++){
+		int c=fSeq[i];
+		if(subMax[c]>num){
+			num=subMax[c];
+		}
+		if(c==color){//比較以color結尾，或者以color之前某個顔色結尾的序列哪個更長，取更大的值。
+			subMax[color]=max(subMax[color],num);
+			subMax[color]++;//把剛剛遇到的color加進去。
+		}
+	}
+	if(tmp.num<=subMax[color]){
+		tmp.num=subMax[color];
+		tmp.lastC=color;
+	}
+}
+
+int main() {
+	scanf("%d",&n);
+	scanf("%d",&m);
+	for(int i=1;i<=m;i++){
+		int color;
+		scanf("%d",&color);
+		pos[color]=i;
+		fSeq.push_back(color);
+	}
+	scanf("%d",&l);
+	for(int i=0;i<l;i++){
+		int color;
+		scanf("%d",&color);
+		
+		int lastPos,nowPos;
+		if(pos[color]){//該顔色存在於需要處理的顔色中。
+			if(tmp.lastC==-1){//tmp裏還沒有有效值。
+				tmp.lastC=color;
+				tmp.num++;
+				subMax[color]=tmp.num;
+			}else{
+				lastPos=pos[tmp.lastC];
+				nowPos=pos[color];
+				if(nowPos<lastPos){
+/*下面這一部分是有問題的。
+					//當前顔色比當前結果最後一個元素位置更靠前，則比較以當前color為結尾的最大長度，和tmp存的最大值哪個大。
+					subMax[color]++;//這裏是有問題的。
+					if(tmp.num<=subMax[color]){//這裏需要用<=而不是<。
+						tmp.lastC=color;
+						tmp.num=subMax[color];
+					}
+如：
+6
+5 2 3 1 5 6
+6 2 3 5 1 1 1
+輸出的是3，而結果是應該是5，繫2 3 1 1 1.
+因爲到5時最長序列為235，再到1時，23可以和它連起來，但是tmp裏的數據并不能體現這一點，所以衹能單獨重算1的subMax值，而非直接加1。
+同理：
+6
+5 2 3 1 5 6
+6 2 3 5 1 1 2 3 3 1 1 1
+第三個1不能再第二個1算出的subMax基礎上纍加，因爲期間出現的2 3 3會影響以1結尾的最大長度的值。所以每次遇到比tmp最後一個顔色出現順序更小的顔色時，都要重算。
+*/
+					resetTmp(color,tmp);
+				}else{
+					tmp.lastC=color;
+					tmp.num++;
+					subMax[color]=tmp.num;
+				}
+			}
+		}
+	}
+	printf("%d",tmp.num);
+	return 0;
+}
