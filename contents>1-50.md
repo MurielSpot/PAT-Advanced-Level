@@ -241,6 +241,14 @@ bool cmp(int a,int b){
   return strcmp(name[a],name[b])<0;
 }</pre>
 
+## A1040. Longest Symmetric String (25)###
+https://www.patest.cn/contests/pat-a-practise/1040
+
+類型：dp（回文串）
+
+注意事項：
+1. 衹要有字符串，則回文串長度至少為1.
+
 ## A1041. Be Unique (20)#
 https://www.patest.cn/contests/pat-a-practise/1041
 
