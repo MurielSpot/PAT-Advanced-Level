@@ -1,0 +1,74 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1068
+
+類型:01背包,dp
+
+難度:5(沒做出來)
+*/
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 10010;
+const int MAXM=110;
+const int INF = 1000000000;
+
+int n,m,l;
+
+int coin[MAXN];
+int dp[MAXN]={0};
+int choice[MAXN][MAXM]={0};//當錢幣為maxm時,是否選擇錢幣maxn.
+bool flag[MAXN]={false};//某個物品是否放入背包.
+
+bool cmp(int a,int b){
+	return a>b;
+}
+
+int main() {
+	cin>>n>>m;
+	for(int i=0;i<n;i++){
+		scanf("%d",&coin[i]);
+	}
+	sort(coin,coin+n,cmp);//從大到小排序.
+	//已經用了used個錢幣,用到了第index個硬幣,已經付了paid的總價.
+	for(int i=0;i<n;i++){//對硬幣0到n-1進行篩選.
+		for(int money=m;money>=coin[i];money--){
+			//dp表示在選擇到第i個錢幣時,能獲得的不大於money的最大錢幣總值.
+			if(dp[money]<=dp[money-coin[i]]+coin[i]){//<=不能是<.
+				//dp[money-coin[i]]是選錢幣i之前,最大只能有money-coin[i]這麼多錢幣,然後加上了coin[i],就是現在的選i的dp值.
+				choice[i][money]=1;
+				dp[money]=dp[money-coin[i]]+coin[i];
+			}else{
+				choice[i][money]=0;
+			}
+		}
+	}
+	if(dp[m]!=m){
+		printf("No Solution");
+	}else{
+		int i=n-1,num=0,money=m;
+		while(i>=0){
+			if(choice[i][money]==1){
+				flag[i]=true;
+				money-=coin[i];
+				num++;
+			}
+			i--;
+		}
+		for(int i=n-1;i>=0;i--){
+			if(flag[i]==true){
+				printf("%d",coin[i]);
+				num--;
+				if(num>0)printf(" ");
+			}
+		}
+	}
+	return 0;
+}
