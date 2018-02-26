@@ -1,0 +1,102 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1105
+
+難度:3(做得慢)
+*/
+
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+using namespace std;
+
+#define P 0
+
+const int MAXN = 10010;
+const int MAXR=10010;
+const int MAXC=110;
+const int INF = 1000000000;
+
+int n;
+
+int num[MAXN];
+int matrix[MAXR][MAXC];	
+
+int upb,downb,leftb,rightb;//當前的邊界。
+int nr,nc,direct=4;//nr,nc表示當前的位置,direct表示當前應該往哪個方向走。
+
+void initRC(int &r,int &c){
+	for(r=(int)sqrt(n);r<=n;r++){
+		if(n%r==0){
+			c=n/r;
+			if(r>=c)return;//因爲可能正好開平方,所以不確定r從(int)sqrt(n)開始還是(int)sqrt(n)+1開始,所以這裏要判斷r>=c.
+		}
+	}
+}
+
+bool setPos(int &row,int &column){
+	if (row == -1) {//第一次設置
+		row = 0; column = 0;
+	}else if(direct==1){//往上.
+		if(row-1<upb){//上方越界。
+			column++;//改往右邊走.
+			direct=4;
+			leftb++;
+		}else row--;
+	}else if(direct==2){//往下.
+		if(row+1>downb){//下方越界,往左走.
+			column--;
+			direct=3;
+			rightb--;
+		}else row++;
+	}else if(direct==3){//zuo
+		if(column-1<leftb){//左邊越界,往上走.
+			direct=1;
+			row--;
+			downb--;
+		}else column--;
+	}else if(direct==4){//you
+		if(column+1>rightb){
+			direct=2;
+			row++;
+			upb++;
+		}else column++;
+	}
+	if (leftb>rightb || upb>downb || row<upb || row>downb || column<leftb || column>rightb)return false;//越界就返回false.
+	return true;
+}
+
+int main() {
+	cin>>n;
+	int r,c;
+	initRC(r,c);
+#if P
+	printf("r=%d,c=%d\n\n",r,c);
+#endif
+//把下面兩行前面添了int導致在函數内部又重新定義了同名變量,結果輸出好多0.
+	upb=0;downb=r-1;leftb=0;rightb=c-1;//當前的邊界。
+	nr=-1;nc=-1;direct=4;
+	for(int i=0;i<n;i++){
+		scanf("%d",&num[i]);
+	}
+	sort(num,num+n);
+	for(int i=n-1;i>=0;i--){
+		if(setPos(nr,nc)){
+#if P
+	printf("nr=%d,nc=%d\n",nr,nc);
+#endif
+			matrix[nr][nc]=num[i];
+		}else{
+			printf("\n-------------sth wrong--------------\n");//正常情況下處理n個數不會發生越界的情況.
+		}
+	}
+	for(int i=0;i<r;i++){
+		for(int j=0;j<c;j++){
+			if(j)printf(" ");
+			printf("%d",matrix[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
+}
