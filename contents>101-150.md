@@ -51,6 +51,11 @@ tmp1=2500050000.00
 tmp2=-1794917296.00
 </pre>
 
+## A1105. Spiral Matrix (25)###
+https://www.patest.cn/contests/pat-a-practise/1105
+
+類型:(不明,不好歸類)
+
 ## A1106. Lowest Price in Supply Chain (25)###
 https://www.patest.cn/contests/pat-a-practise/1106
 
