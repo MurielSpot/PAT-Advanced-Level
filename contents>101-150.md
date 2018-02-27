@@ -104,8 +104,8 @@ https://www.patest.cn/contests/pat-a-practise/1135
 
 注意事項：
 1. 不考慮平衡，按照二叉搜索樹的性質劃分左右子樹即可結合先序遍歷建成所給樹。
-2. 建樹的時候，找先序序列中，第一個值是當前根結點的值，後面是左右子樹的值，找左右子樹里找第一個大於當前結點的值的位置時，不能用lower_bound函數，
-因為關鍵字是正的，但為了表示紅黑，所以需要取絕對值再比較它們與根結點絕對值的大小。
+2. 建樹的時候，找先序序列中，第一個值是當前根結點的值，後面是左右子樹的值，找左右子樹里找第一個大於當前結點的值的位置時，不能直接用lower_bound函數，
+因為關鍵字是正的，但為了表示紅黑，所以需要取絕對值再比較它們與根結點絕對值的大小。如果想用lower_bound函數，見下面介紹。
 3. 進行深度搜索，判斷樹是否滿足條件，一開始沒用返回值來求當前結點到葉子結點路徑上black的數量，沒做出來，然後用返回值就很容易求得black數量。
 可以自己思考，能不能不用返回值，求black到當前結點的數量，比如設置計數變量，每次到null就加一以與上次區分，結點里每次都判斷當前到根結點的值是否是舊的，是否滿足條件，
 我現在只是想一想，具體可不可行還沒有試。
@@ -121,3 +121,45 @@ There is a kind of balanced binary search tree named red-black tree in the data 
 (3) Every leaf (NULL) is black.
 (4) If a node is red, then both its children are black.
 (5) For each node, all simple paths from the node to descendant leaves contain the same number of black nodes.</pre>
+
+3. lower_bound函数<br/>
+注意:lower_bound(num,num+10,value)-num,要减num才能获得value在数组中的下标,不减num得到的是地址.
+
+* 第一个版本：
+* template<class ForwardIterator,class T>
+* ForwardIterator lower_bound(ForwardIterator first,ForwardIterator last,const T &val);
+
+* 第二个版本：
+* template<class ForwardIterator,class T,class Compare>
+* ForwardIterator lower_bound(ForwardIterator first,ForwardIterator last,const T &val,Compare comp);
+
+<pre>
+//第二个版本的比较函数的书写及对应对应例子:
+int num[10]={0,3,6,6,-8,-8,8,9,10,12};
+int main() {
+	printf("%d",lower_bound(num,num+10,x,cmp)-num); 
+	return 0;
+}
+
+//cmp里函数应该写的是小于运算的比较
+//找第一个大于等于x的值.这个cmp函数和不加cmp函数lower_bound的效果时相同的.
+bool cmp(int a,int b){
+	return a<b;
+}
+//x=8时
+6
+
+//找第一个大于x的值.相当于事项了upper_bound的效果.
+bool cmp(int a,int b){
+	return a<=b;
+}
+//x=6时
+6
+
+//找第一个绝对值大于等于x的值.
+bool cmp(int a,int b){
+	return abs(a)<abs(b);
+}
+//x=7时
+4
+</pre>
