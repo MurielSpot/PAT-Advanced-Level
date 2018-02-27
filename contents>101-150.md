@@ -125,13 +125,13 @@ There is a kind of balanced binary search tree named red-black tree in the data 
 3. lower_bound函数<br/>
 注意:lower_bound(num,num+10,value)-num,要减num才能获得value在数组中的下标,不减num得到的是地址.
 
-* 第一个版本：
-* template<class ForwardIterator,class T>
-* ForwardIterator lower_bound(ForwardIterator first,ForwardIterator last,const T &val);
+> 第一个版本：
+> template<class ForwardIterator,class T>
+> ForwardIterator lower_bound(ForwardIterator first,ForwardIterator last,const T &val);
 
-* 第二个版本：
-* template<class ForwardIterator,class T,class Compare>
-* ForwardIterator lower_bound(ForwardIterator first,ForwardIterator last,const T &val,Compare comp);
+> 第二个版本：
+> template<class ForwardIterator,class T,class Compare>
+> ForwardIterator lower_bound(ForwardIterator first,ForwardIterator last,const T &val,Compare comp);
 
 <pre>
 //第二个版本的比较函数的书写及对应对应例子:
