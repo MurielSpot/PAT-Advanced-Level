@@ -158,7 +158,7 @@ bool cmp(int a,int b){
 
 //找第一个绝对值大于等于x的值.
 bool cmp(int a,int b){
-	return abs(a)&<abs(b);
+	return abs(a)&lt;abs(b);
 }
 //x=7时
 4
