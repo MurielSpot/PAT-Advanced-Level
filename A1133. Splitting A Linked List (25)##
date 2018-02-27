@@ -1,0 +1,84 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1133
+
+类型:静态链表,排序.
+
+难度:2
+
+注意事项:
+1. 排序时的cmp函数不太好写.
+*/
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<queue>
+using namespace std;
+
+const int MAXN = 100010;
+const int INF = 1000000000;
+
+struct node {
+	int addr, data, next;
+	int valid;//标记是否属于所给的链表.
+	int seq;//在序列的中出现的顺序.
+	node() {
+		addr = next = -1;
+		valid = 0;
+	}
+	node(int a,int d,int n):addr(a),data(d),next(n){}
+}list[MAXN];
+
+int first;
+int n;//the number of nodes.
+int k;//[0,k] are before (k,...).
+
+vector<node> ans;
+
+void getValid() {
+	int ptr = first;
+	int i=0;//在链表中的先后次序应该在这里确定,而不是在之前的数据输入时.
+	while (ptr != -1) {
+		list[ptr].valid = 1;
+		list[ptr].seq = i++;
+		ptr = list[ptr].next;
+	}
+}
+
+bool cmp(node a, node b) {
+	if (a.valid == b.valid) {
+		if (a.data >= 0&&b.data>=0||a.data<0&&b.data<0) {//同号继续比较.
+			if ((a.data > k&&b.data > k) || (a.data <= k&&b.data <= k)) {//注意0应该和正数一起比较,所以这里不能用a.data*b.data>0,这样0的位置就不对了.
+				return a.seq < b.seq;//按原先顺序先后放置.
+			}else return a.data < b.data;//一个大于k一个小于k,小的在前.
+		}else return a.data < b.data;//异号负数在前.
+	}else return a.valid > b.valid;//把有效的结点排在前面.
+}
+
+int main() {
+	cin >> first >> n >> k;
+	for (int i = 0; i < n; i++) {
+		int addr, data, next;
+		scanf("%d%d%d", &addr, &data, &next);
+		list[addr] = node(addr, data, next);
+	}
+	//get valid nodes.
+	getValid();
+	//按照题目要求排序.
+	sort(list, list + MAXN, cmp);
+	//output
+	for (int i = 0; i < MAXN; i++) {
+		if (list[i].valid) {
+			if (i + 1 == MAXN || list[i + 1].valid == 0) {//下一个值无效或不存在
+				printf("%05d %d -1\n", list[i].addr, list[i].data);
+			}
+			else {
+				printf("%05d %d %05d\n", list[i].addr, list[i].data, list[i+1].addr);
+			}
+		}
+		else break;
+	}
+	return 0;
+}
+
