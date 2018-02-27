@@ -1,0 +1,58 @@
+/*
+
+注意事項：
+1. 不注意切分后的兩部分的乘積是否為0，會出現浮點錯誤，比如10，分成1和0，然後10/(1*0)就出現除0錯誤。
+*/
+
+#include"stdafx.h"
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<queue>
+using namespace std;
+
+#define P 0
+#if P
+int tmpDebug;
+#endif
+
+const int MAXN = 1010;
+const int INF = 1000000000;
+
+int getLen(long long x) {
+	int num = 0;
+	while (x) {
+		num++;
+		x /= 10;
+	}
+	return num;
+}
+
+bool judge(long long x) {
+	int len = getLen(x);
+	long long half = (long long)pow(10, len / 2);
+	long long a = x / half;
+	long long b = x % half;
+	if (a*b) {
+		if (x % (a*b)==0) {
+			return true;
+		}
+	}
+	return false;
+}
+
+int main() {
+	int n;
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		long long x;
+		scanf("%lld", &x);
+		if (judge(x)) {
+			printf("Yes\n");
+		}
+		else printf("No\n");
+	}
+	return 0;
+}
