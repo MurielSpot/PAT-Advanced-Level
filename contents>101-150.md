@@ -144,21 +144,21 @@ int main() {
 //cmp里函数应该写的是小于运算的比较
 //找第一个大于等于x的值.这个cmp函数和不加cmp函数lower_bound的效果时相同的.
 bool cmp(int a,int b){
-	return a\<b;
+	return a&lt;b;
 }
 //x=8时
 6
 
 //找第一个大于x的值.相当于事项了upper_bound的效果.
 bool cmp(int a,int b){
-	return a\<=b;
+	return a&lt;=b;
 }
 //x=6时
 6
 
 //找第一个绝对值大于等于x的值.
 bool cmp(int a,int b){
-	return abs(a)\<abs(b);
+	return abs(a)&<abs(b);
 }
 //x=7时
 4
