@@ -1,0 +1,63 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1134
+
+类型:图(边的遍历).
+
+难度:1(连dfs,bfs都不需要用;英语题稍微有点不容易懂)
+*/
+
+
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+using namespace std;
+
+const int MAXN = 10010;
+const int MAXM = 10010;
+const int INF = 1000000000;
+
+int n;//vertices.
+int m;//edges.
+int k;//queries.
+
+vector<int> g[MAXN];
+bool valid[MAXN];
+
+bool judge() {
+	for (int v = 0; v < n; v++) {//这里需要是n,不能是MAXN!!!!!!!!!
+		if (valid[v])continue;//如果顶点i就是set里的顶点,则不需要判断与它相连的另一个顶点,因为含该结点的边一定存在一个顶点属于set.
+		for (int j = g[v].size() - 1; j >= 0; j--) {
+			int v2 = g[v][j];//注意valid[j]并不代表valid[v2].g[v]也不是v2,g[v][j]才是.
+			if (valid[v2] == false)return false;//如果另一个顶点也不在set里,
+		}
+	}
+	return true;
+}
+
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		int v1, v2;
+		scanf("%d%d", &v1, &v2);
+		g[v1].push_back(v2);
+		g[v2].push_back(v1);
+	}
+	cin >> k;
+	for (int i = 0; i < k; i++) {
+		memset(valid, 0, sizeof(valid));
+		int nv,vi;
+		scanf("%d", &nv);
+		for (int j = 0; j < nv; j++) {
+			scanf("%d", &vi);
+			valid[vi] = true;//valid[vi],不是valid[i].
+		}
+		if (judge()) {
+			printf("Yes\n");
+		}
+		else printf("No\n");
+	}
+	return 0;
+}
