@@ -1,0 +1,130 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1135
+
+類型：樹（先序遍歷結合二叉平衡搜索樹的性質建樹），dfs。
+
+難度：3
+
+注意事項：
+1. 不考慮平衡，按照二叉搜索樹的性質劃分左右子樹即可結合先序遍歷建成所給樹。
+2. 建樹的時候，找先序序列中，第一個值是當前根結點的值，後面是左右子樹的值，找左右子樹里找第一個大於當前結點的值的位置時，不能用lower_bound函數，
+因為關鍵字是正的，但為了表示紅黑，所以需要取絕對值再比較它們與根結點絕對值的大小。
+3. 進行深度搜索，判斷樹是否滿足條件，一開始沒用返回值來求當前結點到葉子結點路徑上black的數量，沒做出來，然後用返回值就很容易求得black數量。
+可以自己思考，能不能不用返回值，求black到當前結點的數量，比如設置計數變量，每次到null就加一以與上次區分，結點里每次都判斷當前到根結點的值是否是舊的，是否滿足條件，
+我現在只是想一想，具體可不可行還沒有試。
+4. 注意題目中For each node, all simple paths from the node to descendant leaves contain the same number of black nodes.
+說的是任何一個結點到它的葉子結點的簡單路徑上的黑色結點的值，不是根結點到葉子結點。
+
+其他：
+1. 平衡二叉樹的建立、插入等等還很不熟，幸好這道題沒考，但自己要多做做avl的題。
+2. 紅黑樹也不了解。該題中是這樣介紹的：
+There is a kind of balanced binary search tree named red-black tree in the data structure. It has the following 5 properties:
+(1) Every node is either red or black.
+(2) The root is black.
+(3) Every leaf (NULL) is black.
+(4) If a node is red, then both its children are black.
+(5) For each node, all simple paths from the node to descendant leaves contain the same number of black nodes.
+*/
+#include<cstdio>
+#include <cstring>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+using namespace std;
+
+const int MAXN = 35;
+const int MAXK = 35;
+const int INF = 1000000000;
+
+struct node {
+	int data;
+	struct node *left;
+	struct node *right;
+	int countBlack1;//第一个到叶子子孙结点的路径上black的值,不包括当前结点.
+	node() {
+		countBlack1 = -1;
+		left = right = NULL;
+	}
+};
+
+int pre[MAXN] = { 0 };
+
+//由于data用负号标记red,所以没法直接用lower_bound,应该自己构造.
+//[left,right),返回大于等于data的第一个值,或者应该插入的位置,即没找到返回right.
+int lowerBound(int left, int right, int data) {
+	data = abs(data);
+	while (left < right) {
+		if (abs(pre[left]) >= data) return left;
+		left++;
+	}
+	return right;
+}
+
+node* buildTree(int left,int right) {//[left,right]为需要建树的先序序列.
+	if (right < left) {
+		return NULL;
+	}
+	node* now = new node;
+	now->data = pre[left];
+	int cut = lowerBound(left+1, right + 1, pre[left]);//返回第一个大于等于pre[left]的值的位置.别忘了减pre,否则返回的不是下标,是下标对应的存储地址.
+	now->left = buildTree(left + 1, cut - 1);
+	now->right = buildTree(cut, right);
+	return now;
+}
+
+bool ans=true;
+int judge(node* root) {//bfs.返回到子孫葉子結點上的black數。
+	//这个数已经不是红黑树,则不需要再进行判断.
+	if (ans == false) return 0;
+	if (root == NULL) return 1;//NULL也是一个black.
+	if (root->data < 0) {
+		if (root->left && root->left->data < 0) {
+			ans = false;
+			return 0;
+		}
+		if (root->right && root->right->data < 0) {
+			ans = false;
+			return 0;
+		}
+	}
+	int num = judge(root->left);//如果当前结点也是black,先不加入计数.
+	if (root->countBlack1 == -1) {
+		root->countBlack1 = num;
+	}else if (root->countBlack1 != num) {
+		ans = false;
+		return 0;
+	}
+	num = judge(root->right);
+	if (root->countBlack1 != num) {
+		ans = false;
+		return 0;
+	}
+	if (root->data > 0) {//加入当前黑色结点计数,返回.
+		return num + 1;
+	}else return num;
+}
+
+int main() {
+	int k;
+	scanf("%d", &k);
+	for (int i = 0; i < k; i++) {
+		int n;
+		scanf("%d", &n);
+		for (int j = 0; j < n; j++) {
+			scanf("%d", &pre[j]);
+		}
+		ans = true;//每次用都要先初始化.
+		node *root=buildTree(0,n-1);
+		if (root->data < 0) {//单独对根结点进行判断,如果不是black直接输出No.
+			printf("No\n");
+		}else {
+			judge(root);
+			if (ans) {
+				printf("Yes\n");
+			}
+			else printf("No\n");
+		}
+	}
+	return 0;
+}
