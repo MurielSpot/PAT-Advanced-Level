@@ -10,7 +10,6 @@ https://www.patest.cn/contests/pat-a-practise/1101
 2. 主元个数为0时，第二行虽然没有输出主元，但必须输出一个换行！
 
 ## A1102. Invert a Binary Tree (25)##
-
 https://www.patest.cn/contests/pat-a-practise/1102
 
 类型：二叉树（层序、中序遍历），bfs
@@ -73,6 +72,16 @@ https://www.patest.cn/contests/pat-a-practise/1107
 
 注意事項：
 1. 該題中將並查集的根結點的值設置為它本身的下標，比設置為0更方便、更容易處理。
+
+## A1124. Raffle for Weibo Followers (20)##
+https://www.patest.cn/contests/pat-a-practise/1124
+
+類型:映射.
+
+注意事項:
+1. 序號範圍是[1,m],所以處理循環退出邊界時不要出錯!!
+2. 代碼不簡潔,輸入數據是就可以處理,不用把人名存到數組裏,另外不需要把結果再存到數組裏(因爲一開始看錯題,以爲第一行要輸出序號,之後多行輸出名字,所以用了ans數組,後來就懶得刪了).
+末尾有很簡潔的別人寫的代碼.
 
 ## A1125. Chain the Ropes (25)##
 https://www.patest.cn/contests/pat-a-practise/1125
