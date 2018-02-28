@@ -1,0 +1,71 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1116
+
+類型:素數,映射.
+
+難度:2.
+
+注意事項:
+1. 審題要仔細,比如某人有效的詢問過一次,再次詢問給出回答應該是checked.
+2. id輸出不足4位要補0.
+*/
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include<cstring> 
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 10010;
+const int INF = 1000000000;
+
+int n;//contestants.
+map<int, int> id2award;
+
+bool prime[MAXN];
+void initPrime() {
+	memset(prime, 1, sizeof(prime));
+	prime[0] = prime[1] = false;
+	for (int i = 2; i < MAXN; i++) {
+		if (prime[i] == true) {
+			for (int j = 2 * i; j < MAXN; j += i) {
+				prime[j] = false;
+			}
+		}
+	}
+#if P
+	for (int i = 0; i < MAXN; i++) {
+		if(prime[i])printf("%d ",i);
+	}
+#endif
+}
+
+
+int main() {
+	initPrime();
+
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		int id;
+		scanf("%d", &id);
+		if (i == 1)id2award[id] = 1;
+		else if (prime[i])id2award[id] = 2;
+		else id2award[id] = 3;
+	}
+	int k;
+	cin >> k;
+	char award[5][30] = { "Are you kidding?","Mystery Award","Minion","Chocolate" ,"Checked"}; 
+	for (int i = 0; i < k; i++) {
+		int id;
+		scanf("%d", &id);
+		printf("%04d: %s\n", id, award[id2award[id]]);//高位補0.
+		if (id2award[id])id2award[id] = 4;//map中值不爲零,才設置已訪問.
+	}
+	return 0;
+}
