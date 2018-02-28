@@ -1,0 +1,84 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1117
+
+類型:排序.
+
+難度:5
+
+注意事項:
+1. 題目晦澀難懂,大意是n個數裏,有e個比e大(相等不行)的值,找出滿足這個條件的e的最大值.
+例子:
+6 6 6 6 6 6 6
+有7個比4大的值,所以如果說有4個比4大的值是可以的;
+有7個比5大的值,所以如果說有5個比5大的值是可以的;
+有0個比6大的值,有0個比7大的值...
+所以最大的e為5.
+
+我之前的理解是正好有e個比e大的值,這道題中,比5大的值不正好是5個,比6大的值為0個,所以是無解.這種思路是錯的.
+*/
+
+#include"stdafx.h"
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 100010;
+const int INF = 1000000000;
+
+int n;//days.
+int d[MAXN];
+
+bool cmp(int a, int b) {
+	return a > b;
+}
+
+bool findE(int index, int &e) {//在index和index+1之間找到等於index的數即是e。
+	if (index == n) {
+		for (int i = d[index] - 1; i > 0; i--) {
+			if (i == index) {
+				e = i;
+				return true;
+			}
+			else if (i < index)break;
+		}
+	}
+	else {
+		for (int i = d[index] - 1; i >= d[index + 1]; i--) {
+			if (i == index) {
+				e = i;
+				return true;
+			}
+			else if (i < index)break;
+		}
+	}
+	return false;
+
+}
+
+int main() {
+	cin >> n;
+	int ans = 0;
+	for (int i = 1; i <= n; i++) {
+		int dist;
+		scanf("%d", &d[i]);
+	}
+	sort(d + 1, d + n + 1, cmp);
+	int maxE = 0;
+	for (int i = 1; i <= n; i++) {
+		//if (findE(i,maxE)) {break;}
+		if (d[i]>i) {//i天跑步超過d[i]公里.
+			maxE = i;
+		}
+		else break;
+	}
+	printf("%d", maxE);
+	return 0;
+}
