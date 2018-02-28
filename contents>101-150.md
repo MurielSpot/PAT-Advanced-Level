@@ -73,6 +73,21 @@ https://www.patest.cn/contests/pat-a-practise/1107
 注意事項：
 1. 該題中將並查集的根結點的值設置為它本身的下標，比設置為0更方便、更容易處理。
 
+## A1117. Eddington Number(25)#####
+https://www.patest.cn/contests/pat-a-practise/1117
+
+類型:排序.
+
+注意事項:
+1. 題目晦澀難懂,大意是n個數裏,有e個比e大(相等不行)的值,找出滿足這個條件的e的最大值.<br/>
+例子:<br/>
+6 6 6 6 6 6 6<br/>
+有7個比4大的值,所以如果說有4個比4大的值是可以的;<br/>
+有7個比5大的值,所以如果說有5個比5大的值是可以的;<br/>
+有0個比6大的值,有0個比7大的值...<br/>
+所以最大的e為5.<br/><br/>
+我之前的理解是正好有e個比e大的值,這道題中,比5大的值不正好是5個,比6大的值為0個,所以是無解.這種思路是錯的.<br/>
+
 ## A1124. Raffle for Weibo Followers (20)##
 https://www.patest.cn/contests/pat-a-practise/1124
 
