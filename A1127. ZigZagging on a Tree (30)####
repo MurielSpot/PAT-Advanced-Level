@@ -1,0 +1,135 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1127
+
+類型:中序後序建樹,層序遍歷按s路綫遍歷.
+
+難度:4(層序s路綫處理起來很麻煩).
+
+注意事項:
+1. 寫循環時,要判斷邊界,變量別忘了加減.
+*/
+
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+#include<queue>
+#include<stack>
+using namespace std;
+
+#define P 0
+#if P
+int tmpDebug;
+#endif
+
+const int MAXN = 32;
+const int INF = 1000000000;
+
+int n;
+int in[MAXN] = { 0 };
+int post[MAXN] = { 0 };
+
+struct node {
+	int data;
+	struct node* left;
+	struct node* right;
+	int level;
+	node() {
+		left = right = NULL;
+		level = 0;
+	}
+};
+
+int findPosInOrder(int left,int right,int data) {
+	while (left <= right) {
+		if (in[left] == data) {
+			return left;
+		}
+		left++;
+	}
+	return left;
+}
+
+node* buildTree(int leftP,int rightP,int leftI,int rightI) {//post的[left,right].
+	while (leftP > rightP||leftI>rightI) {
+		return NULL;
+	}
+	int data = post[rightP];
+	int dataPosInOrder = findPosInOrder(leftI,rightI,data);
+	node* now = new node;
+	now->data = data;
+	int lenLeft = dataPosInOrder - leftI;
+	now->left = buildTree(leftP, lenLeft + leftP - 1,leftI,dataPosInOrder-1);
+	now->right = buildTree(lenLeft + leftP, rightP - 1,dataPosInOrder+1,rightI);
+	return now;//一開始忘了return.
+}
+
+
+bool blank = false;
+node* q[MAXN]; int front = 0, finish = 0;
+void outputLastLevel(int ptr,int level) {
+	while (ptr>=0&&q[ptr]->level == level) {
+		if (blank)printf(" "); else blank = true;
+		printf("%d", q[ptr]->data);
+		ptr--;//別忘寫.
+	}
+}
+void bfs(node* root) {
+	root->level = 0;//第一層為0,和偶數層一起處理.
+	int level = 1;
+	q[finish++] = root;
+	while (front<finish) {
+		node* now = q[front];
+#if P
+		printf("now:\n  data=%d,leftdata=%d,rightdata=%d\n      level=%d\n", now->data, now->left ? now->left->data : -1, now->right ? now->right->data : -1,now->level);
+#endif
+		if (now->level != level) {//處理完,或開始處理新的一層.且之前那層是偶數層,就需要把上一層元素一次性倒著輸出.
+			if (level % 2 == 0) {
+				outputLastLevel(front - 1, level);
+			}
+			level = now->level;
+		}
+		front++;
+		if(level%2){//如果當前層為奇數層,可以直接輸出.
+			if (blank)printf(" "); else blank = true;
+			printf("%d", now->data);
+		}
+		if (now->left) {
+			now->left->level = now->level + 1;
+			q[finish++] = now->left;
+		}
+		if (now->right) {
+			now->right->level = now->level + 1;
+			q[finish++] = now->right;
+		}
+	}
+	if (level % 2==0) {//如果最後一層是偶數層,還需要單獨最後處理輸出.
+		outputLastLevel(finish - 1, level);
+	}
+}
+
+void output(node* root) {
+	if (root) {
+		output(root->left);
+		printf("%d ", root->data);
+		output(root->right);
+	}
+}
+
+int main() {
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &in[i]);
+	}
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &post[i]);
+	}
+	node* root = buildTree(0, n - 1, 0, n - 1);
+	//output(root);
+	bfs(root);
+	return 0;
+}
