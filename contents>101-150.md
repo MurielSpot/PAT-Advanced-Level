@@ -73,6 +73,15 @@ https://www.patest.cn/contests/pat-a-practise/1107
 注意事項：
 1. 該題中將並查集的根結點的值設置為它本身的下標，比設置為0更方便、更容易處理。
 
+## A1116. Come on! Let's C (20)##
+https://www.patest.cn/contests/pat-a-practise/1116
+
+類型:素數,映射.
+
+注意事項:
+1. 審題要仔細,比如某人有效的詢問過一次,再次詢問給出回答應該是checked.
+2. id輸出不足4位要補0.
+
 ## A1117. Eddington Number(25)#####
 https://www.patest.cn/contests/pat-a-practise/1117
 
@@ -87,6 +96,24 @@ https://www.patest.cn/contests/pat-a-practise/1117
 有0個比6大的值,有0個比7大的值...<br/>
 所以最大的e為5.<br/><br/>
 我之前的理解是正好有e個比e大的值,這道題中,比5大的值不正好是5個,比6大的值為0個,所以是無解.這種思路是錯的.<br/>
+
+## A1118. Birds in Forest (25)###
+https://www.patest.cn/contests/pat-a-practise/1118
+
+類型:並查集
+
+注意事項:
+1. 並查集使用不熟練.
+
+## A1119. Pre- and Post-order Traversals (30)###
+https://www.patest.cn/contests/pat-a-practise/1119
+
+類型:前序後序件數(不唯一),中序遍歷.
+
+注意事項:
+1. 樹不唯一的情況,pre數組根節點後面的那個節點肯定是左子樹或右子樹的根,在post裏面找這個節點的位置,如果在post根節點前面那個位置,則該節點是左子樹還是右子樹的根節點無法判斷.
+唯一的情況:上面所説的節點如果不在post根節點前面那個位置,而是和根節點之間還隔有節點,説明中間多出來的節點肯定是右子樹的,所以上面所説的子樹的根節點肯定是屬於左子樹,此時可以唯一判斷一棵樹.
+
 
 ## A1124. Raffle for Weibo Followers (20)##
 https://www.patest.cn/contests/pat-a-practise/1124
