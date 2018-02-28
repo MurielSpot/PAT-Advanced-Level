@@ -1,0 +1,89 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1118
+
+類型:並查集
+
+難度:3
+
+注意事項:
+1. 並查集使用不熟練.
+*/
+
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 10010;
+const int INF = 1000000000;
+
+int n;//pictures.
+
+int father[MAXN];
+
+void init() {
+	for (int i = 0; i < MAXN; i++) {//最開始每個鳥都是一個獨立的集合.
+		father[i] = i;
+	}
+}
+
+int findFather(int index) {
+	//尋找的同時把路徑上所有結點的父親都設爲根結點.
+	if (index == father[index])return index;
+	else father[index] = findFather(father[index]);//father[index] = findFather(index)這個語句是錯的!會無限遞歸下去. 
+	return father[index];
+}
+
+void unite(int a,int b) {
+	int af = findFather(a);
+	int bf = findFather(b);
+	if (af != bf) {
+		father[bf] = af;
+	}
+}
+
+
+int main() {
+	init();
+	cin >> n;
+	int maxBird = -1;//找序號最大的鳥.
+	for (int i = 1; i <= n; i++) {
+		int k;
+		scanf("%d", &k);
+		int first;//圖片中的第一只鳥.
+		if (k)scanf("%d", &first);
+		if (first > maxBird)maxBird = first;
+		for (int j = 1; j < k; j++) {
+			int bird;
+			scanf("%d", &bird);
+			if (bird > maxBird)maxBird = bird;
+			unite(first, bird);
+		}
+	}
+	//數有多少顆樹.
+	map<int, bool> appear;//看哪個根結點出現過.
+	int maxNum = 0;
+	for (int i = 1; i <= maxBird; i++) {
+		appear[findFather(i)]++;
+	}
+	printf("%d %d\n", appear.size(), maxBird);
+	//處理查詢.
+	int q;
+	scanf("%d", &q);
+	for (int i = 0; i < q; i++) {
+		int b1, b2;
+		scanf("%d%d", &b1, &b2);
+		if (findFather(b1) == findFather(b2)) {
+			printf("Yes\n");
+		}
+		else printf("No\n");
+	}
+	return 0;
+}
