@@ -1,0 +1,47 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1125
+
+類型:哈夫曼樹.
+
+難度:2
+
+注意事項:
+1. 題意不清:結果取不大於最大長度的最大整數,并不是最後一次取,而是每次得到新的繩子都要取整!!!!!!!!!所以第一次做用double型最後%.0lf輸出,最后一個測試點過不去!
+另外,由於每次結果都要取整,先把繩子截成兩段再接在一起,和把繩子接在一起再截成兩段,得到的結果是不一樣的,應該取后一種!!!!!!!
+
+思路:
+哈夫曼樹的思想.(具體證明還沒想好)
+*/
+
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+using namespace std;
+
+const int MAXN = 10010;
+const int INF = 1000000000;
+
+typedef long long ll;
+ll rope[MAXN] = { 0 };
+
+int main() {
+	int n;
+	cin >> n;
+	for (int i = 0; i <n; i++) {
+		scanf("%ld", &rope[i]);
+	}
+	sort(rope, rope + n);
+
+	ll ans = rope[0];//先把ans初始化為最短的繩子.
+	for (int i = 1; i < n; i++) {//再操作n-1次就能連成要給繩子.
+		//ans = ans / 2 + rope[i] / 2;
+		ans = (ans + rope[i]) / 2;
+	}
+	printf("%ld", ans);//輸出不大於最大長度的最大整數.
+	return 0;
+}
