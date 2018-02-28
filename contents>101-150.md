@@ -74,6 +74,15 @@ https://www.patest.cn/contests/pat-a-practise/1107
 注意事項：
 1. 該題中將並查集的根結點的值設置為它本身的下標，比設置為0更方便、更容易處理。
 
+
+## A1127. ZigZagging on a Tree (30)####
+https://www.patest.cn/contests/pat-a-practise/1127
+
+類型:中序後序建樹,層序遍歷按s路綫遍歷.
+
+注意事項:
+1. 寫循環時,要判斷邊界,變量別忘了加減.
+
 ## A1132. Cut Integer (20)#
 https://www.patest.cn/contests/pat-a-practise/1132
 
