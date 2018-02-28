@@ -1,0 +1,104 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1124
+
+類型:映射.
+
+難度:2(思路不簡潔)
+
+注意事項:
+1. 序號範圍是[1,m],所以處理循環退出邊界時不要出錯!!
+2. 代碼不簡潔,輸入數據是就可以處理,不用把人名存到數組裏,另外不需要把結果再存到數組裏(因爲一開始看錯題,以爲第一行要輸出序號,之後多行輸出名字,所以用了ans數組,後來就懶得刪了).
+末尾有很簡潔的別人寫的代碼.
+*/
+
+#include<cstdio>
+#include<iostream>
+#include <string>//開始忘了加這個頭文件,一直報錯,找了半天錯誤.
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+#if P
+int tmpDebug;
+#endif
+
+const int MAXM = 1010;
+const int INF = 1000000000;
+
+int m;//forwards.
+int n;//skip number of winners.
+int s;//first winner.[1,...].
+
+map<string, bool> win;//某個人已經贏過,則置true.
+
+struct info {
+	string name;
+}record[MAXM];
+
+vector<int> ans;
+
+int main() {
+	cin >> m >> n >> s;
+	for (int i = 1; i <= m; i++) {
+		cin >> record[i].name;
+	}
+	int tmp = s;
+	while (tmp <= m) {//tmp<=m,而不是tmp<m,因爲序號範圍為[1,m].
+		string name = record[tmp].name;//string 放在while外面,反復給它賦值,是不是會錯?
+		if (win.find(name) == win.end()) {
+			win[name] = true;
+			ans.push_back(tmp);
+			tmp += n;
+		}
+		else {
+			while (win.find(name) != win.end()) {//當前名字都被訪問過,就一直找下一個.
+				if (tmp < m) {//不應該用tmp+1<m,因爲序號範圍為[1,m].
+					tmp++;
+					name = record[tmp].name;
+				}
+				else break;
+			}
+			if (tmp <= m&&win.find(name) == win.end()) {//找到了下一個獲獎者.//tmp<=m,而不是tmp<m,因爲序號範圍為[1,m].
+				win[name] = true;
+				ans.push_back(tmp);
+				tmp += n;
+			}
+			else break;
+		}
+	}
+	if (ans.size()) {
+		for (int i = 0; i < ans.size(); i++) {
+			cout << record[ans[i]].name << endl;
+		}
+	}
+	else printf("Keep going...");
+	return 0;
+}
+
+//https://www.liuchuo.net/archives/3738
+#include <iostream>
+#include <map>
+using namespace std;
+int main() {
+    int m, n, s;
+    scanf("%d%d%d", &m, &n, &s);
+    string str;
+    map<string, int> mapp;
+    bool flag = false;
+    for (int i = 1; i <= m; i++) {
+        cin >> str;
+        if (mapp[str] == 1) s = s + 1;
+        if (i == s && mapp[str] == 0) {
+            mapp[str] = 1;
+            cout << str << endl;
+            flag = true;
+            s = s + n;
+        }
+    }
+    if (flag == false) cout << "Keep going...";
+    return 0;
+}
