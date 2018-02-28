@@ -74,6 +74,17 @@ https://www.patest.cn/contests/pat-a-practise/1107
 注意事項：
 1. 該題中將並查集的根結點的值設置為它本身的下標，比設置為0更方便、更容易處理。
 
+## A1125. Chain the Ropes (25)##
+https://www.patest.cn/contests/pat-a-practise/1125
+
+類型:哈夫曼樹.
+
+注意事項:
+1. 題意不清:結果取不大於最大長度的最大整數,并不是最後一次取,而是每次得到新的繩子都要取整!!!!!!!!!所以第一次做用double型最後%.0lf輸出,最后一個測試點過不去!
+另外,由於每次結果都要取整,先把繩子截成兩段再接在一起,和把繩子接在一起再截成兩段,得到的結果是不一樣的,應該取后一種!!!!!!!
+
+思路:
+哈夫曼樹的思想.(具體證明還沒想好)
 
 ## A1127. ZigZagging on a Tree (30)####
 https://www.patest.cn/contests/pat-a-practise/1127
