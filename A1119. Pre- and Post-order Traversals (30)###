@@ -1,0 +1,91 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1119
+
+類型:前序後序件數(不唯一),中序遍歷.
+
+難度:3(難度主要在怎麽判斷樹尾部唯一)
+
+注意事項:
+1. 樹不唯一的情況,pre數組根節點後面的那個節點肯定是左子樹或右子樹的根,在post裏面找這個節點的位置,如果在post根節點前面那個位置,則該節點是左子樹還是右子樹的根節點無法判斷.
+唯一的情況:上面所説的節點如果不在post根節點前面那個位置,而是和根節點之間還隔有節點,説明中間多出來的節點肯定是右子樹的,所以上面所説的子樹的根節點肯定是屬於左子樹,此時可以唯一判斷一棵樹.
+*/
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 32;
+const int INF = 1000000000;
+
+int n;//NODES.
+int pre[MAXN];
+int post[MAXN];
+
+struct node {
+	int data;
+	struct node* left;
+	struct node* right;
+	node() {
+		left = right = NULL;
+	}
+};
+
+int getPostPos(int data, int left, int right) {//[left,right].
+	while (left <= right) {
+		if (post[left] == data) {
+			return left;
+		}
+		left++;
+	}
+	return left;
+}
+
+bool distinct = true;
+node* buildTree(int preL,int preR,int postL,int postR) {//[left,right].
+	if (preL > preR || postL > postR)return NULL;
+	node* now = new node;
+	now->data = pre[preL];
+	if (preL == preR && postL == postR)return now;//當前區間衹有一個值,可以直接返回.
+	//當前區間不止一個值,則嘗試劃分左右子樹.
+	if (distinct&&pre[preL + 1] == post[postR - 1])distinct = false;//儅pre根結點後面的第一個值和post根結點前面一個值一樣時,這個值則可以任意放在左子樹或右子樹,則此時樹不唯一.
+	int childRoot = getPostPos(pre[preL+1],postL,postR-1);//獲得該值在post裏的位置.
+	int leftLen = childRoot - postL+1;
+	//建左右子樹.
+	now->left = buildTree(preL + 1, preL + leftLen, postL, postL + leftLen - 1);
+	now->right = buildTree(preL + leftLen + 1, preR, postL + leftLen, postR - 1);
+	return now;
+}
+
+bool blank = false;
+void inOrderTravesal(node* root) {
+	if (root) {
+		inOrderTravesal(root->left);
+		if (blank)printf(" "); else blank = true;
+		printf("%d", root->data);
+		inOrderTravesal(root->right);
+	}
+}
+int main() {
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		scanf("%d", &pre[i]);
+	}
+	for (int i = 1; i <= n; i++) {
+		scanf("%d", &post[i]);
+	}
+	node* root = buildTree(1,n,1,n);
+	if (distinct) {
+		printf("Yes\n");
+	}
+	else printf("No\n");
+	inOrderTravesal(root);
+	printf("\n");//要加換行.
+	return 0;
+}
