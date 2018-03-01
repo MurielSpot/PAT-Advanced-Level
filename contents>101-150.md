@@ -95,6 +95,15 @@ https://www.patest.cn/contests/pat-a-practise/1108
 1001
 1000.011</pre>
 
+## A1109. Group Photo (25)###
+https://www.patest.cn/contests/pat-a-practise/1109
+
+類型:模擬(集體照站位),排序.
+
+注意事項:
+1. 題不好讀.
+2. 劃分一行一行人數在數組中的位置,即確定左右邊界有點麻煩.
+
 ## A1116. Come on! Let's C (20)##
 https://www.patest.cn/contests/pat-a-practise/1116
 
