@@ -1,0 +1,101 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1108
+
+類型:判斷數字格式(判斷是否是一個數,這個數小數小於等於兩位;類似的問題還有,判斷一個表示法是否符合科學計數法,這類題做得總是不太好!!!)
+
+難度:4.
+
+注意事項:
+1. 字符衹能是0-9,以及點和負號.
+2. 負號衹能在第一位,但判斷符號是否在第一位,不能根據當前數字和是否是0,或者當前是否出現過數字,來判斷.可以用一個bool變量來標記第一個值.
+3. 小數點可以在最後一位,逗號後面最多衹能有兩位小數.
+4. 數的範圍需要在[-1000,1000]内.
+
+5. -.9以及這樣的情況我并沒有把它看作無效,所以沒有考慮這種情況,測試點也全部通過了.另外網上說123.這樣的數據也算對的.
+
+測試數據:
+可以試試看下面這些數據能不能得到正確結果.
+無效的數據:
+--9
+0-0
+9..9
+1001
+1000.011
+*/
+
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include<cstring> 
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+using namespace std;
+
+const int MAXN = 100010;
+const double INF = 1000000000;
+
+char str[20];
+double judge() {//這部分比較麻煩.
+	scanf("%s", str);
+	int len = strlen(str);
+
+	double sum=0;
+	int cntDot=0;//統計小數點後面出現的數字個數.
+	bool valid = true, dot = false, negative = false;
+	for (int i = 0; i < len; i++) {
+		if (valid == false)break;
+		if (isdigit(str[i])) {
+			if (dot) {//小數點已經出現過.
+				cntDot++;
+				if (cntDot > 2) {
+					valid = false; break;
+				}
+				sum += (str[i] - '0')*pow(0.1, cntDot);
+			}//小數點未出現過.
+			else {
+				sum = sum * 10 + str[i] - '0';
+			}
+		}
+		else if (str[i] == '.'&&dot == false) {//小數點出現了,且之前沒有出現過.
+			dot = true;
+		}
+		else if (str[i] == '-'&&i == 0) {//出現負號,它必須在第一位.
+			negative = true;
+		}
+		else valid = false;
+	}
+	if (sum > 1000 || sum < -1000 || valid == false) {
+		printf("ERROR: %s is not a legal number\n", str);
+		return INF;
+	}
+	else {
+		return negative?-sum:sum;
+	}
+}
+
+int main() {
+	int n;
+	cin >> n; getchar();
+	vector<double> ans;
+	double sum = 0;
+	for (int i = 0; i < n; i++) {
+		double num = judge();
+		if (num != INF) {
+			ans.push_back(num);
+			sum += num;
+		}
+	}
+	if (ans.size() == 0) {
+		printf("The average of 0 numbers is Undefined\n");
+	}
+	else if (ans.size() == 1) {
+		printf("The average of 1 number is %.2lf\n", ans[0]);
+	}
+	else {
+		printf("The average of %d numbers is %.2lf\n", ans.size(), sum / ans.size());
+	}
+	return 0;
+}
