@@ -1,0 +1,91 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1109
+
+類型:模擬(集體照站位),排序.
+
+難度:3
+
+注意事項:
+1. 題不好讀.
+2. 劃分一行一行人數在數組中的位置,即確定左右邊界有點麻煩.
+*/
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include<cstring> 
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+#include<stack>
+#include<queue>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 10010;
+const int MAXK = 12;
+const double INF = 1000000000;
+
+int n;//people.
+int k;//row.
+
+struct info {
+	char name[10];
+	int height;
+}person[MAXN];
+
+//vector<info> row[MAXK];
+
+bool cmp(info a, info b) {
+	if (a.height == b.height) {
+		return strcmp(a.name, b.name) < 0;
+	}
+	else return a.height > b.height;
+}
+
+void output(int left,int right) {//[left,right]從高到低.
+	stack<int> l;
+	queue<int> r;
+	if(left<=right)l.push(left++);
+	while (left < right) {//儅left和right區間内還有至少兩個值時.
+		l.push(left++);
+		r.push(left++);
+	}
+	if (left == right) {
+		l.push(left++);
+	}
+	if (!l.empty()) {
+		printf("%s", person[l.top()].name);
+		l.pop();
+	}
+	while (!l.empty()) {
+		printf(" %s", person[l.top()].name);
+		l.pop();
+	}
+	while (!r.empty()) {
+		printf(" %s", person[r.front()].name);
+		r.pop();
+	}
+	printf("\n");
+}
+
+int main() {
+	cin >> n >> k;
+	for (int i = 0; i < n; i++) {
+		scanf("%s%d", person[i].name, &person[i].height);
+	}
+	sort(person, person + n, cmp);
+	int left = 0;//最後一行輸出的區間.
+	int right = n - n / k * (k - 1) - 1;
+	//先輸出最後一行.
+	output(left, right);
+	//再輸出前k-1行.
+	for (int i = 0; i < k-1; i++) {
+		left = right + 1;
+		right = right + n / k;
+		output(left, right);
+	}
+	return 0;
+}
