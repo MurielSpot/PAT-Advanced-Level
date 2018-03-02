@@ -1,0 +1,103 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1110
+
+類型:bfs.(目前還是別用dfs做了,出錯了)
+
+難度:3
+
+注意事項:
+1. 字符別忘了轉爲數字.注意'-'的情況.
+*/
+/*
+下面代碼有兩個測試點答案錯誤,一個段錯誤.
+
+思路是把結點錄入到[0,n-1]的數組裏,記錄它的子節點,同時記錄子節點的父節點為它;
+由題意可知結果是一棵樹,然後找到父節點為-1的結點則為根節點;
+對根節點進行dfs遍歷,記錄它們的節點編號,然後對它們按新的節點編號進行排序,如果排序的序號是從1到n的,説明是完全二叉樹,如果中間有哪個編號缺失説明不是完全二叉樹.
+
+但不知道錯哪了...
+*/
+#include<cstdio>
+#include<iostream>
+#include <string>
+#include <iostream>
+#include <algorithm>
+#include<cmath> 
+#include<vector>
+#include<map>
+#include<stack>
+#include<queue>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 22;
+const int MAXK = 12;
+const double INF = 1000000000;
+
+int n;//nodes.[0,n-1].
+struct node {
+	int father;
+	int left, right;
+	int iO,iN;//節點原來的序號,和新的在二叉樹中的序號.
+	node() {
+		father = right = left = iO = iN = -1;
+	}
+}tree[MAXN];
+
+void dfs(int now, int index) {
+	if (now != -1) {
+		tree[now].iN = index;
+		dfs(tree[now].left, index * 2);
+		dfs(tree[now].right, index * 2 + 1);
+	}
+}
+
+bool cmp(node a, node b) {
+	return a.iN < b.iN;
+}
+
+int main() {
+	cin >> n; getchar();
+	for (int i = 0; i < n; i++) {
+		char left, right;
+		scanf("%c %c", &left, &right); getchar();
+		tree[i].iO = i;
+		if (left != '-') {
+			left = left - '0';
+			tree[i].left = left;
+			tree[left].father = i;
+		}
+		if (right != '-') {
+			right = right - '0';
+			tree[i].right = right;
+			tree[right].father = i;
+		}
+	}
+	//找根結點.
+	int root = -1;
+	for (int i = 0; i < n; i++) {
+		if (tree[i].father == -1) {
+			root = i;
+			break;
+		}
+	}
+	//dfs,給結點編序號.
+	dfs(root, 1);
+	//按新序號排序,看是否符合遞增順序.
+	sort(tree, tree + n, cmp);
+	bool isCBT = true;
+	for (int i = 0; i < n; i++) {//新序號依次和i+1相等即可.
+		if (tree[i].iN != i + 1) {
+			isCBT = false;
+			break;
+		}
+	}
+	if (isCBT) {
+		printf("YES %d", tree[n - 1].iO);
+	}
+	else {
+		printf("NO %d", root);
+	}
+	return 0;
+}
