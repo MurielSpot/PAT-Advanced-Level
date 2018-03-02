@@ -1,0 +1,233 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1111
+
+類型:最短路徑,dfs.
+
+難度:4
+
+注意事項:
+1. 數組名命名爲time會編譯錯誤,而且編譯錯誤時,點擊編譯錯誤幾個字,會給出具體錯誤,所以不用着急不知道錯了哪.
+time在其它地方,不是我的代碼裏被使用了,所以不能用作數組名了.
+編譯錯誤部分信息:
+a.cpp:54:14: error: 'int time [510]' redeclared as different kind of symbol
+ int time[MAXN];
+/usr/include/time.h:192:15: note: previous declaration 'time_t time(time_t*)'
+ extern time_t time (time_t *__timer) __THROW;
+ 
+ 2. 題目沒理解清楚,一開始是fastest儅成了farthest,不知道怎么做直接放棄了這道題.
+ 然後又把one-way的意思當成是"有路徑",實際one-way是單向的意思.所以oneway為1,表示是單向的,否則是雙向的!!!!!!!!!!!!
+ one-way is 1 if the street is one-way from V1 to V2, or 0 if not.
+ 
+ 3. 輸出邊的時候用的是m變量,即邊的個數,不是n,n是頂點個數.
+ 
+ 4. 找距離已訪問的節點的集合最近的結點時,不要忘了判斷結點是否是未訪問的!!!!!!!!1
+*/
+
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 510;
+const int MAXM = 12;
+const int INF = 1000000000;
+
+int n;//streets intersections.[0,n-1].
+int m;//streets.
+int s, d;
+
+struct path {
+	int oneway;
+	int length;
+	int time;
+	path() {
+		oneway = 0;
+	}
+	path(int o, int l, int t) {
+		oneway = o;
+		length = l;
+		time = t;
+	}
+}g[MAXN][MAXN];
+
+//分別記錄最短和最快路徑上結點的前驅.
+vector<int> preLen[MAXN];
+vector<int> preTime[MAXN];
+
+void output(vector<int> &a) {
+	for (int i = a.size() - 1; i >= 0; i--) {
+		printf("%d", a[i]);
+		if (i)printf(" -> ");
+	}
+	printf("\n");
+}
+
+int len[MAXN];
+int timeArr[MAXN];
+bool visLen[MAXN];
+bool visTime[MAXN];
+void dijkstra(int u) {
+	fill(len, len + MAXN, INF);
+	fill(timeArr, timeArr + MAXN, INF);
+	memset(visLen, 0, sizeof(visLen));
+	memset(visTime, 0, sizeof(visTime));
+
+	timeArr[u] = len[u] = 0;
+	for (int i = 0; i < n; i++) {//循環n次.
+		int minLen = INF, minIndexLen = -1;
+		int minTime = INF, minIndexTime = -1;
+		for (int i = 0; i < n; i++) {
+			if (len[i] < minLen && visLen[i] == false) {//visLen==false別忘了加!!!!!!!
+				minLen = len[i];
+				minIndexLen = i;
+			}
+			if (timeArr[i] < minTime&& visTime[i] == false) {
+				minTime = timeArr[i];
+				minIndexTime = i;
+			}
+		}
+		if (minIndexLen == -1 && minIndexTime == -1)break;
+		if (minIndexLen != -1) {
+			visLen[minIndexLen] = true;
+			for (int i = 0; i < n; i++) {
+#if 0
+				printf("len: now=%d,next=%d,now->next=(%d,%d,%d)\n", minIndexLen, i, g[minIndexLen][i].oneway, g[minIndexLen][i].length, g[minIndexLen][i].time);
+#endif
+				if (g[minIndexLen][i].oneway&&visLen[i] == false) {
+#if P
+					printf("len: now=%d,next=%d,now->next=(%d,%d,%d)\n", minIndexLen, i, g[minIndexLen][i].oneway, g[minIndexLen][i].length, g[minIndexLen][i].time);
+					printf("       nextlen=%d,newnextlen=%d=%d+%d\n", len[i], minLen + g[minIndexLen][i].length, minLen, g[minIndexLen][i].length);
+#endif
+					if (len[i] > minLen + g[minIndexLen][i].length) {
+						len[i] = minLen + g[minIndexLen][i].length;
+						preLen[i].clear();
+						preLen[i].push_back(minIndexLen);
+					}
+					else if (len[i] == minLen + g[minIndexLen][i].length) {
+						preLen[i].push_back(minIndexLen);
+					}
+				}
+			}
+		}
+#if P
+		printf("\n");
+#endif
+		if (minIndexTime != -1) {
+			visTime[minIndexTime] = true;
+			for (int i = 0; i < n; i++) {
+#if 0
+				printf("time: now=%d,next=%d,now->next=(%d,%d,%d)\n", minIndexLen, i, g[minIndexLen][i].oneway, g[minIndexLen][i].length, g[minIndexLen][i].time);
+#endif
+				if (g[minIndexTime][i].oneway&&visTime[i] == false) {
+#if P
+					printf("time: now=%d,next=%d,now->next=(%d,%d,%d)\n", minIndexLen, i, g[minIndexLen][i].oneway, g[minIndexLen][i].length, g[minIndexLen][i].time);
+					printf("       nexttime=%d,newnexttime=%d=%d+%d\n", timeArr[i], minTime + g[minIndexTime][i].time, minTime, g[minIndexTime][i].time);
+#endif
+					if (timeArr[i] > minTime + g[minIndexTime][i].time) {//注意是找min到i的路,所以g中min要在前.否則答案出錯.
+						timeArr[i] = minTime + g[minIndexTime][i].time;
+						preTime[i].clear();
+						preTime[i].push_back(minIndexTime);
+					}
+					else if (timeArr[i] == minTime + g[minIndexTime][i].time) {
+						preTime[i].push_back(minIndexTime);
+					}
+				}
+			}
+		}
+	}
+}
+
+vector<int> ansLen, ansTime, tmp;
+int shortest = INF;
+void dfsLen(int u, int time) {//在最短的路徑中選擇最快的.
+	tmp.push_back(u);
+#if P
+	printf("\n");
+	output(tmp);
+#endif
+	if (u == s) {
+		if (time < shortest) {
+			shortest = time;
+			ansLen = tmp;
+		}
+		tmp.pop_back();
+		return;
+	}
+	for (int i = preLen[u].size() - 1; i >= 0; i--) {
+		int v = preLen[u][i];//不用判斷是否聯通,肯定聯通.且這裏不是preLen[u]而是preLen[u][i].
+		dfsLen(v, g[v][u].time + time);//注意这里g[u][v]和g[v][u]是不一样的.pre裏v的值是當前節點的上一個節點,所以應該用g[v][u]
+	}
+	tmp.pop_back();
+}
+int leastnode = INF;
+void dfsTime(int u) {
+	tmp.push_back(u);
+#if P
+	printf("\n");
+	output(tmp);
+#endif
+	if (u == s) {
+		if (leastnode>tmp.size()) {
+			ansTime = tmp;
+			leastnode = tmp.size();
+		}
+		tmp.pop_back();
+		return;
+	}
+	for (int i = preTime[u].size() - 1; i >= 0; i--) {
+		dfsTime(preTime[u][i]);
+	}
+	tmp.pop_back();
+}
+
+bool compare(vector<int> &a, vector<int> &b) {
+	if (a.size() != b.size())return false;
+	for (int i = a.size() - 1; i >= 0; i--) {
+		if (a[i] != b[i])return false;
+	}
+	return true;
+}
+
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {//這裏輸的是邊,所以循環m次,不是n次.
+		int v1, v2, ow, len, time;
+		scanf("%d%d%d%d%d", &v1, &v2, &ow, &len, &time);
+		//if (ow) {//是1則v1到v2,否則v2到v1.
+		//	g[v1][v2] = path(1, len, time);//這裏是1,不是ow,因爲有路就要填非0.
+		//}else g[v2][v1] = path(1, len, time);//這裏也是1.
+		/*one-way是單向的意思.所以oneway為1,表示是單向的,否則是雙向的!!!!!!!!!!!!
+		one-way is 1 if the street is one-way from V1 to V2, or 0 if not.
+		*/
+		g[v1][v2] = path(1, len, time);
+		if (!ow)g[v2][v1] = path(1, len, time);
+	}
+	cin >> s >> d;
+	dijkstra(s);
+	dfsLen(d, 0);
+	dfsTime(d);
+	if (compare(ansLen, ansTime)) {
+		printf("Distance = %d; Time = %d: ", len[d], timeArr[d]);
+		output(ansLen);
+	}
+	else {
+		printf("Distance = %d: ", len[d]);
+		output(ansLen);
+		printf("Time = %d: ", timeArr[d]);
+		output(ansTime);
+	}
+	return 0;
+}
