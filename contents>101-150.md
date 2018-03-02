@@ -122,6 +122,28 @@ https://www.patest.cn/contests/pat-a-practise/1110
 代碼寫起來麻煩,但時間和空間用的都少.<br/>
 層序遍歷,發現某個節點的某個孩子節點為空時,這個孩子節點後面的節點都應該不存在,所以如果當前或後面節點又有了不該存在的孩子節點,則不是完全二叉樹.
 
+## A1111. Online Map (30)####
+https://www.patest.cn/contests/pat-a-practise/1111
+
+類型:最短路徑,dfs.
+
+注意事項:
+1. 數組名命名爲time會編譯錯誤,而且編譯錯誤時,點擊編譯錯誤幾個字,會給出具體錯誤,所以不用着急不知道錯了哪.
+time在其它地方,不是我的代碼裏被使用了,所以不能用作數組名了.
+編譯錯誤部分信息:
+a.cpp:54:14: error: 'int time [510]' redeclared as different kind of symbol
+ int time[MAXN];
+/usr/include/time.h:192:15: note: previous declaration 'time_t time(time_t*)'
+ extern time_t time (time_t *__timer) __THROW;
+ 
+2. 題目沒理解清楚,一開始是fastest儅成了farthest,不知道怎么做直接放棄了這道題.
+ 然後又把one-way的意思當成是"有路徑",實際one-way是單向的意思.所以oneway為1,表示是單向的,否則是雙向的!!!!!!!!!!!!
+ one-way is 1 if the street is one-way from V1 to V2, or 0 if not.
+ 
+3. 輸出邊的時候用的是m變量,即邊的個數,不是n,n是頂點個數.
+ 
+4. 找距離已訪問的節點的集合最近的結點時,不要忘了判斷結點是否是未訪問的!!!!!!!!1
+
 ## A1116. Come on! Let's C (20)##
 https://www.patest.cn/contests/pat-a-practise/1116
 
