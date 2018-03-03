@@ -1,0 +1,109 @@
+/*
+https://www.patest.cn/submissions/4351707/source
+
+类型:二叉搜索树(建立,层数)
+
+难度:2
+
+注意事项:
+1. 求的是最后两层,不是深度为2和1的结点.所以需要先找到最大层数,再把最后两层的结点统计出来,用层序遍历比较简洁,可以再处理一层的时候直接记录该层的结点数.
+2. 二叉树建树时,如果函数用的时引用,则传入一个空指针即可,如果传入的不是空指针,则第一个元素就不会插入到当前的根结点,因为它非空,而是插入到它的左子树或右子树.
+*/
+
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+typedef long long ll;
+
+const int MAXN = 1010;
+const int INF = 1000000000;
+
+int n;
+
+struct node {
+	struct node* left;
+	struct node* right;
+	int level;
+	int data;
+	node() {
+		left = right = NULL;
+	}
+};
+
+void insert(node* &root,int data) {
+	if (root) {
+		if (data > root->data)insert(root->right,data);
+		else insert(root->left,data);
+	}
+	else {
+		root = new node;
+		root->data = data;
+	}
+}
+
+int maxLevel = 1;
+int r1=0, r2=0;
+int r1Level = 1, r2Level = 2;
+void bfs(node* root) {
+	queue<node*> q;
+	
+	if (root) {
+		root->level = 1;
+		q.push(root);
+	}
+	node* now;
+	while (!q.empty()) {
+		now = q.front();
+#if P
+		printf("now=[%d]\n",now->data);
+#endif
+		q.pop();
+		if (now->level > maxLevel)maxLevel = now->level;
+#if P
+		printf("maxLevel=%d,r1Level=%d,r2Level=%d\n", maxLevel,r1Level,r2Level);
+#endif
+		if (maxLevel == r1Level)r1++;
+		else {
+			r2Level = r1Level++;
+			r2 = r1;
+			r1 = 1;//不是r1=0,因为当前就是新层的第一个值.
+		}
+		if (now->left) {
+			now->left->level = now->level + 1;
+			q.push(now->left);
+		}
+		if (now->right) {
+			now->right->level = now->level + 1;
+			q.push(now->right);
+		}
+	}
+}
+
+int main() {
+	cin >> n;
+	//node* root = new node;
+	node* root=NULL;//只要空的即可!
+	for (int i = 0; i < n; i++) {
+		int tmp;
+		scanf("%d", &tmp);
+		insert(root,tmp);
+	}
+	bfs(root);
+	printf("%d + %d = %d\n", r1, r2, r1 + r2);
+	return 0;
+}
