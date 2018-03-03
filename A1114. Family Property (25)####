@@ -1,0 +1,174 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1114
+
+类型:连通图.
+
+难度:4
+
+注意事项:
+1. 数组范围要注意!比如是否入队的数组inq,一开始设置的大小为一千,但是注意到它对应的下标是每个人的id,而id范围是不大于一万,所以inq大小至少要为一万.
+2. 为了孩子父母相互联系,构成完整的无向的连通图,则再输入孩子结点时,要把孩子结点的父母同时记录,输入父母时,父母的孩子也要相应添加上.
+(这种做法可能会有重复记录父母或孩子的情况,可以添加去重的代码,但是重复记录也就是再父母那记录一次,孩子那再记录一次,所以重复次数二三次,而总结点数不大于1000,所以重复记录空间也够用,所以就没有判断是否重复记录.)
+3. 最后排序时,按平均值排序,按为取平均值的总值排序会出错,因为每个家族的人数都是不同的.
+
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+typedef long long ll;
+
+const int MAXID = 10010;
+const int MAXN = 1010;
+const int INF = 1000000000;
+
+int n;
+
+struct info {
+	int id;
+	vector<int> parent;
+	vector<int> child;
+	int set, area;
+	info() {
+		set = area = 0;
+	}
+}person[MAXID];
+
+struct sumInfo {
+	int id;
+	ll m, set, area;//不是平均值,最后计算时再算平均值.
+	sumInfo() {
+		m = set = area = 0;
+	}
+};
+bool inq[MAXID];//这里应是maxid,不是maxn!!!!!!!!!!!!!!!!!!!!!!!!
+
+void init() {
+	for (int i = 0; i < MAXN; i++) {
+		person[i].id = i;
+	}
+}
+
+void output(vector<sumInfo> &ans) {
+	printf("%d\n", ans.size());
+	for (int i = 0; i < ans.size(); i++) {
+		printf("%04d %lld %.3lf %.3lf\n", ans[i].id, ans[i].m, (double)ans[i].set / ans[i].m, (double)ans[i].area / ans[i].m);
+	}
+}
+
+bool cmp(sumInfo a, sumInfo b) {//按平均值排序,不是总值!!!!!!!!!!!!!!!
+	/*if (a.area == b.area) {
+		return a.id < b.id;
+	}
+	else return a.area > b.area;*/
+	if ((double)a.area / a.m == (double)b.area / b.m) {
+		return a.id < b.id;
+	}
+	else return (double)a.area / a.m > (double)b.area / b.m;
+}
+
+void bfs(int v,sumInfo &sum) {
+	queue<int> q;
+	q.push(v);
+	inq[v] = true;
+	int now, next;
+	while (!q.empty()) {
+		now=q.front();
+		q.pop();//别忘了pop.
+		if (sum.id > now)sum.id = now;
+		sum.m++; 
+		sum.set += person[now].set; 
+		sum.area += person[now].area;
+#if P
+		printf("now=%d\n   summ=%lld,sumset=%lld,sumarea=%lld\n", now,sum.m,sum.set,sum.area);
+#endif
+		//将为入过队的父母和子女入队.
+		for (int i = person[now].parent.size() - 1; i >= 0; i--) {
+			next = person[now].parent[i];
+			if (inq[next] == false) {
+				q.push(next);
+				inq[next] = true;
+			}
+		}
+		for (int i = person[now].child.size() - 1; i >= 0; i--) {
+			next = person[now].child[i];
+			if (inq[next] == false) {
+				q.push(next);
+				inq[next] = true;
+			}
+		}
+	}
+}
+void bfsTraversal(vector<int> &idinput) {
+	memset(inq, 0, sizeof(inq));
+
+	//找连通图,记录每个连通图最小结点id,以及该图的总结点数,总房产数,总面积.
+	vector<sumInfo> ans;
+	sumInfo tmp;
+	for (int i = 0; i < idinput.size(); i++) {
+		int v = idinput[i];
+		if (inq[v] == false) {
+			tmp.id = v; tmp.m = tmp.set = tmp.area = 0;
+			bfs(v, tmp);
+			ans.push_back(tmp);
+		}
+	}
+	sort(ans.begin(),ans.end(), cmp);
+	output(ans);
+}
+
+vector<int> idinput;//将输入的id存入到这里.因为id数组很大,而其中很多位置其实是没有有效数据的.
+int main() {
+	init();
+
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		int id, f, m, k, c;
+		scanf("%d%d%d%d", &id, &f, &m, &k);
+		if (f != -1) {
+			person[id].parent.push_back(f);
+			person[f].child.push_back(id);//孩子相应也要加上!!!!!!!!!!!!
+		}
+		if (m != -1) {
+			person[id].parent.push_back(m);
+			person[m].child.push_back(id);
+		}
+		for (int j = 0; j < k; j++) {
+			scanf("%d", &c);
+			person[id].child.push_back(c);
+			//只添加某个结点的孩子而不把孩子的父母的值也设置,则不能建立一个完整的图,答案会出错.
+			person[c].parent.push_back(id);
+		}
+		scanf("%d%d", &person[id].set, &person[id].area);
+
+		idinput.push_back(id);
+#if P
+		printf("id=%d,set=%d,area=%d\n    parent:", person[id].id, person[id].set, person[id].area);
+		for (int i = 0; i < person[id].parent.size(); i++) {
+			printf("%d,", person[id].parent[i]);
+		}
+		printf("children:");
+		for (int i = 0; i < k; i++) {
+			printf("%d,", person[id].child[i]);
+		}
+		printf("\n");
+#endif
+	}
+	bfsTraversal(idinput);
+
+	return 0;
+}
