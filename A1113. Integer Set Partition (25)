@@ -1,0 +1,48 @@
+/*
+https://www.patest.cn/contests/pat-a-practise?page=2
+
+类型:集合
+
+难度:0
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 100010;
+const int INF = 1000000000;
+
+int n;
+int num[MAXN];
+
+int sum(int left, int right) {//[left,right).
+	int s = 0;
+	while (left < right) {
+		s += num[left++];
+	}
+	return s;
+}
+
+int main() {
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		scanf("%d", &num[i]);
+	}
+	sort(num, num + n);
+	printf("%d %d", n % 2 ? 1 : 0, sum(n / 2, n) - sum(0, n / 2));
+	return 0;
+}
