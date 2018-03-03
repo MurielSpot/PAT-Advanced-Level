@@ -1,0 +1,89 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1112
+
+类型:字符串处理.
+
+难度:3
+
+注意事项:
+1. 注意什么时候用for,什么时候用while.
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXK = 110;
+const int MAXN = 1010;
+const int INF = 1000000000;
+
+int tag[129] = { 0 };//0表示还没有遇到这个字符,1表示这个字符stucked,2表示没有stucked.
+bool print[129] = { false };
+
+int k;//repeating times.
+char str[MAXN];
+
+vector<char> suspect;//可能是stucked的字符,按输入顺序记录.
+void judge(char c, int &i) {
+#if P
+	printf("\nchar=%c,index=%d\n", c, i);
+#endif
+	int cnt = 0;
+	while (str[i] == c && cnt < k) {//找连续的k个c.
+		str[i++];
+		cnt++;
+	}
+#if P
+	printf("   after loop:cnt=%d,index=%d\n",cnt, i);
+#endif
+	if (cnt == k) {//正好找到了连续的k个c,则c可能是坏的,下一个字符从当前更改过的i开始判断.
+		tag[c] = 1;
+		suspect.push_back(c);
+	}
+	else {
+		tag[c] = 2;//如果连续的c不到k个,说明肯定是没有问题的键.
+	}
+}
+
+int main() {
+	scanf("%d\n%s", &k, str);
+	int len = strlen(str);
+	int i = 0;
+	while(i<len){//由于for后面有i++,用起来容易出错.
+		if (tag[str[i]] != 2) {//没有确定这个字符是否stucked.则进行判断.
+			judge(str[i], i);
+		}
+		else i++;//这个字符没有stucked,所以可以直接跳过.
+	}
+	for (int i = 0; i < suspect.size(); i++) {
+		if (tag[suspect[i]] == 1&&print[suspect[i]]==false) {
+			printf("%c", suspect[i]);
+			print[suspect[i]] = true;
+		}
+	}
+	printf("\n");
+	i = 0;
+	while(i<len){
+		if (tag[str[i]] == 1) {
+			printf("%c", str[i]);
+			i += k;
+		}
+		else if (tag[str[i]] == 2) {
+			printf("%c", str[i++]);
+		}
+	}
+	return 0;
+}
