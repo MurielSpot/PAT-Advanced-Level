@@ -1,0 +1,165 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1123
+
+类型:avl平衡二叉查找树,cbt完全二叉树.
+
+难度:3.
+
+注意事项:
+1. avl的建立,调整等还需要更加熟悉.
+2. 判断完全二叉树时,发现某个结点无孩子,则当前结点或之后结点都不能再出现孩子.
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+#define R 0
+
+const int MAXN = 22;
+const int INF = 1000000000;
+
+struct node {
+	struct node *left;
+	struct node *right;
+	int key;
+	int height;
+	node() {
+		left = right = NULL;
+		height = 1;
+		key = -1;
+	}
+};
+
+int getHeight(node* root) {
+	if (root) {
+		return root->height;//我记得不需要递归了??
+	}
+	else return 0;
+}
+
+void updateHeight(node* root) {
+	root->height=max(getHeight(root->right), getHeight(root->left)) + 1;
+}
+
+int getBalanceFactor(node* root) {
+	return getHeight(root->left) - getHeight(root->right);
+}
+
+void Lrotation(node* &root) {
+	node* tmp = root->right;
+	root->right = tmp->left;
+	tmp->left = root;
+	updateHeight(root);
+	updateHeight(tmp);
+	root = tmp;
+}
+void Rrotation(node* &root) {
+	node* tmp = root->left;
+	root->left = tmp->right;
+	tmp->right = root;
+	updateHeight(root);
+	updateHeight(tmp);
+	root = tmp;
+}
+
+void insert(node* &root, int key) {
+	if (root) {
+		if (key > root->key) {
+			insert(root->right,key);
+			updateHeight(root);
+			if (getBalanceFactor(root) == -2) {
+				if (getBalanceFactor(root->right) == -1) {
+					Lrotation(root);//向左旋转.
+				}
+				else if (getBalanceFactor(root->right) == 1) {
+					Rrotation(root->right);
+					Lrotation(root);
+				}
+			}
+		}
+		else {
+			insert(root->left,key);
+			updateHeight(root);
+			if (getBalanceFactor(root) == 2) {
+				if (getBalanceFactor(root->left) == 1) {
+					Rrotation(root);
+				}
+				else if (getBalanceFactor(root->left) == -1) {
+					Lrotation(root->left);
+					Rrotation(root);
+				}
+			}
+		}
+
+	}
+	else {
+		root = new node;
+		root->key = key;
+	}
+}
+
+void preTraversal(node* root,int level) {
+	if (root) {
+		printf("[%d]:%d   ", level, root->key);
+		preTraversal(root->left, level + 1);
+		preTraversal(root->right, level + 1);
+	}
+}
+
+bool bfs(node* now) {//层序遍历.
+	bool emptyChild = false, blank = false;
+	bool complete = true;
+
+	queue<node*> q;
+	q.push(now);
+	while (!q.empty()) {
+		now = q.front();
+		q.pop();
+		if (blank)printf(" "); else blank = true;
+		printf("%d", now->key);
+
+		if (emptyChild&&now->left)complete = false;
+		if (now->left == NULL) emptyChild = true;
+		else q.push(now->left);
+
+		if (emptyChild&&now->right)complete = false;
+		if (now->right == NULL)emptyChild = true;
+		else q.push(now->right);
+
+	}
+	printf("\n");
+	return complete;
+}
+
+int main() {
+	node* root = NULL;
+
+	int n; cin >> n;
+	for (int i = 0; i < n; i++) {
+		int key; scanf("%d", &key);
+		insert(root, key);
+	}
+#if P
+	preTraversal(root,1);
+#endif
+#if R
+	return 0;
+#endif
+	bool complete=bfs(root);
+	if (complete)printf("YES\n");
+	else printf("NO\n");
+	return 0;
+}
