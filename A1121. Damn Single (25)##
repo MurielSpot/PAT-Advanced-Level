@@ -1,0 +1,66 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1121
+
+类型:映射
+
+难度:2
+
+注意事项:
+1. 非单身,但是另一位没有来也算单独的.
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 100010;
+const int MAXM = 10010;
+const int INF = 1000000000;
+
+int n;//couples.
+int m;//guests.
+
+int couple[MAXN];
+map<int, bool> come;
+
+int main() {
+	memset(couple, -1, sizeof(couple));
+	cin >> n;
+	for (int i = 0; i < n; i++) {
+		int c1, c2; scanf("%d%d", &c1, &c2);
+		couple[c1] = c2;
+		couple[c2] = c1;
+	}
+	cin >> m;
+	for (int i = 0; i < m; i++) {
+		int g; scanf("%d", &g);
+		come[g] = true;
+	}
+
+	vector<int> ans;
+	for (map<int, bool>::iterator it = come.begin(); it != come.end(); it++) {
+		int g = it->first;
+		if (couple[g] == -1 || come[couple[g]] == false) {//没有伴侣或伴侣没有来.
+			ans.push_back(g);
+		}
+	}
+	printf("%d\n", ans.size());
+	for (int i = 0; i < ans.size(); i++) {
+		if (i)printf(" ");
+		printf("%05d", ans[i]);
+	}
+	return 0;
+}
