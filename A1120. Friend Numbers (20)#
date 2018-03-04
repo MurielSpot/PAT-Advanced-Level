@@ -1,0 +1,55 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1120
+
+类型:哈希(映射)
+
+难度:1
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 10010;
+const int INF = 1000000000;
+
+map<int, bool> id;
+
+int getId(int num) {
+	int sum = 0;
+	while (num) {
+		sum += num % 10;
+		num /= 10;
+	}
+	return sum;
+}
+
+int main() {
+	int n; cin >> n;
+	for (int i = 0; i < n; i++) {
+		int x; scanf("%d", &x);
+		id[getId(x)] = true;
+	}
+	int len = id.size();
+	printf("%d\n", len);
+	map<int, bool>::iterator it = id.begin();
+	for (int i = 0; i < len; i++) {
+		if (i)printf(" ");
+		printf("%d", it->first);
+		it++;
+	}
+	return 0;
+}
