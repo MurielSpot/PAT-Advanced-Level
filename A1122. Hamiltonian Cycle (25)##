@@ -1,0 +1,88 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1122
+
+类型:图(简单环路).
+
+难度:2
+
+注意事项:
+1. 当序列最后一个元素不等于第一个元素时,肯定不是哈密顿回路,直接输出no;
+当序列元素不等于图的顶点数加1,则不满足经过图中所有顶点这一条件,直接输出no;
+当序列中有元素重复出现(除了开头和结尾这两个顶点元素),或者两个元素之间没有路径,都要输出no;
+其它情况可输出yes.
+
+其它:
+1. 哈密顿图（哈密尔顿图）（英语：Hamiltonian path，或Traceable path）是一个无向图，由天文学家哈密顿提出，由指定的起点前往指定的终点，途中经过所有其他节点且只经过一次。在图论中是指含有哈密顿回路的图，闭合的哈密顿路径称作哈密顿回路（Hamiltonian cycle），含有图中所有顶点的路径称作哈密顿路径。
+2. 简单回路:图的顶点序列中，除了第一个顶点和最后一个顶点相同外，其余顶点不重复出现的回路叫简单回路。或者说，若通路或回路不重复地包含相同的边，则它是简单的。
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+
+const int MAXN = 210;
+const int MAXM = 10010;
+const int INF = 1000000000;
+
+int n;
+int m;
+int k;
+int g[MAXN][MAXN] = { 0 };
+bool vis[MAXN];
+
+bool judge(vector<int> &seq) {
+	if (seq.size() != n + 1)return false;//这个路径要包含所有顶点,且最后一个回到第一个顶点,所以路径总共要有n+1大小.
+	if (seq[0] != *(seq.end() - 1))return false;
+
+	memset(vis, 0, sizeof(vis));
+	//除了头和尾,其它结点只访问一次.
+	int v1 = seq[0],v2;
+	vis[v1] = true;
+	for (int i = 1; i < seq.size(); i++) {
+		v2 = seq[i];
+		if (g[v1][v2] == 0) {
+			return false;
+		}
+		if (vis[v2] == true && i != seq.size() - 1) {//v2已经访问过,但又不是最后一个结点.
+			return false;
+		}
+		v1 = v2;
+	}
+	//由于除了开头结尾顶点,其它顶点不能重复访问,所以访问完n+1个顶点,肯定把图中的所有顶点都访问了一遍.
+	return true;
+}
+
+int main() {
+	cin >> n >> m;
+	for (int i = 0; i < m; i++) {
+		int v1, v2;
+		scanf("%d%d", &v1, &v2);
+		g[v1][v2] = g[v2][v1] = 1;
+	}
+	cin >> k;
+	vector<int> query;
+	for (int i = 0; i < k; i++) {
+		int vnum; scanf("%d", &vnum);
+		int v;
+		query.clear();
+		for (int j = 0; j < vnum; j++) {
+			scanf("%d", &v);
+			query.push_back(v);
+		}
+		printf("%s\n", judge(query) ? "YES" : "NO");
+	}
+	return 0;
+}
