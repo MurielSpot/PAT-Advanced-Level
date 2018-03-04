@@ -216,6 +216,42 @@ https://www.patest.cn/contests/pat-a-practise/1119
 1. 樹不唯一的情況,pre數組根節點後面的那個節點肯定是左子樹或右子樹的根,在post裏面找這個節點的位置,如果在post根節點前面那個位置,則該節點是左子樹還是右子樹的根節點無法判斷.
 唯一的情況:上面所説的節點如果不在post根節點前面那個位置,而是和根節點之間還隔有節點,説明中間多出來的節點肯定是右子樹的,所以上面所説的子樹的根節點肯定是屬於左子樹,此時可以唯一判斷一棵樹.
 
+## A1120. Friend Numbers (20)#
+https://www.patest.cn/contests/pat-a-practise/1120
+
+类型:哈希(映射)
+
+## A1121. Damn Single (25)##
+https://www.patest.cn/contests/pat-a-practise/1121
+
+类型:映射
+
+注意事项:
+1. 非单身,但是另一位没有来也算单独的.
+
+## A1122. Hamiltonian Cycle (25)##
+https://www.patest.cn/contests/pat-a-practise/1122
+
+类型:图(简单环路).
+
+注意事项:
+1. 当序列最后一个元素不等于第一个元素时,肯定不是哈密顿回路,直接输出no;
+当序列元素不等于图的顶点数加1,则不满足经过图中所有顶点这一条件,直接输出no;
+当序列中有元素重复出现(除了开头和结尾这两个顶点元素),或者两个元素之间没有路径,都要输出no;
+其它情况可输出yes.
+
+其它:
+1. 哈密顿图（哈密尔顿图）（英语：Hamiltonian path，或Traceable path）是一个无向图，由天文学家哈密顿提出，由指定的起点前往指定的终点，途中经过所有其他节点且只经过一次。在图论中是指含有哈密顿回路的图，闭合的哈密顿路径称作哈密顿回路（Hamiltonian cycle），含有图中所有顶点的路径称作哈密顿路径。
+2. 简单回路:图的顶点序列中，除了第一个顶点和最后一个顶点相同外，其余顶点不重复出现的回路叫简单回路。或者说，若通路或回路不重复地包含相同的边，则它是简单的。
+
+## A1123. Is It a Complete AVL Tree (30)###
+https://www.patest.cn/contests/pat-a-practise/1123
+
+类型:avl平衡二叉查找树,cbt完全二叉树.
+
+注意事项:
+1. avl的建立,调整等还需要更加熟悉.
+2. 判断完全二叉树时,发现某个结点无孩子,则当前结点或之后结点都不能再出现孩子.
 
 ## A1124. Raffle for Weibo Followers (20)##
 https://www.patest.cn/contests/pat-a-practise/1124
