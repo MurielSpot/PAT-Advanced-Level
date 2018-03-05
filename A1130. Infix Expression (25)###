@@ -1,0 +1,97 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1130
+
+类型：中缀表达式，树的遍历。
+
+难度：3
+
+注意事项：
+1. data不一定只有一个字符，所以不要用char输入。
+2. 最外层括号不需要输出，但只有一个元素时，它的两边也不需要输出括号。
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+#include<set>
+
+#include<map>
+using namespace std;
+
+#define P 0
+#define R 0
+
+const int MAXN = 22;
+const int INF = 1000000000;
+
+int n;//nodes.[1,n].
+
+struct node {
+	char data[10];
+	int father, left, right;
+	node() {
+		father = left = right = -1;
+	}
+	/*node(char d, int l, int r) {
+		data = d; left = l; right = r;
+	}*/
+	/*node* left;
+	node* right;
+	node() {
+		left = right = NULL;
+	}*/
+}tree[MAXN];
+
+int root = -1;
+void inFix(int now) {
+	if (now != -1) {//now不是root!!
+		if (tree[now].left == -1 && tree[now].right == -1) {//只有一个元素时也不用打括号.
+			printf("%s", tree[now].data);
+			return;
+		}
+		if (now != root) {
+			printf("(");//不是最外一层则可以加括号.
+		}
+		inFix(tree[now].left);
+		printf("%s", tree[now].data);
+		inFix(tree[now].right);
+		if (now != root) {
+			printf(")");
+		}
+	}
+}
+
+int main() {
+	cin >> n;
+	for (int i = 1; i <= n; i++) {
+		int l, r;
+		scanf("%s %d %d", tree[i].data, &l, &r);
+		tree[i].left = l;
+		tree[i].right = r;
+		//tree[i] = node(c, l, r);//会改变father的值,为什么?????????
+		if (l != -1) {
+			tree[l].father = i;
+		}
+		if (r != -1) {
+			tree[r].father = i;
+		}
+		
+	}
+	for (int i = 1; i <= n; i++) {
+		if (tree[i].father == -1) {
+			root = i;
+			break;
+		}
+	}
+	inFix(root);
+
+	return 0;
+}
