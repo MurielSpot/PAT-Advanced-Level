@@ -311,7 +311,7 @@ https://www.patest.cn/contests/pat-a-practise/1130
 1. data不一定只有一个字符，所以不要用char输入。
 2. 最外层括号不需要输出，但只有一个元素时，它的两边也不需要输出括号。
 
-## A1131. Subway Map (30)#####
+## A1131. Subway Map (30)#####(自己做未全部通过,且做了很长时间)
 https://www.patest.cn/contests/pat-a-practise/1131
 
 类型：图。
@@ -320,6 +320,9 @@ https://www.patest.cn/contests/pat-a-practise/1131
 1. 重点时怎么把站点连成一个网,且同时又线路信息。建图时稍微麻烦一点，另一个难点是如何记录换乘情况。
 2. 注意到邻接矩阵在找邻接边的时候代价很大,用邻接表存储更好.不过有人用邻接矩阵做了，而且用的dfs，好像也过了。
 3. 火车线路倒着也能走.........
+4. 计算经过的总站点数时，经过的第一个站点不需要算。
+5. 当起始地下一站就是目的地时，注意输出不要出错。对应测试点4.
+6. 预编译输入的IN如果为1，会出现运行超时错误。
 
 ## A1132. Cut Integer (20)#
 https://www.patest.cn/contests/pat-a-practise/1132
