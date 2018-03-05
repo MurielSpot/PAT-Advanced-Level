@@ -1,0 +1,67 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1131
+
+类型：模拟。
+
+难度：3.
+
+注意事项：
+1. 我设的标记的数组标记的是某一行，某一左对角线和右对角线是否已经被占，已经被占后面那个元素再占则不满足要求。
+2. 不知道设二维数组，只标记某个位置，而非一行或一条对角线，是否会超时。
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+
+#include<map>
+using namespace std;
+
+#define P 0
+#define R 0
+
+const int MAXN = 1010;
+const int MAXK = 210;
+const int INF = 1000000000;
+
+bool row[MAXN];
+bool diaLeft[MAXN*2], diaRight[MAXN*2];
+
+int main() {
+	int k; scanf("%d", &k);
+
+	for (int i = 0; i < k; i++) {
+		memset(row, 0, sizeof(row));
+		memset(diaRight, 0, sizeof(diaRight));
+		memset(diaLeft, 0, sizeof(diaLeft));
+		bool ans = true;
+
+		int n; scanf("%d", &n);
+		for (int c = 1; c <= n; c++) {
+			int r; scanf("%d", &r);
+
+			if (ans) {
+				int dl = c - r; if (dl < 0)dl = n - dl;//这里不是cl+=n,需要dl先取反!!
+				int dr = n - c + 1 - r; if (dr < 0)dr = n - dr;
+				if (row[r] == false && diaLeft[dl] == false && diaRight[dr] == false) {
+					row[r] = diaLeft[dl] = diaRight[dr] = true;
+				}
+				else {
+					ans = false;
+					//break;//不能随便跳出循环,因为一行数据还没输完!
+				}
+			}
+		}
+		if (ans)printf("YES\n");
+		else printf("NO\n");
+	}
+	return 0;
+}
