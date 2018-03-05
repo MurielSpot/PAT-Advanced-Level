@@ -283,6 +283,37 @@ https://www.patest.cn/contests/pat-a-practise/1127
 注意事項:
 1. 寫循環時,要判斷邊界,變量別忘了加減.
 
+## A1128. N Queens Puzzle (20)###
+https://www.patest.cn/contests/pat-a-practise/1131
+
+类型：模拟。
+
+注意事项：
+1. 我设的标记的数组标记的是某一行，某一左对角线和右对角线是否已经被占，已经被占后面那个元素再占则不满足要求。
+2. 不知道设二维数组，只标记某个位置，而非一行或一条对角线，是否会超时。
+
+## A1129. Recommendation System (25)###
+https://www.patest.cn/contests/pat-a-practise/1129
+
+类型：模拟。
+
+注意事项：
+1. while循环别忘了自加或自减,且要确定是加还是减!
+2. 推荐仅仅是根据之前获取货物的情况，不需要把所有获取货物的情况遍历完。且第一次取货，由于之前没有人取过货，所以什么都不推荐。
+3. 题一开始没看明白，建议以后看过题，根据自己思路对照答案演算一遍，判断自己思路对不对！
+
+## A1130. Infix Expression (25)###
+https://www.patest.cn/contests/pat-a-practise/1130
+
+类型：中缀表达式，树的遍历。
+
+注意事项：
+1. data不一定只有一个字符，所以不要用char输入。
+2. 最外层括号不需要输出，但只有一个元素时，它的两边也不需要输出括号。
+
+## A1131. Subway Map (30)#####
+https://www.patest.cn/contests/pat-a-practise/1131
+
 ## A1132. Cut Integer (20)#
 https://www.patest.cn/contests/pat-a-practise/1132
 
