@@ -1,0 +1,110 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1129
+
+类型：模拟。
+
+难度：3.（题一开始没看明白，建议以后看过题，根据自己思路对照答案演算一遍，判断自己思路对不对！）
+
+注意事项：
+1. while循环别忘了自加或自减,且要确定是加还是减!
+2. 推荐仅仅是根据之前获取货物的情况，不需要把所有获取货物的情况遍历完。且第一次取货，由于之前没有人取过货，所以什么都不推荐。
+*/
+#include<cstdio>
+#include<iostream>
+
+#include <string>
+#include <cstring>
+
+#include <algorithm>
+#include<cmath> 
+
+#include<vector>
+#include<stack>
+#include<queue>
+#include<set>
+
+#include<map>
+using namespace std;
+
+#define P 0
+#define R 0
+
+const int MAXN = 50010;
+const int MAXK = 12;
+const int INF = 1000000000;
+
+int n;//queries.[1,n].
+int k;
+
+map<int, set<int> > cntmap;
+int cntarr[MAXN] = { 0 };
+vector<int> query;
+
+void recommend() {
+	map<int, set<int> >::iterator it = cntmap.end();
+	it--;
+	set<int>::iterator sIt;
+	int i = 0;
+	while (it != cntmap.begin() && i < k) {//cntmap倒着遍历.
+		sIt = it->second.begin();//取其中集合的值.
+		while(i < k&&sIt!=it->second.end()) {
+			printf(" %d", *sIt);
+			i++;
+			sIt++;
+		}
+		it--;//别忘了自减!!!
+	}
+	if (i < k) {
+		sIt = it->second.begin();
+		while (i < k&&sIt != it->second.end()) {
+			printf(" %d", *sIt);
+			i++;
+			sIt++;
+		}
+	}
+	printf("\n");
+}
+
+int main() {
+	cin >> n >> k;
+	/*for (int i = 0; i < n; i++) {
+		int item; scanf("%d", &item);
+		query.push_back(item);
+		cntarr[item]++;
+	}*/
+	//for (int index = 1; index <= n; index++) {
+	//	if (cntarr[index]) {
+	//		cntmap[cntarr[index]].insert(index);
+	//	}
+	//}
+	/*for (int i = 0; i < query.size(); i++) {
+		printf("%d:", query[i]);
+		recommend(query[i]);
+		printf("\n");
+	}*/
+	for (int i = 0; i < n; i++) {
+		int item; scanf("%d", &item);
+
+		if (cntmap.size()) {
+			printf("%d:", item);
+			recommend();
+		}
+		if (cntarr[item]) {
+			cntmap[cntarr[item]].erase(item);
+#if P
+			printf("   key1=%d,key1SetSize=%d\n",cntarr[item], cntmap[cntarr[item]].size());
+#endif
+			if (cntmap[cntarr[item]].size() == 0) {
+				cntmap.erase(cntarr[item]);
+				//cntmap[cntarr[item]].clear();//怎么把map的某个元素清除掉
+			}
+		}
+		cntarr[item]++;
+		cntmap[cntarr[item]].insert(item);
+#if P
+		printf("   cntarr[item]:%d,", cntarr[item]);
+		printf("key1SetSize=%d\n", cntmap[cntarr[item]].size());
+#endif
+	}
+	return 0;
+}
