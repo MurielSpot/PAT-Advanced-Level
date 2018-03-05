@@ -314,6 +314,13 @@ https://www.patest.cn/contests/pat-a-practise/1130
 ## A1131. Subway Map (30)#####
 https://www.patest.cn/contests/pat-a-practise/1131
 
+类型：图。
+
+注意事项：
+1. 重点时怎么把站点连成一个网,且同时又线路信息。建图时稍微麻烦一点，另一个难点是如何记录换乘情况。
+2. 注意到邻接矩阵在找邻接边的时候代价很大,用邻接表存储更好.不过有人用邻接矩阵做了，而且用的dfs，好像也过了。
+3. 火车线路倒着也能走.........
+
 ## A1132. Cut Integer (20)#
 https://www.patest.cn/contests/pat-a-practise/1132
 
