@@ -1,0 +1,152 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1139
+
+类型:图.
+
+难度:3(注意数据格式,如-0000)
+
+注意事项:
+1. 注意数组要开到一万那么大,因为id为四位数.
+2. id不足四位要补0.不然测试点1会错.
+3. 会出现-0000，0000和-0000在数值上相同，所以需要输入字符串，根据字符串长度判断正负，然后再转成数字.这一点可能会卡住测试点2和5.
+
+其它做法:
+1. 其实根本不需要用dfs.找一个v1的同性朋友,找一个v2的同性朋友,判断他们是否相识即可.
+*/
+#include<cstdio>
+#include<iostream>
+#include<vector>
+#include<stack>
+#include<map>
+#include<string>
+#include<algorithm>
+#include <exception>
+
+#include<fstream>
+#include <sstream>
+using namespace std;
+
+#define IN 0
+#define P 0
+
+#define rep(i,n) for(int i=0;i<n;i++)
+#define pt(a) printf("%d",a)
+#define sc(a) scanf("%d",&a)
+
+//typedef long long ll;
+const int INF = 1000000000;
+//const double INF = 1000000000;
+//const long long INF = 1000000000;
+
+//const int MAXN = 310;
+const int MAXID = 10010;
+
+int n, m;
+vector<int> g[MAXID];
+int gender[MAXID] = { 0 };
+
+vector<pair<int, int> > ans;
+pair<int, int> tmp;
+bool vis[MAXID] = { 0 };
+void dfs(int s,const int d, int sindex) {
+	if (s == d&&sindex==4) {
+		ans.push_back(tmp);
+	}
+	else if (s == d && sindex != 4) {
+		return;
+	}
+	else if (sindex >= 4) {
+		return;
+	}
+	vis[s] = true;
+	rep(i, g[s].size()) {
+		int v = g[s][i];
+		if (vis[v] == false) {
+			if (sindex == 2) {
+				tmp = make_pair(s, v);
+				dfs(v, d, 3);
+			}
+			else if (sindex == 1&&gender[s]==gender[v]) {
+				dfs(v, d, 2);
+			}
+			else if (sindex == 3 && gender[s] == gender[v]) {
+				dfs(v, d, 4);
+			}
+
+		}
+	}
+	vis[s] = false;
+}
+
+bool cmp(pair<int, int> a, pair<int, int> b) {
+	return a < b;
+}
+
+int main() {
+	//ifstream f;
+	/*f.open("C:\\Users\\oakpa\\Desktop\\test.txt",ifstream::in);
+
+	std::stringstream fileStream;
+	fileStream << f.rdbuf();
+
+	f.close();
+	cout << fileStream.str();
+	return 0;*/
+
+	/*f.open("C:\\Users\\oakpa\\Desktop\\test.txt");
+	cout << f.rdbuf();
+	f.close();
+
+	freopen("C:\\Users\\oakpa\\Desktop\\test.txt", "r",stdin);*/
+
+	sc(n), sc(m);
+	rep(i, m) {
+		//string a;
+		char a[6];
+		cin >> a;
+		int v1, v2;
+		if (a[0] == '-') {
+			v1 = stoi(a + 1);
+			//a.erase(a.begin());
+			//v1 = stoi(a);
+			gender[v1] = 1;
+		}
+		else {
+			//下面语句会崩溃,因为a里面存的时字符呀!!!!!v1乘出来不知道有多大了!!!!
+			/*v1 = a[0] * 1000 + a[1] * 100 + a[2] * 10 + a[3];
+			gender[v1] = 2;*/
+			v1 = stoi(a);
+			gender[v1] = 2;
+		}
+		cin >> a;
+		//复制代码容易出错!!!!!!!!!!v2一开始写成v1了!!!!!!
+		if (a[0] == '-') {
+			v2 = stoi(a + 1);
+			gender[v2] = 1;
+		}
+		else {
+			v2 = stoi(a);
+			gender[v2] = 2;
+		}
+		g[v1].push_back(v2);
+		g[v2].push_back(v1);
+	}
+	int k;
+	sc(k);
+	rep(i, k) {
+		int v1, v2;
+		sc(v1); sc(v2);
+		v1 = abs(v1);
+		v2 = abs(v2);
+		ans.clear();
+		dfs(v1, v2, 1);
+		printf("%d\n", ans.size());//这一句要放到外面来输出.
+		if (ans.size()) {
+			sort(ans.begin(), ans.end(), cmp);
+			rep(j, ans.size()) {
+				printf("%04d %04d\n", ans[j].first, ans[j].second);
+			}
+		}
+	}
+	return 0;
+}
