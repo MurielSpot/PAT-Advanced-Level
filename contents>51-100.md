@@ -382,6 +382,20 @@ https://www.patest.cn/contests/pat-a-practise/1094
 
 类型：图的遍历。
 
+## A1095. Cars on Campus (30)####
+https://www.patest.cn/contests/pat-a-practise/1095
+
+类型:模拟.
+
+难度:4.(一般想清楚再做,如果遇到了什么疏忽的地方,那这题就别得分了.)
+
+注意事项:
+1. 有一个巨大的坑点,一个车可能反复进入校园,所以它的值要不断累加.求最长停车时间不是指一次连续停车时间....
+
+思路:<br/>
+先按姓名排序，筛选出无效的记录，同时统计最长停车时间。<br/>
+再按时间排序，进行查询的处理，因为查询是按时间递增的顺序，所以新的查询都从上一次查询开始。
+
 ## A1096. Consecutive Factors (20)#####（需要自己重做一遍，未全部通过测试点，看了别人的代码才通过）
 /*
 https://www.patest.cn/contests/pat-a-practise/1096
