@@ -1,18 +1,154 @@
 /*
 https://www.patest.cn/contests/pat-a-practise/1131
 
-类型：图。
+类型：图(信息在邊上)。
 
-难度:5.
+难度:5.(比較複雜)
 
 注意事项：
-1. 重点时怎么把站点连成一个网,且同时又线路信息。建图时稍微麻烦一点，另一个难点是如何记录换乘情况。
+1. 重点时怎么把站点连成一个网,且同时又线路信息。建图时稍微麻烦一点，另一个难点是如何记录换乘情况。這類題要所需的信息都在邊上,所以要對邊進行操作!
 2. 注意到邻接矩阵在找邻接边的时候代价很大,用邻接表存储更好.不过有人用邻接矩阵做了，而且用的dfs，好像也过了。
 3. 火车线路倒着也能走.........
-4. 计算经过的总站点数时，经过的第一个站点不需要算。
-5. 当起始地下一站就是目的地时，注意输出不要出错。对应测试点4.
+4. 计算经过的总站点数时，经过的第一个站点不需要算。也就是說經過的縂的小段綫路數.
+5. 当起始地下一站就是目的地时，注意输出不要出错。对应测试点4.也就是說輸出的時候,對開頭和結尾都要單獨考慮,比如要考慮兩者之間是否有換乘,兩者之間是否有其他站點.
 6. 预编译输入的IN如果为1，会出现运行超时错误。
 */
+/*
+重寫了一邊,可ac.
+大概思路就是:
+存邊,每兩個站點之間有邊就存下來,且由題可知一小段邊僅屬於一條地鐵綫.
+用dfs,把路上經過的所有小段路徑都存起來,且同時存儲換乘的次數,即上一小段綫路和這一小段綫路的地鐵綫不同則可增加換乘次數.
+每次遇到終點,就把暫存的綫路和答案比對,答案要是比較長或換乘地多,就更新答案.
+每次查詢之前,存答案的結構都要清空,不要忘了.
+輸出的時候終點和結尾要單獨考慮一下.
+*/
+#include <cstdio>
+#include<iostream>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include<map>
+using namespace std;
+
+const int ID = 10001;
+
+#define rep(i,n) for(int i=0;i<n;i++)
+#define rep1(i,n) for(int i=1;i<=n;i++)
+#define sc(a) scanf("%d",&a)
+
+int n;//subways lines number.
+int s, d;//source and destination.
+
+struct part {
+	int from, to;
+	int line;
+	part(){}
+	part(int f,int t,int l) {
+		from = f; to = t; line = l;
+	}
+};
+
+vector<part> g[ID];
+
+//记录可能的答案信息。
+struct info {
+	vector<part> path;
+	int change;
+	info() {
+		change = 0;
+	}
+}ans;
+vector<part> tmp;
+int tmpChange = 0;
+
+bool vis[ID] = { false };
+void dfs(int now) {
+	if (now == d) {
+		if (ans.path.size() == 0 || tmp.size() < ans.path.size()) {
+			ans.path = tmp;
+			ans.change = tmpChange;
+		}
+		else if (ans.path.size() == tmp.size() && ans.change > tmpChange) {
+			ans.path = tmp;
+			ans.change = tmpChange;
+		}
+		return;
+	}
+	if (ans.path.size()&& tmp.size() > ans.path.size()) {//在ans有数据时，及时剪枝。
+		return;
+	}
+	vis[now] = true;
+	rep(i, g[now].size()) {
+		part part_way = g[now][i];
+		if (vis[part_way.to] == false) {
+			tmp.push_back(part_way);
+			if (tmp.size()>1){
+				if (tmp[tmp.size() - 1].line != tmp[tmp.size() - 2].line) {
+					tmpChange++;
+				}
+			}
+			dfs(part_way.to);
+			if (tmp.size()>1) {
+				if (tmp[tmp.size() - 1].line != tmp[tmp.size() - 2].line) {
+					tmpChange--;
+				}
+			}
+			tmp.pop_back();
+		}
+
+	}
+	vis[now] = false;
+}
+
+void printAns() {
+	printf("%d\n", ans.path.size());
+	//if(ans.path.size()==0)return; 
+	if (ans.path.size() == 1) {
+		printf("Take Line#%d from %04d to %04d.\n", ans.path[0].line, s, d);
+	}
+	else {
+		printf("Take Line#%d from %04d to ", ans.path[0].line, s);
+		for (int i = 1; i < ans.path.size();i++) {
+			part now = ans.path[i];
+			part pre = ans.path[i - 1];
+			if (now.line!=pre.line) {
+				printf("%04d.\n", pre.to);
+				printf("Take Line#%d from %04d to ", now.line, now.from);
+			}
+			if (now.to == d) {
+				printf("%04d.\n", d);
+			}
+		}
+	}
+		
+}
+
+int main(){
+	cin >> n;
+	rep1(line, n) {
+		int m; sc(m);
+		int v1, v2;
+		sc(v1);
+		rep1(j, m-1) {//再输入m-1次。
+			sc(v2);
+			g[v2].push_back(part(v2, v1, line));
+			g[v1].push_back(part(v1, v2, line));
+			v1 = v2;
+		}
+	}
+	int k; sc(k);
+	rep(i, k) {
+		sc(s); sc(d);
+		memset(vis, 0, sizeof(vis));
+		ans.path.clear();//ans用之前需要清空！
+		ans.change = 0;
+		dfs(s);
+		printAns();
+	}
+	return 0;
+}
+
 //网上的可ac代码，还没看，懒得看了。
 #include <iostream>
 #include <vector>
