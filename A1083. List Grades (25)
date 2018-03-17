@@ -7,8 +7,10 @@ https://www.patest.cn/contests/pat-a-practise/1083
 
 注意事项；
 1. 注意此题中数组从1开始记录，所以sort的区间要相应从1开始。 
+2. 没给n的范围，所以用vector做可能更严谨，不过这道题假设n最大为一万就能通过了。
 */
 
+//先排序，不需要的数据直接不输出了。
 #include<cstdio>
 #include<cstring>
 #include<algorithm>
@@ -53,4 +55,53 @@ int main(){
 	}
 	
 	return 0;
+}
+
+//以为这道题没做，又做了一遍。下面是先筛选，再排序。
+#include <cstdio>
+#include<iostream>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+using namespace std;
+
+const int MAXN = 10005;
+
+#define rep(i,n) for(int i=0;i<n;i++)
+
+int n;
+int grade1, grade2;
+struct info {
+  char name[12];
+  char id[12];
+  int grade;
+}record[MAXN];
+
+bool cmp(info &a, info &b) {
+  return a.grade > b.grade;
+}
+
+vector<info> ans;
+int main(){
+  cin >> n;
+  rep(i, n) {
+    scanf("%s%s%d", record[i].name, record[i].id, &record[i].grade);
+  }
+  cin >> grade1 >> grade2;
+  rep(i, n) {
+    if (record[i].grade <= grade2 && record[i].grade >= grade1) {
+      ans.push_back(record[i]);
+    }
+  }
+  if (ans.size()) {
+    sort(ans.begin(), ans.end(), cmp);
+    rep(i, ans.size()) {
+      printf("%s %s\n", ans[i].name, ans[i].id);
+    }
+  }
+  else {
+    printf("NONE\n");
+  }
+  
+  return 0;
 }
