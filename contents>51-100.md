@@ -234,6 +234,7 @@ https://www.patest.cn/contests/pat-a-practise/1083
 
 注意事项；
 1. 注意此题中数组从1开始记录，所以sort的区间要相应从1开始。 
+2. 没给n的范围，所以用vector做可能更严谨，不过这道题假设n最大为一万就能通过了。
 
 ## A1084. Broken Keyboard (20)#
 https://www.patest.cn/contests/pat-a-practise/1084
