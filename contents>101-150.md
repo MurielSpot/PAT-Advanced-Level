@@ -433,6 +433,16 @@ bool cmp(int a,int b){
 4
 </pre>
 
+## A1137. Final Grading (25)##
+https://www.patest.cn/contests/pat-a-practise/1137
+
+类型：排序，string映射数组下标。
+
+难度：2
+
+注意事项：
+1. 第一次做的时候因为担心string会超时，做了一种很啰嗦的方法。再做的时候就用了string，map，sort，结果也没超时，大概复杂度也就10的6,7次方吧。
+
 ## A1139. First Contact (30)###
 https://www.patest.cn/contests/pat-a-practise/1139
 
