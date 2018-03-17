@@ -323,7 +323,6 @@ https://www.patest.cn/contests/pat-a-practise/1091
 
 类型：广度优先搜索（获得某连续区域），三维数组。
 
-
 注意事项：
 1. 访问某个像素相邻的点时，也可以用增量矩阵：
 <pre>int x[6]={0,0,0,0,1,-1};
@@ -423,6 +422,19 @@ https://www.patest.cn/contests/pat-a-practise/1098
 
 類型：插入排序，堆排序。
 
+難度：4（堆排序太費事了，很不熟練）
+
+注意事项：
+1. 插入排序将无序区元素加入有序区时，用while不是if，不要疏忽。
+2. 初始序列不参与比较！
+<pre>//测试数据：
+4
+3 4 2 1
+3 4 2 1
+//輸出,如果初始序列參與比較,則第一次調整就會發現相同,進行第二次調整之後輸出的就是3 4 2 1,但題目雖然沒説清楚,但是實際比較的是第二次發現相同,輸出的是第三次調整的結果.
+Insertion Sort
+2 3 4 1
+</pre>
 
 ## A1099. Build A Binary Search Tree (30)###
 https://www.patest.cn/contests/pat-a-practise/1099
