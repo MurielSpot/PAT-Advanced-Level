@@ -1,0 +1,241 @@
+/*
+https://www.patest.cn/contests/pat-a-practise/1098
+
+類型：插入排序，堆排序。
+
+難度：4（堆排序太費事了，很不熟練）
+
+注意事项：
+1. 插入排序将无序区元素加入有序区时，用while不是if，不要疏忽。
+2. 初始序列不参与比较！
+<pre>//测试数据：
+4
+3 4 2 1
+3 4 2 1
+//輸出,如果初始序列參與比較,則第一次調整就會發現相同,進行第二次調整之後輸出的就是3 4 2 1,但題目雖然沒説清楚,但是實際比較的是第二次發現相同,輸出的是第三次調整的結果.
+Insertion Sort
+2 3 4 1
+</pre>
+*/
+#include <cstdio>
+#include<iostream>
+#include <cstring>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include<set>
+#include <functional>//优先队列里的greater需要它.
+#include <queue>//用优先队列需要它.
+#include<utility>
+using namespace std;
+
+typedef long long ll;
+
+const int MAXN = 105;
+const ll INF = 100000000000000000;
+
+#define rep(i,j,n) for(int i=j;i<n;i++)
+#define sc(a) scanf("%d",&a)
+
+int n;
+int a[MAXN];
+int b[MAXN];
+int sorted[MAXN];
+
+void insertion(int arr[],int nonsorted) {//nonsorted为无序区第一个值。
+	while (nonsorted > 0 && nonsorted < n&&arr[nonsorted] < arr[nonsorted - 1]) {//这里需要反复调整，要用while。经常把需要循环的地方用成if。
+		swap(arr[nonsorted], arr[nonsorted - 1]);
+		nonsorted--;
+	}
+}
+
+//調成大頂堆.size是最后一个需调整元素后面的位置。
+void downAdjust(int arr[], int now, int size) {
+	while (now < size) {
+		int left = now * 2 + 1;
+		if (left >= size)return;
+		if (left + 1 < size&&arr[left] < arr[left + 1]) {
+			left++;
+		}
+		if (arr[now] < arr[left]) {
+			swap(arr[now], arr[left]);
+			now = left;
+		}
+		else break;
+	}
+}
+
+//sorted表示有序区的第一个元素，初始状态为n，最后为1的时候，由于1到n-1都有序，则0号正好是最小值也有序了。
+void heap(int arr[],int sorted) {
+	if (sorted == n) {//最先要进行堆调整。
+		for (int i = n / 2 - 1; i >= 0; i--) {
+			downAdjust(arr, i, n);
+		}
+	}
+	if (sorted <= n && sorted > 0) {
+		sorted--;//移动到无序区最后一个元素。
+		swap(arr[0], arr[sorted]);
+		downAdjust(arr, 0, sorted);//这里向下调整只需要调整到无序区最后。
+	}
+}
+
+bool equal(int a[],int b[], int size) {
+	rep(i,0,size) {
+		if (a[i] != b[i])return false;
+	}
+	return true;
+}
+
+void printAns(int arr[],int size) {
+	rep(i, 0, size) {
+		if (i)printf(" ");
+		printf("%d", arr[i]);
+	}
+	printf("\n");
+}
+
+
+
+int main(){
+	sc(n);
+	rep(i,0,n) {
+		sc(a[i]);
+		b[i] = a[i];
+	}
+	rep(i, 0, n) {
+		sc(sorted[i]);
+	}
+	bool isHeap = true;
+	//rep(i, 0, n) {//初始序列不参与比较！！所以一开始就从第2个元素调整一次！因为第一个元素自身已经有序，所以直接从第二个开始调整不会出错！
+	rep(i, 1, n) {
+		insertion(a, i);
+		//printAns(a, n);
+		if (equal(a, sorted,n)) {
+			insertion(a, i + 1);
+			printf("Insertion Sort\n");
+			printAns(a,n);
+			isHeap = false;
+			break;
+		}
+	}
+	if (isHeap) {
+		rep(i, 0, n) {
+			heap(b,n-i);
+			if (equal(b, sorted, n)) {
+				heap(b, n-i-1);
+				printf("Heap Sort\n");
+				printAns(b, n);
+				break;
+			}
+		}
+	}
+	return 0;
+}
+
+
+//下面代码有一个测试点未通过。
+#include<cstdio>
+#include<iostream>
+#include<algorithm>
+using namespace std;
+
+const int MAXN=110;
+
+bool compare(int a[],int b[],int size){
+	for(int i=0;i<size;i++){
+		if(a[i]!=b[i])return false;
+	}
+	return true;
+}
+
+void insertion(int a[],int size,int unsorted){//一次插入排序。
+	if(unsorted<size){//如果未排序的第一個元素沒有超過數組存儲範圍，可以進行排序。
+		int data=a[unsorted];
+		int i;
+		for(i=unsorted;i>=1;i--){
+			if(data<a[i-1]){
+				a[i]=a[i-1];
+			}else{
+				a[i]=data;break;
+			}
+		}
+		if(i==0)a[0]=data;
+	}
+}
+
+void downAdjust(int arr[],int left,int right){
+	int data=arr[left];
+	int now=left,next=(now+1)*2-1;//next先指向右孩子。
+	while(next<=right){
+		if(next+1<=right&&arr[next+1]>arr[next]){//左孩子存在且左孩子更大。
+			next++;
+		}
+		if(data<arr[next]){//data小，還要繼續向下調整。
+			arr[now]=arr[next];
+			now=next;
+			next=(now+1)*2-1;
+		}else{
+			break;
+		}
+	}
+	arr[now]=data;	
+}
+void swap(int &a,int &b){
+	int tmp=b;
+	b=a;
+	a=tmp;
+}
+void heapSort(int a[],int size,int sorted){
+	if(sorted==size&&size>1){//第一次排序，需要先建堆。如果有一個元素就已經是有序的了，不需要調整。
+		for(int i=size/2;i>=0;i--){
+			downAdjust(a,i,size-1);
+		}
+	}
+	if(sorted>1){//sorted代表已排序區間的第一個元素。儅僅剩一個元素沒有排序，而這個元素根據之前的篩選最大值的過程，則肯定就應該在第一個位置，所以不需要排序了。儅所有元素都排序完時，也不需要再排序。
+		swap(a[0],a[sorted-1]);
+		downAdjust(a,0,sorted-2);
+	}
+}
+
+void output(int arr[],int size){
+	for(int i=0;i<size;i++){
+		if(i)printf(" %d",arr[i]);
+		else printf("%d",arr[i]);
+	}
+	printf("\n");
+}
+
+int main() {
+	int beginI[MAXN],beginH[MAXN],partial[MAXN];
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&beginI[i]);
+		beginH[i]=beginI[i];
+	}
+	for(int i=0;i<n;i++){
+		scanf("%d",&partial[i]);
+	}
+	bool heap=true;
+	for(int i=0;i<n;i++){
+		insertion(beginI,n,i);
+		if(compare(beginI,partial,n)){
+			printf("Insertion Sort\n");
+			insertion(beginI,n,i+1);
+			output(beginI,n);
+			heap=false;
+			break;
+		}
+	}
+	if(heap){		
+		for(int i=n;i>0;i--){
+			heapSort(beginH,n,i);
+			if(compare(beginH,partial,n)){
+				printf("Heap Sort\n");
+				heapSort(beginH,n,i-1);
+				output(beginH,n);
+			}
+		}
+	}
+	return 0;
+}
